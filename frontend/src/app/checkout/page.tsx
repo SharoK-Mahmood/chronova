@@ -1,18 +1,11 @@
-import {
-  SectionPage,
-  createSectionMetadata,
-} from "@/shared/components/layout/SectionPage";
+import { CheckoutContent } from "@/features/checkout";
+import { createSectionMetadata } from "@/shared/components/layout/SectionPage";
 
 export const metadata = createSectionMetadata(
   "Checkout",
-  "Complete your Chronova purchase.",
+  "Complete your Chronova purchase securely.",
 );
 
 export default function CheckoutPage() {
-  return (
-    <SectionPage
-      title="Checkout"
-      description="Secure checkout is coming soon. Review your cart and check back shortly."
-    />
-  );
+  return <CheckoutContent />;
 }
