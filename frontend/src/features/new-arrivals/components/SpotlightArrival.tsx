@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -6,6 +8,7 @@ import { Price } from "@/features/currency";
 import type { NewArrivalSpotlight } from "@/features/new-arrivals/types/new-arrival.types";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { useTranslation } from "@/shared/i18n";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 
 type SpotlightArrivalProps = {
@@ -13,6 +16,7 @@ type SpotlightArrivalProps = {
 };
 
 export function SpotlightArrival({ arrival }: SpotlightArrivalProps) {
+  const { t } = useTranslation();
   const { product, arrivedLabel, tagline, editorial } = arrival;
   const imageAlt = product.subtitle
     ? `${product.brand} ${product.name}, ${product.subtitle}`
@@ -24,13 +28,15 @@ export function SpotlightArrival({ arrival }: SpotlightArrivalProps) {
         <div className="mb-12 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-accent">
-              Spotlight
+              {t("newArrivals.spotlight")}
             </p>
             <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
-              The season&apos;s defining piece
+              {t("newArrivals.definingPiece")}
             </h2>
           </div>
-          <p className="text-sm text-secondary">Arrived {arrivedLabel}</p>
+          <p className="text-sm text-secondary">
+            {t("newArrivals.arrived", { date: arrivedLabel })}
+          </p>
         </div>
 
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
@@ -55,7 +61,7 @@ export function SpotlightArrival({ arrival }: SpotlightArrivalProps) {
               )}
             </div>
             <div className="absolute left-6 top-6 rounded-full bg-primary px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-background">
-              New
+              {t("newArrivals.newBadge")}
             </div>
           </Link>
 
@@ -88,7 +94,7 @@ export function SpotlightArrival({ arrival }: SpotlightArrivalProps) {
                   variant="button"
                 />
                 <Button href={`/products/${product.slug}`} variant="secondary">
-                  Discover piece
+                  {t("newArrivals.discoverPiece")}
                 </Button>
               </div>
             </div>

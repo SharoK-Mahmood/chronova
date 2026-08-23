@@ -20,10 +20,10 @@ export function SettingsNav({
   const { t } = useTranslation();
 
   return (
-    <>
+    <div className="min-w-0 w-full lg:sticky lg:top-28 lg:self-start">
       <nav
         aria-label="Settings sections"
-        className="hidden lg:block lg:sticky lg:top-28 lg:self-start"
+        className="hidden lg:block"
       >
         <ul className="space-y-1">
           {SETTINGS_NAV_ITEMS.map((item) => (
@@ -45,15 +45,18 @@ export function SettingsNav({
         </ul>
       </nav>
 
-      <div className="mb-6 lg:hidden">
-        <div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <nav
+        aria-label="Settings sections"
+        className="mb-2 max-w-full overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:hidden [&::-webkit-scrollbar]:hidden"
+      >
+        <div className="flex w-max gap-2">
           {SETTINGS_NAV_ITEMS.map((item) => (
             <button
               key={item.id}
               type="button"
               onClick={() => onSectionChange(item.id)}
               className={cn(
-                "shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors",
+                "shrink-0 rounded-full border px-3.5 py-2 text-xs font-medium transition-colors",
                 activeSection === item.id
                   ? "border-accent bg-accent/10 text-accent"
                   : "border-border text-secondary hover:border-accent/30 hover:text-foreground",
@@ -63,8 +66,8 @@ export function SettingsNav({
             </button>
           ))}
         </div>
-      </div>
-    </>
+      </nav>
+    </div>
   );
 }
 

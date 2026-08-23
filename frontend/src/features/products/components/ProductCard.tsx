@@ -27,52 +27,62 @@ export function ProductCard({
   return (
     <article
       className={cn(
-        "group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-shadow hover:shadow-lg",
+        "group flex flex-col overflow-hidden rounded-xl border border-border bg-card sm:rounded-2xl sm:transition-shadow sm:hover:shadow-lg",
         className,
       )}
     >
       <Link href={`/products/${product.slug}`} className="flex flex-1 flex-col">
         <div
           className={cn(
-            "relative flex aspect-square items-center justify-center p-8",
+            "relative flex aspect-square items-center justify-center p-3 sm:p-8",
             hasProductPhoto(product.imageUrl) ? "bg-white" : "bg-background",
           )}
         >
-          <div className="absolute left-3 top-3 z-10">
+          <div className="absolute left-2 top-2 z-10 hidden sm:block">
             <AddToCartButton
               slug={product.slug}
               productName={product.name}
               unitPriceUsd={unitPriceUsd}
             />
           </div>
-          <div className="absolute right-3 top-3 z-10">
-            <WishlistButton slug={product.slug} productName={product.name} />
+          <div className="absolute right-2 top-2 z-10 sm:right-3 sm:top-3">
+            <WishlistButton
+              slug={product.slug}
+              productName={product.name}
+              className="h-10 w-10 p-2.5 sm:h-auto sm:w-auto sm:p-2"
+            />
           </div>
           {hasProductPhoto(product.imageUrl) ? (
             <Image
               src={product.imageUrl}
               alt={imageAlt}
               fill
-              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              className="object-contain p-6"
+              sizes="(min-width: 1024px) 33vw, 50vw"
+              className="object-contain p-3 sm:p-6"
             />
           ) : (
-            <div className="h-24 w-24 rounded-full border border-border bg-card shadow-sm" />
+            <div className="h-16 w-16 rounded-full border border-border bg-card shadow-sm sm:h-24 sm:w-24" />
           )}
         </div>
 
-        <div className="flex flex-1 flex-col gap-1 p-4">
-          <p className="text-xs uppercase tracking-widest text-accent">
+        <div className="flex flex-1 flex-col gap-0.5 p-2.5 sm:gap-1 sm:p-4">
+          <p className="truncate text-[10px] uppercase tracking-widest text-accent sm:text-xs">
             {product.brand}
           </p>
-          <h3 className="font-medium group-hover:underline">{product.name}</h3>
+          <h3 className="line-clamp-2 text-sm font-medium leading-snug sm:text-base sm:group-hover:underline">
+            {product.name}
+          </h3>
           {product.subtitle ? (
-            <p className="text-sm text-secondary">{product.subtitle}</p>
+            <p className="hidden text-sm text-secondary sm:line-clamp-1 sm:block">
+              {product.subtitle}
+            </p>
           ) : null}
           {product.reference ? (
-            <p className="text-xs text-secondary">Reference {product.reference}</p>
+            <p className="hidden text-xs text-secondary sm:block">
+              Reference {product.reference}
+            </p>
           ) : null}
-          <p className="mt-1 text-sm text-accent">
+          <p className="mt-1 text-sm font-medium text-accent sm:mt-1">
             <Price amountUsd={displayPrice} />
           </p>
         </div>

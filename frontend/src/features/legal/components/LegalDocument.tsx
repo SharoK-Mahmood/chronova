@@ -35,9 +35,7 @@ export function LegalDocument({
           {title}
         </h1>
         <p className="mt-4 text-secondary">{description}</p>
-        <p className="mt-3 text-sm text-secondary">
-          Last updated: {lastUpdated}
-        </p>
+        <p className="mt-3 text-sm text-secondary">{lastUpdated}</p>
       </header>
 
       <div className="mt-10 max-w-3xl space-y-10">

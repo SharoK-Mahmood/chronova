@@ -91,7 +91,7 @@ export function HeaderSearch({ variant = "desktop", className }: HeaderSearchPro
           className={cn(
             "flex items-center gap-2 rounded-full border bg-background/80 transition-colors",
             isMobile
-              ? "border-border px-4 py-2.5"
+              ? "border-border px-4 py-3.5"
               : "border-border/80 px-3 py-2",
             open && "border-accent/40 bg-card ring-1 ring-accent/15",
           )}
@@ -99,7 +99,7 @@ export function HeaderSearch({ variant = "desktop", className }: HeaderSearchPro
           <SearchIcon
             className={cn(
               "shrink-0 text-secondary",
-              isMobile ? "h-4 w-4" : "h-3.5 w-3.5",
+              isMobile ? "h-5 w-5" : "h-3.5 w-3.5",
             )}
           />
           <input
@@ -115,7 +115,7 @@ export function HeaderSearch({ variant = "desktop", className }: HeaderSearchPro
             placeholder={t("search.placeholder")}
             className={cn(
               "min-w-0 flex-1 bg-transparent text-foreground outline-none placeholder:text-secondary/70",
-              isMobile ? "text-sm" : "text-[13px]",
+              isMobile ? "text-base" : "text-[13px]",
             )}
             autoComplete="off"
             enterKeyHint="search"

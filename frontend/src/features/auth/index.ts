@@ -1,4 +1,3 @@
-export { AccountDashboard } from "@/features/auth/components/AccountDashboard";
 export { AuthButton } from "@/features/auth/components/AuthButton";
 export { AuthShell } from "@/features/auth/components/AuthShell";
 export { ForgotPasswordForm } from "@/features/auth/components/ForgotPasswordForm";

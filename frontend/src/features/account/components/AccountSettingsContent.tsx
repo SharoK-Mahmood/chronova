@@ -89,21 +89,21 @@ export function AccountSettingsContent() {
         </Container>
       </section>
 
-      <Container className="max-w-5xl py-10 sm:py-14">
-        <div className="grid gap-10 lg:grid-cols-[12rem_1fr] lg:items-start">
+      <Container className="max-w-5xl overflow-x-hidden py-8 sm:py-14">
+        <div className="grid min-w-0 gap-6 lg:grid-cols-[12rem_1fr] lg:items-start lg:gap-10">
           <SettingsNav
             activeSection={activeSection}
             onSectionChange={scrollToSection}
           />
 
-          <div className="space-y-6">
+          <div className="min-w-0 space-y-4 sm:space-y-6">
             <SettingsSection
               id="account"
               title={t("account.accountSection.title")}
               description={t("account.accountSection.description")}
             >
-              <div className="grid gap-5 sm:grid-cols-2">
-                <div>
+              <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
+                <div className="min-w-0">
                   <label htmlFor="settings-name" className="mb-2 block text-sm font-medium">
                     {t("account.accountSection.name")}
                   </label>
@@ -121,7 +121,7 @@ export function AccountSettingsContent() {
                     }
                   />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <label htmlFor="settings-email" className="mb-2 block text-sm font-medium">
                     {t("account.accountSection.email")}
                   </label>
@@ -141,14 +141,14 @@ export function AccountSettingsContent() {
                   />
                 </div>
               </div>
-              <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background/50 px-4 py-3.5">
-                <div>
+              <div className="mt-5 flex flex-col gap-3 rounded-xl border border-border bg-background/50 px-3 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:px-4">
+                <div className="min-w-0">
                   <p className="text-sm font-medium">{t("account.accountSection.password")}</p>
                   <p className="mt-0.5 text-xs text-secondary">
                     {t("account.accountSection.passwordDesc")}
                   </p>
                 </div>
-                <Button href="/reset-password" variant="secondary" className="shrink-0">
+                <Button href="/reset-password" variant="secondary" className="w-full shrink-0 sm:w-auto">
                   {t("account.accountSection.changePassword")}
                 </Button>
               </div>
@@ -347,8 +347,8 @@ export function AccountSettingsContent() {
               title={t("account.currencySection.title")}
               description={t("account.currencySection.description")}
             >
-              <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-background/50 px-4 py-4">
-                <div>
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-background/50 px-3 py-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:px-4">
+                <div className="min-w-0">
                   <p className="text-sm font-medium">{t("currency.display")}</p>
                   <p className="mt-0.5 text-xs text-secondary">
                     {t("currency.displayDescription")}
@@ -388,7 +388,7 @@ export function AccountSettingsContent() {
               </div>
             </SettingsSection>
 
-            <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+            <div className="rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-6">
               <h2 className="text-lg font-semibold tracking-tight">
                 {t("account.logoutSection.title")}
               </h2>

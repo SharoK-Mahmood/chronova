@@ -37,7 +37,7 @@ export function RegisterForm() {
       return;
     }
 
-    router.push("/account");
+    router.push("/account/settings");
   }
 
   return (
@@ -60,7 +60,7 @@ export function RegisterForm() {
               name="firstName"
               type="text"
               autoComplete="given-name"
-              placeholder="Jane"
+              placeholder={t("auth.firstNamePlaceholder")}
               required
             />
           </div>
@@ -73,7 +73,7 @@ export function RegisterForm() {
               name="lastName"
               type="text"
               autoComplete="family-name"
-              placeholder="Doe"
+              placeholder={t("auth.lastNamePlaceholder")}
               required
             />
           </div>
@@ -88,7 +88,7 @@ export function RegisterForm() {
             name="email"
             type="email"
             autoComplete="email"
-            placeholder="you@example.com"
+            placeholder={t("auth.emailPlaceholder")}
             required
           />
         </div>

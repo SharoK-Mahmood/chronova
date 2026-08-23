@@ -1,4 +1,5 @@
 export { LegalDocument } from "@/features/legal/components/LegalDocument";
+export { LegalPageContent } from "@/features/legal/components/LegalPageContent";
 export type { LegalSection } from "@/features/legal/components/LegalDocument";
 export {
   PRIVACY_DESCRIPTION,

@@ -31,7 +31,7 @@ export function GoogleAuthForm() {
   const [selectedId, setSelectedId] = useState<string>(GOOGLE_ACCOUNTS[0].id);
 
   function handleContinue() {
-    router.push("/account");
+    router.push("/account/settings");
   }
 
   return (

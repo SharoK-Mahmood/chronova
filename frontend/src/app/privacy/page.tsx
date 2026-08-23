@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import {
-  LegalDocument,
+  LegalPageContent,
   PRIVACY_DESCRIPTION,
   PRIVACY_LAST_UPDATED,
   PRIVACY_SECTIONS,
@@ -15,20 +14,11 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <LegalDocument
-      title="Privacy Policy"
+    <LegalPageContent
+      variant="privacy"
       description={PRIVACY_DESCRIPTION}
       lastUpdated={PRIVACY_LAST_UPDATED}
       sections={PRIVACY_SECTIONS}
-      footerNote={
-        <>
-          See also our{" "}
-          <Link href="/terms" className="text-accent hover:text-accent/80">
-            Terms of Service
-          </Link>
-          .
-        </>
-      }
     />
   );
 }

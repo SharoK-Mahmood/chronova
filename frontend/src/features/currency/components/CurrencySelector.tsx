@@ -111,7 +111,7 @@ export function CurrencySelector({ className }: CurrencySelectorProps) {
           id={listboxId}
           role="listbox"
           aria-label={t("currency.choose")}
-          className="absolute right-0 top-[calc(100%+0.375rem)] z-50 min-w-[10.5rem] overflow-hidden rounded-xl border border-border bg-card py-1 shadow-[0_12px_40px_-12px_rgba(17,17,17,0.18)]"
+          className="absolute end-0 top-[calc(100%+0.375rem)] z-50 min-w-[10.5rem] overflow-hidden rounded-xl border border-border bg-card py-1 shadow-[0_12px_40px_-12px_rgba(17,17,17,0.18)]"
         >
         {options.map((code) => {
           const isSelected = currency === code;

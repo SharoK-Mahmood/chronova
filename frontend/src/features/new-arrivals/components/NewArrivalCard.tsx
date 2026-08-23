@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -5,6 +7,7 @@ import { AddToCartButton } from "@/features/cart";
 import { Price } from "@/features/currency";
 import type { NewArrival } from "@/features/new-arrivals/types/new-arrival.types";
 import { WishlistButton } from "@/features/wishlist";
+import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 
@@ -19,6 +22,7 @@ export function NewArrivalCard({
   index,
   className,
 }: NewArrivalCardProps) {
+  const { t } = useTranslation();
   const { product, arrivedLabel, tagline } = arrival;
   const imageAlt = product.subtitle
     ? `${product.brand} ${product.name}, ${product.subtitle}`
@@ -36,15 +40,19 @@ export function NewArrivalCard({
       <Link href={`/products/${product.slug}`} className="flex flex-1 flex-col">
         <div
           className={cn(
-            "relative flex items-center justify-center bg-white p-8",
-            isWide ? "aspect-[16/9]" : "aspect-square",
+            "relative flex items-center justify-center bg-white p-4 sm:p-8",
+            isWide ? "aspect-square sm:aspect-[16/9]" : "aspect-square",
           )}
         >
-          <div className="absolute left-3 top-3 z-10">
+          <div className="absolute left-2 top-2 z-10 hidden sm:block">
             <AddToCartButton slug={product.slug} productName={product.name} />
           </div>
-          <div className="absolute right-3 top-3 z-10">
-            <WishlistButton slug={product.slug} productName={product.name} />
+          <div className="absolute right-2 top-2 z-10 sm:right-3 sm:top-3">
+            <WishlistButton
+              slug={product.slug}
+              productName={product.name}
+              className="h-10 w-10 p-2.5 sm:h-auto sm:w-auto sm:p-2"
+            />
           </div>
 
           {hasProductPhoto(product.imageUrl) ? (
@@ -65,7 +73,7 @@ export function NewArrivalCard({
 
           <div className="absolute bottom-4 left-4 flex items-center gap-2">
             <span className="rounded-full bg-primary px-3 py-1 text-[10px] font-medium uppercase tracking-widest text-background">
-              New
+              {t("newArrivals.newBadge")}
             </span>
             <span className="hidden text-[10px] uppercase tracking-widest text-secondary sm:inline">
               {arrivedLabel}

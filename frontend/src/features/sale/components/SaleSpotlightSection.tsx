@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -6,6 +8,7 @@ import { Price } from "@/features/currency";
 import type { SaleSpotlight } from "@/features/sale/types/sale.types";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { useTranslation } from "@/shared/i18n";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 
 type SaleSpotlightSectionProps = {
@@ -13,6 +16,7 @@ type SaleSpotlightSectionProps = {
 };
 
 export function SaleSpotlightSection({ item }: SaleSpotlightSectionProps) {
+  const { t } = useTranslation();
   const { product, originalPrice, salePrice, discountPercent, savings, headline } =
     item;
   const imageAlt = product.subtitle
@@ -25,14 +29,14 @@ export function SaleSpotlightSection({ item }: SaleSpotlightSectionProps) {
         <div className="mb-12 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-accent">
-              Best Offer
+              {t("sale.bestOffer")}
             </p>
             <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
-              The deal of the season
+              {t("sale.dealOfSeason")}
             </h2>
           </div>
           <span className="inline-flex w-fit rounded-full bg-accent/15 px-4 py-1.5 text-sm font-semibold text-accent">
-            −{discountPercent}% off
+            {t("sale.percentOff", { percent: discountPercent })}
           </span>
         </div>
 
@@ -58,7 +62,7 @@ export function SaleSpotlightSection({ item }: SaleSpotlightSectionProps) {
               )}
             </div>
             <div className="absolute left-6 top-6 rounded-full bg-accent px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
-              Save <Price amountUsd={savings} />
+              {t("sale.saveAmount")} <Price amountUsd={savings} />
             </div>
           </Link>
 
@@ -94,11 +98,12 @@ export function SaleSpotlightSection({ item }: SaleSpotlightSectionProps) {
                   variant="button"
                 />
                 <Button href={`/products/${product.slug}`} variant="secondary">
-                  Shop this deal
+                  {t("sale.shopThisDeal")}
                 </Button>
               </div>
               <p className="text-sm text-secondary">
-                You save <Price amountUsd={savings} /> ({discountPercent}% off)
+                <Price amountUsd={savings} /> ·{" "}
+                {t("sale.youSave", { percent: discountPercent })}
               </p>
             </div>
           </div>

@@ -105,7 +105,7 @@ export function PaymentMethodSection({
               name="cardNumber"
               autoComplete="cc-number"
               inputMode="numeric"
-              placeholder="1234 5678 9012 3456"
+              placeholder={t("checkout.card.numberPlaceholder")}
               required
               value={cardDetails.cardNumber}
               onChange={(event) =>
@@ -119,7 +119,7 @@ export function PaymentMethodSection({
                 id="checkout-card-expiry"
                 name="expiry"
                 autoComplete="cc-exp"
-                placeholder="MM / YY"
+                placeholder={t("checkout.card.expiryPlaceholder")}
                 required
                 value={cardDetails.expiry}
                 onChange={(event) =>
@@ -133,7 +133,7 @@ export function PaymentMethodSection({
                 name="cvv"
                 autoComplete="cc-csc"
                 inputMode="numeric"
-                placeholder="CVV"
+                placeholder={t("checkout.card.cvvPlaceholder")}
                 required
                 value={cardDetails.cvv}
                 onChange={(event) => updateCardField("cvv", event.target.value)}

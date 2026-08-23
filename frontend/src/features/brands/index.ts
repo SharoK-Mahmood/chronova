@@ -1,5 +1,6 @@
 export { BrandCard } from "@/features/brands/components/BrandCard";
 export { BrandGrid } from "@/features/brands/components/BrandGrid";
+export { BrandPageContent } from "@/features/brands/components/BrandPageContent";
 export {
   COMMON_BRANDS,
   getBrandBySlug,

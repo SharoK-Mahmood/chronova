@@ -9,17 +9,17 @@ export function FeaturedProducts() {
   const { t } = useTranslation();
 
   return (
-    <section className="py-20 sm:py-28">
+    <section className="py-12 sm:py-20 lg:py-28">
       <Container>
-        <div className="mb-14 flex flex-col gap-6 border-b border-border pb-10 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mb-8 flex flex-col gap-4 border-b border-border pb-6 sm:mb-14 sm:gap-6 sm:pb-10 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-accent">
               {t("home.featured.eyebrow")}
             </p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:mt-3 sm:text-4xl">
               {t("home.featured.title")}
             </h2>
-            <p className="mt-3 max-w-lg text-secondary">
+            <p className="mt-2 max-w-lg text-sm text-secondary sm:mt-3 sm:text-base">
               {t("home.featured.subtitle")}
             </p>
           </div>

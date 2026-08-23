@@ -44,8 +44,7 @@ export function ForgotPasswordForm() {
             {t("auth.checkEmail")}
           </h1>
           <p className="mt-3 text-sm leading-relaxed text-secondary">
-            {t("auth.checkEmail")}:{" "}
-            <span className="font-medium text-foreground">{submittedEmail}</span>
+            {t("auth.forgotPasswordSent", { email: submittedEmail })}
           </p>
           <div className="mt-8 space-y-3">
             <AuthButton href="/reset-password" className="w-full">
@@ -88,7 +87,7 @@ export function ForgotPasswordForm() {
             name="email"
             type="email"
             autoComplete="email"
-            placeholder="you@example.com"
+            placeholder={t("auth.emailPlaceholder")}
             required
           />
         </div>

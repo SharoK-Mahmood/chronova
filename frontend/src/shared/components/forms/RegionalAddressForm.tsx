@@ -59,7 +59,7 @@ export function RegionalAddressForm({
   }));
 
   return (
-    <div className={cn("grid sm:grid-cols-2", gridGap)}>
+    <div className={cn("grid min-w-0 sm:grid-cols-2", gridGap)}>
       <div className="sm:col-span-2">
         <label
           htmlFor={`${prefix}-fullName`}
