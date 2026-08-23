@@ -55,23 +55,23 @@ export function CartDrawer() {
         aria-modal="true"
         aria-labelledby="cart-drawer-title"
         className={cn(
-          "absolute inset-y-0 right-0 flex w-full max-w-md flex-col border-l border-border bg-card shadow-2xl transition-transform duration-300 ease-out",
-          isDrawerOpen ? "translate-x-0" : "translate-x-full",
+          "absolute inset-y-0 end-0 flex h-full max-h-[100dvh] w-full max-w-md flex-col border-s border-border bg-card shadow-2xl transition-transform duration-300 ease-out",
+          isDrawerOpen ? "translate-x-0" : "translate-x-full rtl:-translate-x-full",
         )}
       >
-        <header className="border-b border-border bg-primary px-6 py-6 text-background">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.35em] text-accent">
+        <header className="shrink-0 border-b border-border bg-primary px-5 py-4 text-background">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-accent">
                 {t("cart.yourSelection")}
               </p>
               <h2
                 id="cart-drawer-title"
-                className="mt-2 text-2xl font-semibold tracking-tight"
+                className="mt-1 text-xl font-semibold tracking-tight"
               >
                 {t("cart.shoppingBag")}
               </h2>
-              <p className="mt-1 text-sm text-background/70">
+              <p className="mt-0.5 text-xs text-background/70">
                 {itemCount > 0
                   ? t("cart.bagCount", { count: itemCount })
                   : t("cart.emptyDrawerDesc")}
@@ -82,7 +82,7 @@ export function CartDrawer() {
               onClick={closeDrawer}
               aria-label={t("cart.closeBag")}
               className={cn(
-                "rounded-full p-2 text-background/70",
+                "shrink-0 rounded-full p-1.5 text-background/70",
                 interactiveIconButtonClasses,
                 "hover:bg-background/10 hover:text-background",
               )}
@@ -103,15 +103,15 @@ export function CartDrawer() {
         </header>
 
         {itemCount === 0 ? (
-          <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
-            <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
+          <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-5 text-center">
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-accent/10">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.5"
-                className="h-8 w-8 text-accent"
+                className="h-7 w-7 text-accent"
                 aria-hidden="true"
               >
                 <path d="M6 6h15l-1.5 9h-12L6 6z" />
@@ -120,58 +120,65 @@ export function CartDrawer() {
                 <circle cx="18" cy="20" r="1" />
               </svg>
             </div>
-            <p className="text-lg font-medium">{t("cart.emptyDrawer")}</p>
+            <p className="text-base font-medium">{t("cart.emptyDrawer")}</p>
             <p className="mt-2 max-w-xs text-sm text-secondary">
               {t("cart.emptyDrawerDesc")}
             </p>
-            <Button href="/products" variant="accent" onClick={closeDrawer} className="mt-8">
+            <Button
+              href="/products"
+              variant="accent"
+              onClick={closeDrawer}
+              className="mt-6"
+            >
               {t("cart.exploreCollection")}
             </Button>
           </div>
         ) : (
           <>
-            <div className="flex-1 space-y-3 overflow-y-auto px-6 py-6">
-              <p className="text-xs uppercase tracking-[0.25em] text-secondary">
-                {t("cart.inYourBag")}
-              </p>
-              {entries.map((entry) => (
-                <CartDrawerItem
-                  key={entry.slug}
-                  entry={entry}
-                  onNavigate={closeDrawer}
-                />
-              ))}
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-4">
+              <ul className="space-y-3">
+                {entries.map((entry) => (
+                  <li key={entry.slug}>
+                    <CartDrawerItem
+                      entry={entry}
+                      onNavigate={closeDrawer}
+                    />
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            <footer className="relative border-t border-border bg-card px-6 py-6">
-              <dl className="space-y-2 text-sm">
-                <div className="flex items-center justify-between">
+            <footer className="shrink-0 border-t border-border bg-card px-5 py-4">
+              <dl className="grid gap-1.5 text-sm">
+                <div className="flex items-center justify-between gap-4">
                   <dt className="text-secondary">{t("cart.subtotal")}</dt>
-                  <dd className="font-medium">
+                  <dd className="font-medium tabular-nums">
                     <Price amountUsd={subtotalUsd} />
                   </dd>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-4">
                   <dt className="text-secondary">{t("cart.shipping")}</dt>
-                  <dd className="text-secondary">{t("cart.shippingAtCheckoutShort")}</dd>
+                  <dd className="text-secondary">
+                    {t("cart.shippingAtCheckoutShort")}
+                  </dd>
                 </div>
-                <div className="flex items-center justify-between border-t border-border pt-3 text-base">
+                <div className="flex items-center justify-between gap-4 border-t border-border pt-2">
                   <dt className="font-semibold">{t("cart.estimatedTotal")}</dt>
-                  <dd className="font-semibold text-accent">
+                  <dd className="font-semibold tabular-nums text-accent">
                     <Price amountUsd={subtotalUsd} />
                   </dd>
                 </div>
               </dl>
-              <p className="mt-2 text-[11px] text-secondary">
+              <p className="mt-1.5 text-[10px] leading-snug text-secondary">
                 {t("common.pricesIn", { currency: currencyLabel })}
               </p>
 
-              <div className="mt-6 space-y-3">
+              <div className="mt-3 grid grid-cols-2 gap-2">
                 <Button
                   href="/checkout"
                   variant="accent"
                   onClick={closeDrawer}
-                  className="w-full"
+                  className="col-span-2 w-full py-2.5 text-sm"
                 >
                   {t("cart.completePurchase")}
                 </Button>
@@ -179,19 +186,18 @@ export function CartDrawer() {
                   href="/products"
                   variant="secondary"
                   onClick={closeDrawer}
-                  className="w-full"
+                  className="w-full py-2.5 text-sm"
                 >
                   {t("common.continueShopping")}
                 </Button>
+                <Link
+                  href="/cart"
+                  onClick={closeDrawer}
+                  className="flex items-center justify-center rounded-xl border border-border px-3 py-2.5 text-center text-xs font-medium text-accent transition-colors hover:border-accent/30 hover:bg-background"
+                >
+                  {t("cart.viewFullBag")}
+                </Link>
               </div>
-
-              <Link
-                href="/cart"
-                onClick={closeDrawer}
-                className="mt-4 block text-center text-xs font-medium text-accent transition-colors hover:text-accent/80"
-              >
-                {t("cart.viewFullBag")}
-              </Link>
             </footer>
           </>
         )}
