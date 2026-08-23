@@ -4,11 +4,9 @@ import type { ComponentPropsWithoutRef } from "react";
 import { cn } from "@/shared/lib/utils/cn";
 
 const variants = {
-  primary:
-    "bg-foreground text-background hover:bg-foreground/90",
-  secondary:
-    "border border-foreground/15 bg-transparent hover:bg-foreground/5",
-  ghost: "bg-transparent hover:bg-foreground/5",
+  primary: "bg-primary text-background hover:bg-primary/90",
+  secondary: "border border-border bg-transparent hover:bg-border/60",
+  ghost: "bg-transparent hover:bg-border/60",
 } as const;
 
 type ButtonVariant = keyof typeof variants;

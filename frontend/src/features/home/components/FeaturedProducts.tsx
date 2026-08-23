@@ -11,7 +11,7 @@ export function FeaturedProducts() {
             <h2 className="text-2xl font-semibold tracking-tight">
               Featured watches
             </h2>
-            <p className="mt-2 text-foreground/70">
+            <p className="mt-2 text-secondary">
               Curated picks from the Chronova collection.
             </p>
           </div>
