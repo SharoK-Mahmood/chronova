@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-import { CurrencySelector } from "@/features/currency";
+import { CurrencySwitch } from "@/features/currency";
 import {
   MAIN_NAV_LINKS,
   UTILITY_NAV_LINKS,
@@ -144,11 +144,11 @@ export function MobileMenuDrawer({ open, onClose }: MobileMenuDrawerProps) {
           </ul>
         </nav>
 
-        <div className="border-t border-border px-4 py-4">
+        <div className="border-t border-border px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4">
           <p className="mb-2 text-xs uppercase tracking-[0.2em] text-secondary">
             {t("currency.display")}
           </p>
-          <CurrencySelector className="w-full justify-start" />
+          <CurrencySwitch className="w-full" />
         </div>
       </aside>
     </div>

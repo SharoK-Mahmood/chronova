@@ -1,4 +1,5 @@
 export { CurrencySelector } from "@/features/currency/components/CurrencySelector";
+export { CurrencySwitch } from "@/features/currency/components/CurrencySwitch";
 export { Price } from "@/features/currency/components/Price";
 export {
   CURRENCIES,
