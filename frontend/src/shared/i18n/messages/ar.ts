@@ -31,6 +31,7 @@ export const messages: Messages = {
     menu: "القائمة",
     categories: "الفئات",
     bottomNav: "التنقل السفلي",
+    more: "المزيد",
   },
   footer: {
     rights: "جميع الحقوق محفوظة.",

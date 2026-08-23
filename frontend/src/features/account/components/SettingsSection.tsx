@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { cn } from "@/shared/lib/utils/cn";
+import { type as typography } from "@/shared/lib/typography";
 
 type SettingsSectionProps = {
   id: string;
@@ -26,9 +27,9 @@ export function SettingsSection({
       )}
     >
       <div className="mb-6 border-b border-border pb-5">
-        <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+        <h2 className={typography.section}>{title}</h2>
         {description ? (
-          <p className="mt-1 text-sm text-secondary">{description}</p>
+          <p className={cn("mt-1 text-secondary", typography.body)}>{description}</p>
         ) : null}
       </div>
       {children}

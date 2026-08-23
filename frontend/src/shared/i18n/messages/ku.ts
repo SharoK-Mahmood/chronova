@@ -31,6 +31,7 @@ export const messages: Messages = {
     menu: "مێنیو",
     categories: "پۆلەکان",
     bottomNav: "گەشتکردنی خوارەوە",
+    more: "زیاتر",
   },
   footer: {
     rights: "هەموو مافەکان پارێزراون.",

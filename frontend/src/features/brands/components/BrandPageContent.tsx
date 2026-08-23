@@ -5,6 +5,8 @@ import type { Product } from "@/features/products";
 import { ProductGrid } from "@/features/products";
 import { Container } from "@/shared/components/ui/Container";
 import { useTranslation } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils/cn";
+import { type as typography } from "@/shared/lib/typography";
 
 type BrandPageContentProps = {
   brand: Brand;
@@ -27,11 +29,11 @@ export function BrandPageContent({ brand, products }: BrandPageContentProps) {
         <p className="text-sm uppercase tracking-widest text-accent">
           {brand.origin}
         </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight">
-          {brand.name}
-        </h1>
-        <p className="mt-2 max-w-2xl text-secondary">{brand.description}</p>
-        <p className="mt-3 text-sm text-secondary">{availabilityLabel}</p>
+        <h1 className={cn("mt-2", typography.page)}>{brand.name}</h1>
+        <p className={cn("mt-2 max-w-2xl text-secondary", typography.body)}>
+          {brand.description}
+        </p>
+        <p className={cn("mt-3 text-secondary", typography.body)}>{availabilityLabel}</p>
       </div>
 
       {products.length > 0 ? (

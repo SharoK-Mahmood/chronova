@@ -29,6 +29,7 @@ export const messages = {
     menu: "Menu",
     categories: "Categories",
     bottomNav: "Bottom navigation",
+    more: "More",
   },
   footer: {
     rights: "All rights reserved.",

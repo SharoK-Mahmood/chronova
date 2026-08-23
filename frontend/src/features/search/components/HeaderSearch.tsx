@@ -8,6 +8,7 @@ import { buildSearchUrl } from "@/features/search/constants/search-categories";
 import { searchCatalog } from "@/features/search/lib/search-catalog";
 import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
+import { type as typography } from "@/shared/lib/typography";
 
 type HeaderSearchProps = {
   variant?: "desktop" | "mobile";
@@ -66,6 +67,51 @@ export function HeaderSearch({ variant = "desktop", className }: HeaderSearchPro
     };
   }, []);
 
+  useEffect(() => {
+    if (!showDropdown) {
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    function handleWheel(event: WheelEvent) {
+      const root = rootRef.current;
+      if (!root?.contains(event.target as Node)) {
+        event.preventDefault();
+        return;
+      }
+
+      const scrollEl = root.querySelector<HTMLElement>("[data-search-scroll]");
+      if (!scrollEl) {
+        event.preventDefault();
+        return;
+      }
+
+      const { scrollTop, scrollHeight, clientHeight } = scrollEl;
+      const canScroll = scrollHeight > clientHeight + 1;
+      const atTop = scrollTop <= 0;
+      const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+      const scrollingUp = event.deltaY < 0;
+      const scrollingDown = event.deltaY > 0;
+
+      if (
+        !canScroll ||
+        (scrollingUp && atTop) ||
+        (scrollingDown && atBottom)
+      ) {
+        event.preventDefault();
+      }
+    }
+
+    document.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("wheel", handleWheel);
+    };
+  }, [showDropdown]);
+
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const trimmed = query.trim();
@@ -115,7 +161,7 @@ export function HeaderSearch({ variant = "desktop", className }: HeaderSearchPro
             placeholder={t("search.placeholder")}
             className={cn(
               "min-w-0 flex-1 bg-transparent text-foreground outline-none placeholder:text-secondary/70",
-              isMobile ? "text-base" : "text-[13px]",
+              typography.body,
             )}
             autoComplete="off"
             enterKeyHint="search"

@@ -16,6 +16,7 @@ import {
   UtilityNavLinks,
 } from "@/shared/components/layout/HeaderNav";
 import { MobileMenuDrawer } from "@/shared/components/layout/MobileMenuDrawer";
+import { TabletPrimaryNavLinks } from "@/shared/components/layout/TabletNav";
 import { NavIcon } from "@/shared/components/layout/NavIcon";
 import { Container } from "@/shared/components/ui/Container";
 import { useTranslation } from "@/shared/i18n";
@@ -72,8 +73,8 @@ export function Header() {
   return (
     <BrandsMenuProvider>
       <header className="sticky top-0 z-40 border-b border-border bg-card/95 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-card/90">
-        {/* Mobile top bar: menu | logo | cart */}
-        <Container className="lg:hidden">
+        {/* Mobile: menu | logo | cart + search below */}
+        <Container className="md:hidden">
           <div className="flex h-14 items-center justify-between gap-2">
             <button
               type="button"
@@ -106,7 +107,42 @@ export function Header() {
           <HeaderSearch variant="mobile" className="pb-3" />
         </Container>
 
-        {/* Desktop header */}
+        {/* Tablet: logo + nav + search + utilities */}
+        <Container className="hidden max-w-5xl md:block lg:hidden">
+          <div className="flex h-16 items-center gap-3">
+            <Link href="/" className="shrink-0" aria-label={t("nav.homeAria")}>
+              <Image
+                src="/chronova-logo.png"
+                alt={t("site.name")}
+                width={240}
+                height={64}
+                priority
+                className="h-9 w-auto"
+              />
+            </Link>
+
+            <nav
+              aria-label={t("nav.main")}
+              className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1"
+            >
+              <TabletPrimaryNavLinks />
+            </nav>
+
+            <HeaderSearch
+              variant="desktop"
+              className="ms-auto min-w-0 max-w-[12rem] flex-1"
+            />
+
+            <nav
+              aria-label={t("nav.utility")}
+              className="flex shrink-0 items-center gap-0.5"
+            >
+              <UtilityNavLinks />
+            </nav>
+          </div>
+        </Container>
+
+        {/* Desktop: full navigation */}
         <Container className="hidden max-w-5xl lg:block">
           <div className="flex h-[4.25rem] items-center justify-between gap-4">
             <div className="flex min-w-0 items-center gap-6 xl:gap-8">
@@ -131,7 +167,7 @@ export function Header() {
 
             <HeaderSearch
               variant="desktop"
-              className="min-w-0 flex-1 lg:max-w-[17rem] xl:max-w-xs"
+              className="min-w-0 flex-1 max-w-[17rem] xl:max-w-xs"
             />
 
             <nav

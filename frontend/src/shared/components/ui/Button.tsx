@@ -8,6 +8,7 @@ import {
   luxurySecondaryHoverClasses,
 } from "@/shared/lib/utils/button-interaction";
 import { cn } from "@/shared/lib/utils/cn";
+import { type as typography } from "@/shared/lib/typography";
 
 const variants = {
   primary:
@@ -88,7 +89,8 @@ export function Button({
   );
 
   const classes = cn(
-    "relative inline-flex items-center justify-center overflow-hidden rounded-full px-5 py-2.5 text-sm font-medium",
+    "relative inline-flex items-center justify-center overflow-hidden rounded-full px-5 py-2.5",
+    typography.btn,
     motionClasses,
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-offset-2",
     "disabled:pointer-events-none disabled:opacity-50 disabled:hover:scale-100 disabled:hover:translate-y-0 disabled:hover:shadow-none",

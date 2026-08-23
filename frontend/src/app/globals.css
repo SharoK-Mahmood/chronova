@@ -18,7 +18,8 @@
   --color-secondary: var(--secondary);
   --color-card: var(--card);
   --color-border: var(--border);
-  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-family-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-family-serif), ui-serif, Georgia, serif;
 }
 
 body {
@@ -26,7 +27,159 @@ body {
   color: var(--foreground);
 }
 
+/*
+ * Typography scale (Cormorant Garamond headings · Inter UI)
+ * Mobile → Tablet (md) → Desktop (lg) → Large desktop (xl)
+ */
 @layer components {
+  .type-hero {
+    font-size: 2rem; /* 32px mobile */
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+
+  .type-page {
+    font-size: 1.75rem; /* 28px mobile */
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+
+  .type-section {
+    font-size: 1.375rem; /* 22px mobile */
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    font-weight: 600;
+  }
+
+  .type-product {
+    font-size: 0.875rem; /* 14px mobile */
+    line-height: 1.35;
+    font-weight: 500;
+  }
+
+  .type-body {
+    font-size: 0.875rem; /* 14px mobile */
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  .type-btn {
+    font-size: 0.875rem; /* 14px mobile */
+    line-height: 1.25;
+    font-weight: 500;
+  }
+
+  .type-nav {
+    font-size: 0.875rem; /* 14px mobile */
+    line-height: 1.25;
+    font-weight: 400;
+  }
+
+  .type-price {
+    font-size: 1rem; /* 16px mobile */
+    line-height: 1.25;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .type-label {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    font-weight: 500;
+  }
+
+  @media (min-width: 768px) {
+    .type-hero {
+      font-size: 2.5rem; /* 40px tablet */
+    }
+
+    .type-page {
+      font-size: 2rem; /* 32px tablet */
+    }
+
+    .type-section {
+      font-size: 1.625rem; /* 26px tablet */
+    }
+
+    .type-product {
+      font-size: 0.9375rem; /* 15px tablet */
+    }
+
+    .type-body {
+      font-size: 0.9375rem; /* 15px tablet */
+    }
+
+    .type-btn {
+      font-size: 0.9375rem; /* 15px tablet */
+    }
+
+    .type-nav {
+      font-size: 0.9375rem; /* 15px tablet */
+    }
+
+    .type-price {
+      font-size: 1.125rem; /* 18px tablet */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .type-hero {
+      font-size: 3rem; /* 48px desktop */
+    }
+
+    .type-page {
+      font-size: 2.25rem; /* 36px desktop */
+    }
+
+    .type-section {
+      font-size: 1.75rem; /* 28px desktop */
+    }
+
+    .type-product {
+      font-size: 1rem; /* 16px desktop */
+    }
+
+    .type-body {
+      font-size: 1rem; /* 16px desktop */
+    }
+
+    .type-btn {
+      font-size: 1rem; /* 16px desktop */
+    }
+
+    .type-nav {
+      font-size: 1rem; /* 16px desktop */
+    }
+
+    .type-price {
+      font-size: 1.25rem; /* 20px desktop */
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .type-hero {
+      font-size: 4rem; /* 64px large desktop */
+    }
+
+    .type-page {
+      font-size: 2.75rem; /* 44px large desktop */
+    }
+
+    .type-section {
+      font-size: 2rem; /* 32px large desktop */
+    }
+
+    .type-product {
+      font-size: 1.125rem; /* 18px large desktop */
+    }
+
+    .type-price {
+      font-size: 1.375rem; /* 22px large desktop */
+    }
+  }
+
   .btn-luxury {
     transform-origin: center;
     transform: translateY(0) scale(1);

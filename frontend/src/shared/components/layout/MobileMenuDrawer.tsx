@@ -65,7 +65,7 @@ export function MobileMenuDrawer({ open, onClose }: MobileMenuDrawerProps) {
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[55] lg:hidden",
+        "fixed inset-0 z-[55] md:hidden",
         open ? "pointer-events-auto" : "pointer-events-none",
       )}
       aria-hidden={!open}

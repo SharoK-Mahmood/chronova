@@ -4,6 +4,7 @@ import type { NewArrival } from "@/features/new-arrivals/types/new-arrival.types
 import { NewArrivalCard } from "@/features/new-arrivals/components/NewArrivalCard";
 import { Container } from "@/shared/components/ui/Container";
 import { useTranslation } from "@/shared/i18n";
+import { type as typography } from "@/shared/lib/typography";
 
 type NewArrivalsCollectionProps = {
   arrivals: NewArrival[];
@@ -21,13 +22,15 @@ export function NewArrivalsCollection({
           <p className="text-xs uppercase tracking-[0.3em] text-accent">
             {t("newArrivals.collectionEyebrow")}
           </p>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+          <h2 className={cn("mt-2", typography.section)}>
             {t("newArrivals.collectionTitle")}
           </h2>
-          <p className="mt-4 text-secondary">{t("newArrivals.collectionDesc")}</p>
+          <p className={cn("mt-4 text-secondary", typography.body)}>
+            {t("newArrivals.collectionDesc")}
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:gap-6">
           {arrivals.map((arrival, index) => (
             <NewArrivalCard
               key={arrival.product.id}

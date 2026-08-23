@@ -57,7 +57,7 @@ function ResultLink({
 }
 
 const dropdownShellClass =
-  "flex max-h-[min(28rem,calc(100dvh-11.5rem))] flex-col overflow-hidden rounded-xl border border-border bg-card shadow-[0_12px_40px_-12px_rgba(17,17,17,0.18)] lg:max-h-[min(28rem,calc(100dvh-8rem))]";
+  "flex max-h-[min(28rem,calc(100dvh-11.5rem))] flex-col overflow-hidden rounded-xl border border-border bg-card shadow-[0_12px_40px_-12px_rgba(17,17,17,0.18)] md:max-h-[min(28rem,calc(100dvh-8rem))]";
 
 export function SearchDropdown({
   results,
@@ -84,7 +84,7 @@ export function SearchDropdown({
   if (!hasResults) {
     return (
       <div className={cn(dropdownShellClass, className)}>
-        <div className="min-h-0 overflow-y-auto overscroll-contain py-4">
+        <div className="min-h-0 overflow-y-auto overscroll-contain py-4" data-search-scroll>
           <p className="px-4 text-sm text-secondary">
             {t("common.noResults", { query: results.query })}
           </p>
@@ -104,7 +104,10 @@ export function SearchDropdown({
 
   return (
     <div className={cn(dropdownShellClass, className)}>
-      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+      <div
+        className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
+        data-search-scroll
+      >
         {results.watches.length > 0 ? (
           <div className="border-b border-border/80 pb-1">
             <SectionLabel>{t("search.matchingWatches")}</SectionLabel>

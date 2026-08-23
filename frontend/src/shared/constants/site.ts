@@ -26,6 +26,17 @@ export const MAIN_NAV_LINKS = [
   { href: "/sale", labelKey: "nav.sale" as const, highlight: true },
 ] as const;
 
+/** Links shown in the tablet header (full main nav, no overflow menu). */
+export const TABLET_PRIMARY_NAV_HREFS = [
+  "/",
+  "/products",
+  "/men",
+  "/women",
+  "/brands",
+  "/new-arrivals",
+  "/sale",
+] as const;
+
 export type UtilityNavIcon = "wishlist" | "cart" | "account";
 
 export const UTILITY_NAV_LINKS: ReadonlyArray<{

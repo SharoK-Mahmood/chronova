@@ -8,6 +8,7 @@ import { useWishlist } from "@/features/wishlist";
 import { NavIcon } from "@/shared/components/layout/NavIcon";
 import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
+import { type as typography } from "@/shared/lib/typography";
 
 function HomeIcon({ className }: { className?: string }) {
   return (
@@ -103,14 +104,15 @@ export function MobileBottomNav() {
   return (
     <nav
       aria-label={t("nav.bottomNav")}
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md supports-[backdrop-filter]:bg-card/90 lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md supports-[backdrop-filter]:bg-card/90 md:hidden"
     >
       <ul className="mx-auto flex h-16 max-w-lg items-stretch justify-around px-1">
         {items.map((item) => {
           const isActive = isActivePath(pathname, item.href);
           const badge = "badge" in item ? item.badge : 0;
           const className = cn(
-            "relative flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 px-1 text-[10px] font-medium tracking-wide transition-colors",
+            "relative flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 px-1 tracking-wide transition-colors",
+            typography.nav,
             isActive ? "text-accent" : "text-secondary",
           );
 

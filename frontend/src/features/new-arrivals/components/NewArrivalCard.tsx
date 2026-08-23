@@ -33,7 +33,7 @@ export function NewArrivalCard({
     <article
       className={cn(
         "group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:border-accent/30 hover:shadow-xl",
-        isWide && "sm:col-span-2",
+        isWide && "lg:col-span-2",
         className,
       )}
     >
@@ -41,17 +41,17 @@ export function NewArrivalCard({
         <div
           className={cn(
             "relative flex items-center justify-center bg-white p-4 sm:p-8",
-            isWide ? "aspect-square sm:aspect-[16/9]" : "aspect-square",
+            isWide ? "aspect-square lg:aspect-[16/9]" : "aspect-square",
           )}
         >
-          <div className="absolute left-2 top-2 z-10 hidden sm:block">
+          <div className="absolute left-2 top-2 z-10 hidden md:block">
             <AddToCartButton slug={product.slug} productName={product.name} />
           </div>
-          <div className="absolute right-2 top-2 z-10 sm:right-3 sm:top-3">
+          <div className="absolute right-2 top-2 z-10 md:right-3 md:top-3">
             <WishlistButton
               slug={product.slug}
               productName={product.name}
-              className="h-10 w-10 p-2.5 sm:h-auto sm:w-auto sm:p-2"
+              className="h-10 w-10 p-2.5 md:h-auto md:w-auto md:p-2"
             />
           </div>
 

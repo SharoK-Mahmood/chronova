@@ -26,6 +26,7 @@ import { Input } from "@/shared/components/ui/Input";
 import type { LanguageCode } from "@/shared/i18n/types";
 import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
+import { type as typography } from "@/shared/lib/typography";
 
 const LOCALE_BY_LANGUAGE: Record<LanguageCode, string> = {
   en: "en-US",
@@ -80,10 +81,10 @@ export function AccountSettingsContent() {
           <p className="mt-6 text-xs uppercase tracking-[0.35em] text-accent">
             {t("account.preferences")}
           </p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h1 className={cn("mt-2", typography.page)}>
             {t("account.settingsTitle")}
           </h1>
-          <p className="mt-2 max-w-xl text-background/70">
+          <p className={cn("mt-2 max-w-xl text-background/70", typography.body)}>
             {t("account.settingsSubtitle")}
           </p>
         </Container>
@@ -104,7 +105,7 @@ export function AccountSettingsContent() {
             >
               <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
                 <div className="min-w-0">
-                  <label htmlFor="settings-name" className="mb-2 block text-sm font-medium">
+                  <label htmlFor="settings-name" className={cn("mb-2 block", typography.label)}>
                     {t("account.accountSection.name")}
                   </label>
                   <Input
@@ -122,7 +123,7 @@ export function AccountSettingsContent() {
                   />
                 </div>
                 <div className="min-w-0">
-                  <label htmlFor="settings-email" className="mb-2 block text-sm font-medium">
+                  <label htmlFor="settings-email" className={cn("mb-2 block", typography.label)}>
                     {t("account.accountSection.email")}
                   </label>
                   <Input

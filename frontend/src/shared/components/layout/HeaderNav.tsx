@@ -15,6 +15,7 @@ import {
 import { useTranslation } from "@/shared/i18n";
 import { navIconButtonClasses } from "@/shared/lib/utils/button-interaction";
 import { cn } from "@/shared/lib/utils/cn";
+import { type as typography } from "@/shared/lib/typography";
 
 function isNavLinkActive(pathname: string, href: string): boolean {
   if (href === "/") {
@@ -29,7 +30,8 @@ function getMainNavLinkClassName(
   isHighlighted: boolean,
 ): string {
   return cn(
-    "relative inline-block whitespace-nowrap pb-1 text-[13px] font-normal leading-none transition-all duration-200",
+    "relative inline-block whitespace-nowrap pb-1 leading-none transition-all duration-200",
+    typography.nav,
     "after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:rounded-full after:bg-accent after:transition-transform after:duration-200",
     isActive
       ? "text-foreground after:scale-x-100"

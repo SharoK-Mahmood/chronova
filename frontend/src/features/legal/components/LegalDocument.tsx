@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 
 import { Container } from "@/shared/components/ui/Container";
 import { SITE } from "@/shared/constants/site";
+import { cn } from "@/shared/lib/utils/cn";
+import { type as typography } from "@/shared/lib/typography";
 
 export type LegalSection = {
   id: string;
@@ -31,20 +33,16 @@ export function LegalDocument({
         <p className="text-xs uppercase tracking-[0.3em] text-accent">
           {SITE.name}
         </p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-          {title}
-        </h1>
-        <p className="mt-4 text-secondary">{description}</p>
-        <p className="mt-3 text-sm text-secondary">{lastUpdated}</p>
+        <h1 className={cn("mt-3", typography.page)}>{title}</h1>
+        <p className={cn("mt-4 text-secondary", typography.body)}>{description}</p>
+        <p className={cn("mt-3 text-secondary", typography.body)}>{lastUpdated}</p>
       </header>
 
       <div className="mt-10 max-w-3xl space-y-10">
         {sections.map((section) => (
           <section key={section.id} id={section.id}>
-            <h2 className="text-xl font-semibold tracking-tight">
-              {section.title}
-            </h2>
-            <div className="mt-4 space-y-4 text-secondary leading-relaxed">
+            <h2 className={typography.section}>{section.title}</h2>
+            <div className={cn("mt-4 space-y-4 text-secondary leading-relaxed", typography.body)}>
               {section.paragraphs.map((paragraph) => (
                 <p key={paragraph.slice(0, 40)}>{paragraph}</p>
               ))}
@@ -61,7 +59,7 @@ export function LegalDocument({
       </div>
 
       {footerNote ? (
-        <p className="mt-12 max-w-3xl border-t border-border pt-8 text-sm text-secondary">
+        <p className={cn("mt-12 max-w-3xl border-t border-border pt-8 text-secondary", typography.body)}>
           {footerNote}
         </p>
       ) : null}

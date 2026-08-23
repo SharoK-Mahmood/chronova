@@ -14,7 +14,7 @@ export function MainLayout({ children }: MainLayoutProps) {
     <Providers>
       <Header />
       <main className="flex-1">{children}</main>
-      <div className="pb-20 lg:pb-0">
+      <div className="pb-20 md:pb-0">
         <Footer />
       </div>
       <MobileBottomNav />
