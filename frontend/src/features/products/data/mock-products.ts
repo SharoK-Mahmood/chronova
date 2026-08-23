@@ -51,6 +51,105 @@ const FEATURED_ROLEX: Product[] = [
   },
 ];
 
+const FEATURED_WOMEN: Product[] = [
+  {
+    id: "rolex-279381rbr",
+    name: "Lady-Datejust 28",
+    slug: "lady-datejust-28",
+    brand: "Rolex",
+    subtitle: "Oyster, 28 mm, Everose gold and diamonds",
+    reference: "279381RBR",
+    description:
+      "The Lady-Datejust 28 in 18 kt Everose gold with a chocolate dial, diamond-set bezel and President bracelet. A refined expression of Rolex elegance, sized for a slimmer wrist without compromising presence.",
+    price: 42800,
+    currency: "USD",
+    imageUrl:
+      "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=1200&q=80",
+    category: "women",
+    inStock: true,
+  },
+  {
+    id: "rolex-278273",
+    name: "Datejust 31",
+    slug: "datejust-31",
+    brand: "Rolex",
+    subtitle: "Oyster, 31 mm, Oystersteel and yellow gold",
+    reference: "278273",
+    description:
+      "The Datejust 31 in Oystersteel and yellow gold, with a silver dial, fluted bezel and Jubilee bracelet. A versatile classic that transitions effortlessly from day to evening.",
+    price: 15200,
+    currency: "USD",
+    imageUrl:
+      "https://images.unsplash.com/photo-1542496658-ba5938be05ae?auto=format&fit=crop&w=1200&q=80",
+    category: "women",
+    inStock: true,
+  },
+  {
+    id: "rolex-277200",
+    name: "Oyster Perpetual 31",
+    slug: "oyster-perpetual-31",
+    brand: "Rolex",
+    subtitle: "Oyster, 31 mm, Oystersteel",
+    reference: "277200",
+    description:
+      "The Oyster Perpetual 31 in Oystersteel with a candy pink dial and Oyster bracelet. Clean, contemporary lines with the reliability of Rolex's perpetual movement in a refined 31 mm case.",
+    price: 6100,
+    currency: "USD",
+    imageUrl:
+      "https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?auto=format&fit=crop&w=1200&q=80",
+    category: "women",
+    inStock: true,
+  },
+];
+
+const CHRONOVA_WOMEN: Product[] = [
+  {
+    id: "chronova-lumen-28",
+    name: "Lumen 28",
+    slug: "lumen-28",
+    brand: "Chronova",
+    subtitle: "28 mm, champagne dial, leather strap",
+    description:
+      "A slim 28 mm quartz with a champagne dial and leather strap. Designed for everyday elegance with a lightweight profile that sits comfortably on smaller wrists.",
+    price: 640,
+    currency: "USD",
+    imageUrl:
+      "https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?auto=format&fit=crop&w=1200&q=80",
+    category: "women",
+    inStock: true,
+  },
+  {
+    id: "chronova-pearl",
+    name: "Pearl",
+    slug: "chronova-pearl",
+    brand: "Chronova",
+    subtitle: "32 mm, mother-of-pearl dial, rose gold",
+    description:
+      "The Pearl pairs a luminous mother-of-pearl dial with a rose gold case and mesh bracelet. Soft light play and a refined silhouette for formal and casual wear alike.",
+    price: 420,
+    currency: "USD",
+    imageUrl:
+      "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=1200&q=80",
+    category: "women",
+    inStock: true,
+  },
+  {
+    id: "chronova-grace",
+    name: "Grace",
+    slug: "chronova-grace",
+    brand: "Chronova",
+    subtitle: "34 mm, automatic, stainless steel",
+    description:
+      "Grace is a 34 mm automatic with a sunburst silver dial and integrated steel bracelet. Understated movement and a balanced case size for all-day wear.",
+    price: 549,
+    currency: "USD",
+    imageUrl:
+      "https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?auto=format&fit=crop&w=1200&q=80",
+    category: "women",
+    inStock: true,
+  },
+];
+
 const CHRONOVA_WATCHES: Product[] = [
   {
     id: "1",
@@ -145,9 +244,23 @@ export const FEATURED_PRODUCTS: ProductSummary[] =
 
 export const CATALOG_PRODUCTS: Product[] = [
   ...FEATURED_ROLEX,
+  ...FEATURED_WOMEN,
+  ...CHRONOVA_WOMEN,
   ...CHRONOVA_WATCHES,
 ];
 
 export function getProductBySlug(slug: string): Product | undefined {
   return CATALOG_PRODUCTS.find((product) => product.slug === slug);
+}
+
+export function getProductsByCategory(category: string): Product[] {
+  return CATALOG_PRODUCTS.filter((product) => product.category === category);
+}
+
+export function getProductsByBrand(brandName: string): Product[] {
+  const normalizedBrand = brandName.toLowerCase();
+
+  return CATALOG_PRODUCTS.filter(
+    (product) => product.brand.toLowerCase() === normalizedBrand,
+  );
 }

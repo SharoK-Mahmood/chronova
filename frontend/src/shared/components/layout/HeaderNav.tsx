@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { BrandsNavLink } from "@/shared/components/layout/BrandsNavMenu";
 import { NavIcon } from "@/shared/components/layout/NavIcon";
 import {
   MAIN_NAV_LINKS,
@@ -37,9 +38,13 @@ function getMainNavLinkClassName(
 
 type MainNavLinksProps = {
   className?: string;
+  variant?: "desktop" | "mobile";
 };
 
-export function MainNavLinks({ className }: MainNavLinksProps) {
+export function MainNavLinks({
+  className,
+  variant = "desktop",
+}: MainNavLinksProps) {
   const pathname = usePathname();
 
   return (
@@ -47,16 +52,27 @@ export function MainNavLinks({ className }: MainNavLinksProps) {
       {MAIN_NAV_LINKS.map((link) => {
         const isActive = isNavLinkActive(pathname, link.href);
         const isHighlighted = "highlight" in link && link.highlight;
+        const linkClassName = cn(
+          getMainNavLinkClassName(isActive, isHighlighted),
+          className,
+        );
+
+        if (link.href === "/brands" && variant === "desktop") {
+          return (
+            <BrandsNavLink
+              key={link.href}
+              isActive={isActive}
+              className={linkClassName}
+            />
+          );
+        }
 
         return (
           <Link
             key={link.href}
             href={link.href}
             aria-current={isActive ? "page" : undefined}
-            className={cn(
-              getMainNavLinkClassName(isActive, isHighlighted),
-              className,
-            )}
+            className={linkClassName}
           >
             {link.label}
           </Link>

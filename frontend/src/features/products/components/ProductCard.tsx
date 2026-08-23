@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import type { ProductSummary } from "@/features/products/types/product.types";
 import { cn } from "@/shared/lib/utils/cn";
+import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 
 type ProductCardProps = {
   product: ProductSummary;
@@ -14,10 +15,6 @@ function formatPrice(price: number, currency: string): string {
     style: "currency",
     currency,
   }).format(price);
-}
-
-function hasProductPhoto(imageUrl: string): boolean {
-  return /\.(png|jpe?g|webp)$/i.test(imageUrl);
 }
 
 export function ProductCard({ product, className }: ProductCardProps) {
@@ -36,7 +33,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
         <div
           className={cn(
             "relative flex aspect-square items-center justify-center p-8",
-            hasProductPhoto(product.imageUrl) ? "bg-black" : "bg-background",
+            hasProductPhoto(product.imageUrl) ? "bg-white" : "bg-background",
           )}
         >
           {hasProductPhoto(product.imageUrl) ? (

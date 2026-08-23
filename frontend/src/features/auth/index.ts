@@ -1,1 +1,10 @@
+export { AccountDashboard } from "@/features/auth/components/AccountDashboard";
+export { AuthButton } from "@/features/auth/components/AuthButton";
+export { AuthShell } from "@/features/auth/components/AuthShell";
+export { ForgotPasswordForm } from "@/features/auth/components/ForgotPasswordForm";
+export { GoogleAuthForm } from "@/features/auth/components/GoogleAuthForm";
+export { GoogleSignInButton } from "@/features/auth/components/GoogleSignInButton";
+export { LoginForm } from "@/features/auth/components/LoginForm";
+export { RegisterForm } from "@/features/auth/components/RegisterForm";
+export { ResetPasswordForm } from "@/features/auth/components/ResetPasswordForm";
 export type { AuthSession, User } from "@/features/auth/types/auth.types";

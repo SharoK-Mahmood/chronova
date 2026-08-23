@@ -1,18 +1,35 @@
-import {
-  SectionPage,
-  createSectionMetadata,
-} from "@/shared/components/layout/SectionPage";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
-export const metadata = createSectionMetadata(
-  "New Arrivals",
-  "See the latest watches added to Chronova.",
-);
+import {
+  getNewArrivalSpotlight,
+  getNewArrivalsCollection,
+  NewArrivalsCollection,
+  NewArrivalsCta,
+  NewArrivalsHero,
+  SpotlightArrival,
+} from "@/features/new-arrivals";
+
+export const metadata: Metadata = {
+  title: "New Arrivals",
+  description:
+    "Discover the latest luxury timepieces just landed at Chronova — curated for the discerning collector.",
+};
 
 export default function NewArrivalsPage() {
+  const spotlight = getNewArrivalSpotlight();
+  const collection = getNewArrivalsCollection();
+
+  if (!spotlight) {
+    notFound();
+  }
+
   return (
-    <SectionPage
-      title="New Arrivals"
-      description="Be the first to discover our newest timepieces."
-    />
+    <>
+      <NewArrivalsHero />
+      <SpotlightArrival arrival={spotlight} />
+      <NewArrivalsCollection arrivals={collection} />
+      <NewArrivalsCta />
+    </>
   );
 }

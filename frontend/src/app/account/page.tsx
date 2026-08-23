@@ -1,18 +1,12 @@
-import {
-  SectionPage,
-  createSectionMetadata,
-} from "@/shared/components/layout/SectionPage";
+import type { Metadata } from "next";
 
-export const metadata = createSectionMetadata(
-  "Account",
-  "Manage your Chronova account.",
-);
+import { AccountDashboard } from "@/features/auth";
+
+export const metadata: Metadata = {
+  title: "Account",
+  description: "Manage your Chronova account.",
+};
 
 export default function AccountPage() {
-  return (
-    <SectionPage
-      title="Account"
-      description="Sign in to manage orders, addresses, and preferences."
-    />
-  );
+  return <AccountDashboard />;
 }

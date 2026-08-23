@@ -6,6 +6,7 @@ import { CATALOG_PRODUCTS, getProductBySlug } from "@/features/products";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
 import { cn } from "@/shared/lib/utils/cn";
+import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
@@ -16,10 +17,6 @@ function formatPrice(price: number, currency: string): string {
     style: "currency",
     currency,
   }).format(price);
-}
-
-function hasProductPhoto(imageUrl: string): boolean {
-  return /\.(png|jpe?g|webp)$/i.test(imageUrl);
 }
 
 export function generateStaticParams() {
@@ -69,7 +66,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           className={cn(
             "relative flex aspect-square items-center justify-center overflow-hidden rounded-3xl",
             hasProductPhoto(product.imageUrl)
-              ? "bg-black"
+              ? "bg-white"
               : "border border-border bg-background",
           )}
         >
