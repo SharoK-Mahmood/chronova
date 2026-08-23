@@ -150,6 +150,57 @@ const CHRONOVA_WOMEN: Product[] = [
   },
 ];
 
+const SEIKO_WATCHES: Product[] = [
+  {
+    id: "seiko-5-sports",
+    name: "Seiko 5 Sports",
+    slug: "seiko-5-sports",
+    brand: "Seiko",
+    subtitle: "Automatic, 42.5 mm, stainless steel",
+    reference: "SRPD55",
+    description:
+      "The Seiko 5 Sports combines automatic reliability with a bold dial and unidirectional bezel — an everyday icon of accessible Japanese watchmaking.",
+    price: 295,
+    currency: "USD",
+    imageUrl:
+      "https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=1200&q=80",
+    category: "men",
+    inStock: true,
+  },
+  {
+    id: "seiko-presage",
+    name: "Seiko Presage",
+    slug: "seiko-presage",
+    brand: "Seiko",
+    subtitle: "Automatic, 40.5 mm, cocktail time",
+    reference: "SRPB41",
+    description:
+      "Presage elevates Seiko's mechanical craft with a refined dial inspired by classic cocktails — dress watch elegance with Japanese attention to detail.",
+    price: 425,
+    currency: "USD",
+    imageUrl:
+      "https://images.unsplash.com/photo-1587836374828-4dbafa53fb0c?auto=format&fit=crop&w=1200&q=80",
+    category: "men",
+    inStock: true,
+  },
+  {
+    id: "seiko-prospex",
+    name: "Seiko Prospex",
+    slug: "seiko-prospex",
+    brand: "Seiko",
+    subtitle: "Automatic diver, 45 mm, ISO certified",
+    reference: "SPB143",
+    description:
+      "Prospex is Seiko's professional sports line — built for divers with ISO-certified water resistance and a heritage of adventure under the sea.",
+    price: 1200,
+    currency: "USD",
+    imageUrl:
+      "https://images.unsplash.com/photo-1612817159947-7bb70193e412?auto=format&fit=crop&w=1200&q=80",
+    category: "men",
+    inStock: true,
+  },
+];
+
 const CHRONOVA_WATCHES: Product[] = [
   {
     id: "1",
@@ -246,6 +297,7 @@ export const CATALOG_PRODUCTS: Product[] = [
   ...FEATURED_ROLEX,
   ...FEATURED_WOMEN,
   ...CHRONOVA_WOMEN,
+  ...SEIKO_WATCHES,
   ...CHRONOVA_WATCHES,
 ];
 

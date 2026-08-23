@@ -1,7 +1,8 @@
-import {
-  SectionPage,
-  createSectionMetadata,
-} from "@/shared/components/layout/SectionPage";
+import { Suspense } from "react";
+
+import { SearchResultsContent } from "@/features/search";
+import { createSectionMetadata } from "@/shared/components/layout/SectionPage";
+import { Container } from "@/shared/components/ui/Container";
 
 export const metadata = createSectionMetadata(
   "Search",
@@ -10,9 +11,14 @@ export const metadata = createSectionMetadata(
 
 export default function SearchPage() {
   return (
-    <SectionPage
-      title="Search"
-      description="Find your next timepiece across the full Chronova catalog."
-    />
+    <Suspense
+      fallback={
+        <Container className="max-w-5xl py-16">
+          <p className="text-secondary">Searching...</p>
+        </Container>
+      }
+    >
+      <SearchResultsContent />
+    </Suspense>
   );
 }

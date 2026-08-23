@@ -27,14 +27,14 @@ function getMainNavLinkClassName(
   isHighlighted: boolean,
 ): string {
   return cn(
-    "relative whitespace-nowrap pb-1 text-sm transition-all duration-200",
+    "relative inline-block whitespace-nowrap pb-1 text-[13px] font-normal leading-none transition-all duration-200",
     "after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:rounded-full after:bg-accent after:transition-transform after:duration-200",
     isActive
-      ? "font-semibold text-foreground after:scale-x-100"
+      ? "text-foreground after:scale-x-100"
       : cn(
           "text-secondary after:scale-x-0",
-          "hover:font-medium hover:text-foreground hover:after:scale-x-100",
-          isHighlighted && "font-medium text-accent hover:text-accent",
+          "hover:text-foreground hover:after:scale-x-100",
+          isHighlighted && "text-accent hover:text-accent",
         ),
   );
 }

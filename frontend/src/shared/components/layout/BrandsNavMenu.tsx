@@ -86,7 +86,7 @@ export function BrandsNavLink({ isActive, className }: BrandsNavLinkProps) {
 
   return (
     <div
-      className="relative"
+      className="relative inline-flex items-center"
       onMouseEnter={() => {
         cancelClose();
         open();
@@ -113,7 +113,7 @@ export function BrandsMegaMenuPanel() {
   return (
     <div
       className={cn(
-        "absolute inset-x-0 top-full z-50 hidden pt-3 xl:block",
+        "absolute inset-x-0 top-full z-50 hidden pt-1 lg:block",
         isOpen
           ? "pointer-events-auto opacity-100"
           : "pointer-events-none opacity-0",
@@ -126,39 +126,34 @@ export function BrandsMegaMenuPanel() {
     >
       <div
         className={cn(
-          "border-t border-border bg-card shadow-lg transition-transform duration-200",
+          "border-t border-border bg-card/98 shadow-md backdrop-blur-sm transition-transform duration-200",
           isOpen ? "translate-y-0" : "-translate-y-1",
         )}
       >
-        <Container className="py-8">
-          <div className="mb-6 flex items-end justify-between gap-4">
-            <div>
-              <p className="text-xs uppercase tracking-widest text-accent">
-                Collections
-              </p>
-              <h2 className="mt-1 text-lg font-semibold tracking-tight">
-                Shop by brand
-              </h2>
-            </div>
+        <Container className="max-w-5xl py-5">
+          <div className="mb-4 flex items-center justify-between gap-4">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-accent">
+              Shop by brand
+            </p>
             <Link
               href="/brands"
-              className="text-sm font-medium text-secondary transition-colors hover:text-accent"
+              className="text-xs text-secondary transition-colors hover:text-accent"
             >
-              View all brands
+              View all
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-3 lg:grid-cols-5">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-1 sm:grid-cols-3 md:grid-cols-5">
             {brands.map((brand) => (
               <Link
                 key={brand.slug}
                 href={`/brands/${brand.slug}`}
-                className="group/brand rounded-xl p-3 transition-colors hover:bg-background"
+                className="group/brand rounded-lg px-2 py-2 transition-colors hover:bg-background/80"
               >
-                <p className="font-medium transition-colors group-hover/brand:text-accent">
+                <p className="text-[13px] font-normal text-foreground transition-colors group-hover/brand:text-accent">
                   {brand.name}
                 </p>
-                <p className="mt-1 text-xs text-secondary">
+                <p className="mt-0.5 text-[11px] text-secondary/80">
                   {brand.productCount > 0
                     ? `${brand.productCount} ${brand.productCount === 1 ? "watch" : "watches"}`
                     : "Coming soon"}

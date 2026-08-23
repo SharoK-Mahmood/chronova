@@ -14,14 +14,13 @@ export const MAIN_NAV_LINKS = [
   { href: "/sale", label: "Sale", highlight: true },
 ] as const;
 
-export type UtilityNavIcon = "search" | "wishlist" | "cart" | "account";
+export type UtilityNavIcon = "wishlist" | "cart" | "account";
 
 export const UTILITY_NAV_LINKS: ReadonlyArray<{
   href: string;
   label: string;
   icon: UtilityNavIcon;
 }> = [
-  { href: "/search", label: "Search", icon: "search" },
   { href: "/wishlist", label: "Wishlist", icon: "wishlist" },
   { href: "/cart", label: "Cart", icon: "cart" },
   { href: "/account", label: "Account", icon: "account" },

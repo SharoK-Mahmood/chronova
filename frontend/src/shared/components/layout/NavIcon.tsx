@@ -9,23 +9,6 @@ export function NavIcon({ icon, className }: NavIconProps) {
   const shared = className ?? "h-5 w-5";
 
   switch (icon) {
-    case "search":
-      return (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className={shared}
-          aria-hidden="true"
-        >
-          <circle cx="11" cy="11" r="7" />
-          <path d="M20 20l-3.5-3.5" />
-        </svg>
-      );
     case "wishlist":
       return (
         <svg

@@ -72,6 +72,13 @@ export const COMMON_BRANDS: Brand[] = [
       "The house collection — accessible luxury with Chronova craftsmanship.",
     origin: "Switzerland",
   },
+  {
+    name: "Seiko",
+    slug: "seiko",
+    description:
+      "Japanese precision with legendary value across sport, dress, and everyday lines.",
+    origin: "Japan",
+  },
 ];
 
 export function getBrandBySlug(slug: string): Brand | undefined {
