@@ -5,6 +5,7 @@ import { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "@/features/auth/components/AuthIcons";
 import { Input } from "@/shared/components/ui/Input";
 import { cn } from "@/shared/lib/utils/cn";
+import { interactiveIconButtonClasses } from "@/shared/lib/utils/button-interaction";
 
 type PasswordFieldProps = {
   id: string;
@@ -47,7 +48,11 @@ export function PasswordField({
         <button
           type="button"
           onClick={() => setShowPassword((visible) => !visible)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-secondary transition-all duration-200 hover:scale-110 hover:bg-background hover:text-foreground"
+          className={cn(
+            "absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-secondary",
+            interactiveIconButtonClasses,
+            "hover:bg-background hover:text-foreground",
+          )}
           aria-label={showPassword ? "Hide password" : "Show password"}
         >
           {showPassword ? (

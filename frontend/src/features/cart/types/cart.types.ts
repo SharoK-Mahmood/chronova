@@ -1,12 +1,11 @@
-import type { ProductSummary } from "@/features/products/types/product.types";
-
-export type CartItem = {
-  product: ProductSummary;
+export type StoredCartEntry = {
+  slug: string;
   quantity: number;
+  unitPriceUsd?: number;
 };
 
-export type Cart = {
-  items: CartItem[];
-  subtotal: number;
-  currency: string;
+export type CartLineItem = {
+  slug: string;
+  quantity: number;
+  unitPriceUsd: number;
 };

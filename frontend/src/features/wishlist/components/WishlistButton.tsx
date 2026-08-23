@@ -1,6 +1,8 @@
 "use client";
 
 import { useWishlist } from "@/features/wishlist/context/WishlistProvider";
+import { Button } from "@/shared/components/ui/Button";
+import { interactiveIconButtonClasses } from "@/shared/lib/utils/button-interaction";
 import { cn } from "@/shared/lib/utils/cn";
 
 type WishlistButtonProps = {
@@ -45,8 +47,9 @@ export function WishlistButton({
 
   if (variant === "button") {
     return (
-      <button
+      <Button
         type="button"
+        variant="secondary"
         onClick={handleClick}
         aria-pressed={saved}
         aria-label={
@@ -55,17 +58,14 @@ export function WishlistButton({
             : `Add ${productName} to wishlist`
         }
         className={cn(
-          "inline-flex items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-200",
-          saved
-            ? "border-accent bg-accent/10 text-accent hover:bg-accent/15"
-            : "border-border bg-transparent hover:bg-border/60",
-          "hover:scale-[1.03] active:scale-[0.98]",
+          "gap-2",
+          saved && "border-accent bg-accent/10 text-accent hover:bg-accent/15",
           className,
         )}
       >
         <HeartIcon filled={saved} className="h-4 w-4" />
         {saved ? "Saved to wishlist" : "Add to wishlist"}
-      </button>
+      </Button>
     );
   }
 
@@ -80,11 +80,11 @@ export function WishlistButton({
           : `Add ${productName} to wishlist`
       }
       className={cn(
-        "rounded-full bg-card/90 p-2 shadow-sm ring-1 ring-border backdrop-blur-sm transition-all duration-200",
+        "rounded-full bg-card/90 p-2 shadow-sm ring-1 ring-border backdrop-blur-sm",
+        interactiveIconButtonClasses,
         saved
-          ? "text-accent ring-accent/30 hover:bg-accent/10"
-          : "text-secondary hover:text-accent hover:ring-accent/20",
-        "hover:scale-110 active:scale-95",
+          ? "text-accent ring-accent/30 hover:bg-accent/10 hover:ring-accent/40"
+          : "text-secondary hover:text-accent hover:ring-accent/30",
         className,
       )}
     >

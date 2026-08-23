@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { AddToCartButton } from "@/features/cart";
+import { Price } from "@/features/currency";
 import type { ProductSummary } from "@/features/products/types/product.types";
 import { WishlistButton } from "@/features/wishlist";
 import { cn } from "@/shared/lib/utils/cn";
@@ -9,16 +11,15 @@ import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 type ProductCardProps = {
   product: ProductSummary;
   className?: string;
+  unitPriceUsd?: number;
 };
 
-function formatPrice(price: number, currency: string): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-  }).format(price);
-}
-
-export function ProductCard({ product, className }: ProductCardProps) {
+export function ProductCard({
+  product,
+  className,
+  unitPriceUsd,
+}: ProductCardProps) {
+  const displayPrice = unitPriceUsd ?? product.price;
   const imageAlt = product.subtitle
     ? `${product.brand} ${product.name}, ${product.subtitle}`
     : product.name;
@@ -37,6 +38,13 @@ export function ProductCard({ product, className }: ProductCardProps) {
             hasProductPhoto(product.imageUrl) ? "bg-white" : "bg-background",
           )}
         >
+          <div className="absolute left-3 top-3 z-10">
+            <AddToCartButton
+              slug={product.slug}
+              productName={product.name}
+              unitPriceUsd={unitPriceUsd}
+            />
+          </div>
           <div className="absolute right-3 top-3 z-10">
             <WishlistButton slug={product.slug} productName={product.name} />
           </div>
@@ -65,7 +73,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
             <p className="text-xs text-secondary">Reference {product.reference}</p>
           ) : null}
           <p className="mt-1 text-sm text-accent">
-            {formatPrice(product.price, product.currency)}
+            <Price amountUsd={displayPrice} />
           </p>
         </div>
       </Link>

@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { AddToCartButton } from "@/features/cart";
+import { Price } from "@/features/currency";
 import type { NewArrivalSpotlight } from "@/features/new-arrivals/types/new-arrival.types";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
@@ -9,13 +11,6 @@ import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 type SpotlightArrivalProps = {
   arrival: NewArrivalSpotlight;
 };
-
-function formatPrice(price: number, currency: string): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-  }).format(price);
-}
 
 export function SpotlightArrival({ arrival }: SpotlightArrivalProps) {
   const { product, arrivedLabel, tagline, editorial } = arrival;
@@ -82,13 +77,20 @@ export function SpotlightArrival({ arrival }: SpotlightArrivalProps) {
               {editorial}
             </p>
 
-            <div className="flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-4 border-t border-border pt-6">
               <p className="text-2xl font-medium text-accent">
-                {formatPrice(product.price, product.currency)}
+                <Price amountUsd={product.price} />
               </p>
-              <Button href={`/products/${product.slug}`}>
-                Discover piece
-              </Button>
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <AddToCartButton
+                  slug={product.slug}
+                  productName={product.name}
+                  variant="button"
+                />
+                <Button href={`/products/${product.slug}`} variant="secondary">
+                  Discover piece
+                </Button>
+              </div>
             </div>
           </div>
         </div>

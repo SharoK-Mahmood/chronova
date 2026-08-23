@@ -1,25 +1,30 @@
 "use client";
 
+import { AddToCartButton } from "@/features/cart";
 import { WishlistButton } from "@/features/wishlist";
 import { Button } from "@/shared/components/ui/Button";
 
 type ProductActionsProps = {
   slug: string;
   name: string;
+  unitPriceUsd?: number;
 };
 
-export function ProductActions({ slug, name }: ProductActionsProps) {
+export function ProductActions({
+  slug,
+  name,
+  unitPriceUsd,
+}: ProductActionsProps) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-      <Button type="button" className="transition-transform duration-200 hover:scale-[1.03] active:scale-[0.98]">
-        Add to cart
-      </Button>
+      <AddToCartButton
+        slug={slug}
+        productName={name}
+        unitPriceUsd={unitPriceUsd}
+        variant="button"
+      />
       <WishlistButton slug={slug} productName={name} variant="button" />
-      <Button
-        href="/products"
-        variant="secondary"
-        className="transition-transform duration-200 hover:scale-[1.03] active:scale-[0.98]"
-      >
+      <Button href="/products" variant="secondary">
         Back to shop
       </Button>
     </div>

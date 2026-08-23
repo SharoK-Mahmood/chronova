@@ -28,8 +28,7 @@ export function NewArrivalsHero() {
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Button
               href="#spotlight"
-              variant="primary"
-              className="bg-accent text-primary hover:bg-accent/90"
+              variant="accent"
             >
               View spotlight
             </Button>

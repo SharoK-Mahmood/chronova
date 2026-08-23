@@ -16,10 +16,7 @@ export function NewArrivalsCta() {
           visit our brands to find your next timepiece.
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Button
-            href="/products"
-            className="bg-accent text-primary hover:bg-accent/90"
-          >
+          <Button href="/products" variant="accent">
             Shop all watches
           </Button>
           <Button

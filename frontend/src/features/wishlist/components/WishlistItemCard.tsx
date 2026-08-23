@@ -3,6 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { AddToCartButton } from "@/features/cart";
+import { Price } from "@/features/currency";
 import type { ProductSummary } from "@/features/products/types/product.types";
 import { WishlistButton } from "@/features/wishlist";
 import { Button } from "@/shared/components/ui/Button";
@@ -12,13 +14,6 @@ import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 type WishlistItemCardProps = {
   product: ProductSummary;
 };
-
-function formatPrice(price: number, currency: string): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-  }).format(price);
-}
 
 export function WishlistItemCard({ product }: WishlistItemCardProps) {
   const imageAlt = product.subtitle
@@ -47,7 +42,10 @@ export function WishlistItemCard({ product }: WishlistItemCardProps) {
             <div className="h-24 w-24 rounded-full border border-border bg-card shadow-sm" />
           )}
         </Link>
-        <div className="absolute right-3 top-3">
+        <div className="absolute left-3 top-3 z-10">
+          <AddToCartButton slug={product.slug} productName={product.name} />
+        </div>
+        <div className="absolute right-3 top-3 z-10">
           <WishlistButton slug={product.slug} productName={product.name} />
         </div>
       </div>
@@ -67,13 +65,21 @@ export function WishlistItemCard({ product }: WishlistItemCardProps) {
             <p className="mt-1 text-sm text-secondary">{product.subtitle}</p>
           ) : null}
           <p className="mt-2 text-sm text-accent">
-            {formatPrice(product.price, product.currency)}
+            <Price amountUsd={product.price} />
           </p>
         </div>
 
-        <Button href={`/products/${product.slug}`} variant="secondary" className="w-full">
-          View product
-        </Button>
+        <div className="flex flex-col gap-2">
+          <AddToCartButton
+            slug={product.slug}
+            productName={product.name}
+            variant="button"
+            className="w-full"
+          />
+          <Button href={`/products/${product.slug}`} variant="secondary" className="w-full">
+            View product
+          </Button>
+        </div>
       </div>
     </article>
   );

@@ -1,7 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { AddToCartButton } from "@/features/cart";
+import { Price } from "@/features/currency";
 import type { NewArrival } from "@/features/new-arrivals/types/new-arrival.types";
+import { WishlistButton } from "@/features/wishlist";
 import { cn } from "@/shared/lib/utils/cn";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 
@@ -10,13 +13,6 @@ type NewArrivalCardProps = {
   index: number;
   className?: string;
 };
-
-function formatPrice(price: number, currency: string): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-  }).format(price);
-}
 
 export function NewArrivalCard({
   arrival,
@@ -44,6 +40,13 @@ export function NewArrivalCard({
             isWide ? "aspect-[16/9]" : "aspect-square",
           )}
         >
+          <div className="absolute left-3 top-3 z-10">
+            <AddToCartButton slug={product.slug} productName={product.name} />
+          </div>
+          <div className="absolute right-3 top-3 z-10">
+            <WishlistButton slug={product.slug} productName={product.name} />
+          </div>
+
           {hasProductPhoto(product.imageUrl) ? (
             <Image
               src={product.imageUrl}
@@ -60,7 +63,7 @@ export function NewArrivalCard({
             <div className="h-24 w-24 rounded-full border border-border bg-background shadow-sm" />
           )}
 
-          <div className="absolute left-4 top-4 flex items-center gap-2">
+          <div className="absolute bottom-4 left-4 flex items-center gap-2">
             <span className="rounded-full bg-primary px-3 py-1 text-[10px] font-medium uppercase tracking-widest text-background">
               New
             </span>
@@ -88,7 +91,7 @@ export function NewArrivalCard({
           <p className="line-clamp-2 text-sm text-secondary">{tagline}</p>
 
           <p className="mt-auto pt-2 text-sm font-medium text-accent">
-            {formatPrice(product.price, product.currency)}
+            <Price amountUsd={product.price} />
           </p>
         </div>
       </Link>

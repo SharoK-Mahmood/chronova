@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { AddToCartButton } from "@/features/cart";
+import { Price } from "@/features/currency";
 import type { SaleSpotlight } from "@/features/sale/types/sale.types";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
@@ -9,13 +11,6 @@ import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 type SaleSpotlightSectionProps = {
   item: SaleSpotlight;
 };
-
-function formatPrice(price: number, currency: string): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-  }).format(price);
-}
 
 export function SaleSpotlightSection({ item }: SaleSpotlightSectionProps) {
   const { product, originalPrice, salePrice, discountPercent, savings, headline } =
@@ -63,7 +58,7 @@ export function SaleSpotlightSection({ item }: SaleSpotlightSectionProps) {
               )}
             </div>
             <div className="absolute left-6 top-6 rounded-full bg-accent px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
-              Save {formatPrice(savings, product.currency)}
+              Save <Price amountUsd={savings} />
             </div>
           </Link>
 
@@ -83,18 +78,27 @@ export function SaleSpotlightSection({ item }: SaleSpotlightSectionProps) {
 
             <div className="flex flex-wrap items-baseline gap-3">
               <p className="text-3xl font-semibold text-accent">
-                {formatPrice(salePrice, product.currency)}
+                <Price amountUsd={salePrice} />
               </p>
               <p className="text-lg text-secondary line-through">
-                {formatPrice(originalPrice, product.currency)}
+                <Price amountUsd={originalPrice} />
               </p>
             </div>
 
-            <div className="flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center">
-              <Button href={`/products/${product.slug}`}>Shop this deal</Button>
+            <div className="flex flex-col gap-4 border-t border-border pt-6">
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <AddToCartButton
+                  slug={product.slug}
+                  productName={product.name}
+                  unitPriceUsd={salePrice}
+                  variant="button"
+                />
+                <Button href={`/products/${product.slug}`} variant="secondary">
+                  Shop this deal
+                </Button>
+              </div>
               <p className="text-sm text-secondary">
-                You save {formatPrice(savings, product.currency)} (
-                {discountPercent}% off)
+                You save <Price amountUsd={savings} /> ({discountPercent}% off)
               </p>
             </div>
           </div>

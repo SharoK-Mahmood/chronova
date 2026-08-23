@@ -15,9 +15,16 @@ export function HeroSection() {
         <p className="mt-4 text-lg text-secondary">
           {SITE.description}
         </p>
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <Button href="/products">Shop collection</Button>
-          <Button href="/products/land-dweller-40" variant="secondary">
+        <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center [perspective:1200px]">
+          <Button href="/products" effect="luxury" className="px-7 py-3.5 text-base">
+            Shop collection
+          </Button>
+          <Button
+            href="/products/land-dweller-40"
+            variant="secondary"
+            effect="luxury"
+            className="px-7 py-3.5 text-base"
+          >
             View bestseller
           </Button>
         </div>

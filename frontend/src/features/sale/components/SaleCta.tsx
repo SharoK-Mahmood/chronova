@@ -16,10 +16,7 @@ export function SaleCta() {
           for pieces not included in this promotion.
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Button
-            href="/products"
-            className="bg-accent text-primary hover:bg-accent/90"
-          >
+          <Button href="/products" variant="accent">
             Full catalogue
           </Button>
           <Button

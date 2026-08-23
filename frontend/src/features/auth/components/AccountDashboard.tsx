@@ -29,28 +29,28 @@ export function AccountDashboard() {
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
             <Link
               href="/products"
-              className="rounded-xl border border-border p-4 transition-all duration-200 hover:scale-[1.02] hover:border-accent/30 hover:shadow-md"
+              className="rounded-xl border border-border p-4 transition-all duration-200 hover:scale-[1.01] hover:border-accent/30 hover:shadow-md"
             >
               <p className="font-medium">Orders</p>
               <p className="mt-1 text-sm text-secondary">View your order history</p>
             </Link>
             <Link
               href="/wishlist"
-              className="rounded-xl border border-border p-4 transition-all duration-200 hover:scale-[1.02] hover:border-accent/30 hover:shadow-md"
+              className="rounded-xl border border-border p-4 transition-all duration-200 hover:scale-[1.01] hover:border-accent/30 hover:shadow-md"
             >
               <p className="font-medium">Wishlist</p>
               <p className="mt-1 text-sm text-secondary">Saved timepieces</p>
             </Link>
             <Link
               href="/cart"
-              className="rounded-xl border border-border p-4 transition-all duration-200 hover:scale-[1.02] hover:border-accent/30 hover:shadow-md"
+              className="rounded-xl border border-border p-4 transition-all duration-200 hover:scale-[1.01] hover:border-accent/30 hover:shadow-md"
             >
               <p className="font-medium">Cart</p>
               <p className="mt-1 text-sm text-secondary">Review items to purchase</p>
             </Link>
             <Link
               href="/account/settings"
-              className="rounded-xl border border-border p-4 transition-all duration-200 hover:scale-[1.02] hover:border-accent/30 hover:shadow-md"
+              className="rounded-xl border border-border p-4 transition-all duration-200 hover:scale-[1.01] hover:border-accent/30 hover:shadow-md"
             >
               <p className="font-medium">Settings</p>
               <p className="mt-1 text-sm text-secondary">Profile and preferences</p>

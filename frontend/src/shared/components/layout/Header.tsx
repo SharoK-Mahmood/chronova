@@ -9,6 +9,7 @@ import {
   MainNavLinks,
   UtilityNavLinks,
 } from "@/shared/components/layout/HeaderNav";
+import { CurrencySelector } from "@/features/currency";
 import { Container } from "@/shared/components/ui/Container";
 
 export function Header() {
@@ -39,15 +40,17 @@ export function Header() {
               aria-label="Utility"
               className="ml-auto flex items-center gap-1 sm:gap-2"
             >
+              <CurrencySelector className="hidden sm:flex" />
               <UtilityNavLinks />
             </nav>
           </div>
 
           <nav
             aria-label="Main"
-            className="flex gap-5 overflow-x-auto border-t border-border py-3 xl:hidden"
+            className="flex items-center gap-5 overflow-x-auto border-t border-border py-3 xl:hidden"
           >
             <MainNavLinks variant="mobile" />
+            <CurrencySelector className="ml-auto shrink-0 sm:hidden" />
           </nav>
         </Container>
 

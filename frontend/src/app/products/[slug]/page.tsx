@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { CATALOG_PRODUCTS, getProductBySlug } from "@/features/products";
 import { ProductActions } from "@/features/products/components/ProductActions";
+import { ProductPrice } from "@/features/products/components/ProductPrice";
 import { Container } from "@/shared/components/ui/Container";
 import { cn } from "@/shared/lib/utils/cn";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
@@ -11,13 +12,6 @@ import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
 };
-
-function formatPrice(price: number, currency: string): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-  }).format(price);
-}
 
 export function generateStaticParams() {
   return CATALOG_PRODUCTS.map((product) => ({ slug: product.slug }));
@@ -101,7 +95,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </p>
             ) : null}
             <p className="mt-3 text-2xl text-accent">
-              {formatPrice(product.price, product.currency)}
+              <ProductPrice amountUsd={product.price} />
             </p>
           </div>
 

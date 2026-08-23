@@ -72,7 +72,7 @@ export function LoginForm() {
           <span className="text-sm text-secondary">Remember me</span>
         </label>
 
-        <AuthButton type="submit" className="w-full">
+        <AuthButton type="submit" variant="accent" className="w-full">
           Log In
         </AuthButton>
       </form>

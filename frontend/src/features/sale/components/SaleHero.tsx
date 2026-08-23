@@ -38,10 +38,7 @@ export function SaleHero({ maxDiscount, itemCount }: SaleHeroProps) {
             {itemCount} {itemCount === 1 ? "piece" : "pieces"} on offer
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button
-              href="#spotlight"
-              className="bg-accent text-primary hover:bg-accent/90"
-            >
+            <Button href="#spotlight" variant="accent">
               Best offer
             </Button>
             <Button

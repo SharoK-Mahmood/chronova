@@ -1,7 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { AddToCartButton } from "@/features/cart";
+import { Price } from "@/features/currency";
 import type { SaleItem } from "@/features/sale/types/sale.types";
+import { WishlistButton } from "@/features/wishlist";
 import { cn } from "@/shared/lib/utils/cn";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 
@@ -9,13 +12,6 @@ type SaleCardProps = {
   item: SaleItem;
   className?: string;
 };
-
-function formatPrice(price: number, currency: string): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-  }).format(price);
-}
 
 export function SaleCard({ item, className }: SaleCardProps) {
   const { product, originalPrice, salePrice, discountPercent, savings } = item;
@@ -32,6 +28,17 @@ export function SaleCard({ item, className }: SaleCardProps) {
     >
       <Link href={`/products/${product.slug}`} className="flex flex-1 flex-col">
         <div className="relative flex aspect-square items-center justify-center bg-white p-8">
+          <div className="absolute left-3 top-3 z-10 flex flex-col gap-2">
+            <AddToCartButton
+              slug={product.slug}
+              productName={product.name}
+              unitPriceUsd={salePrice}
+            />
+          </div>
+          <div className="absolute right-3 top-3 z-10">
+            <WishlistButton slug={product.slug} productName={product.name} />
+          </div>
+
           {hasProductPhoto(product.imageUrl) ? (
             <Image
               src={product.imageUrl}
@@ -44,7 +51,7 @@ export function SaleCard({ item, className }: SaleCardProps) {
             <div className="h-24 w-24 rounded-full border border-border bg-background shadow-sm" />
           )}
 
-          <span className="absolute left-4 top-4 rounded-full bg-accent px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-primary">
+          <span className="absolute bottom-4 left-4 rounded-full bg-accent px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-primary">
             −{discountPercent}%
           </span>
         </div>
@@ -64,14 +71,14 @@ export function SaleCard({ item, className }: SaleCardProps) {
 
           <div className="mt-auto flex flex-wrap items-baseline gap-2 pt-2">
             <p className="text-lg font-semibold text-accent">
-              {formatPrice(salePrice, product.currency)}
+              <Price amountUsd={salePrice} />
             </p>
             <p className="text-sm text-secondary line-through">
-              {formatPrice(originalPrice, product.currency)}
+              <Price amountUsd={originalPrice} />
             </p>
           </div>
           <p className="text-xs text-secondary">
-            Save {formatPrice(savings, product.currency)}
+            Save <Price amountUsd={savings} />
           </p>
         </div>
       </Link>

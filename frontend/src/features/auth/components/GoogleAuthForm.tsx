@@ -56,7 +56,7 @@ export function GoogleAuthForm() {
               type="button"
               onClick={() => setSelectedId(account.id)}
               className={cn(
-                "flex w-full items-center gap-4 rounded-xl border p-4 text-left transition-all duration-200",
+                "flex w-full items-center gap-4 rounded-xl border p-4 text-left transition-all duration-200 hover:scale-[1.01] hover:shadow-md active:scale-[0.99]",
                 isSelected
                   ? "border-accent bg-accent/5 shadow-sm"
                   : "border-border hover:border-accent/30 hover:bg-background",
