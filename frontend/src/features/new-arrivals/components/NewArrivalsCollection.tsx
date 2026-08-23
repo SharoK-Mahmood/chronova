@@ -4,6 +4,7 @@ import type { NewArrival } from "@/features/new-arrivals/types/new-arrival.types
 import { NewArrivalCard } from "@/features/new-arrivals/components/NewArrivalCard";
 import { Container } from "@/shared/components/ui/Container";
 import { useTranslation } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils/cn";
 import { type as typography } from "@/shared/lib/typography";
 
 type NewArrivalsCollectionProps = {

@@ -7,6 +7,8 @@ import { AuthButton } from "@/features/auth/components/AuthButton";
 import { AuthShell } from "@/features/auth/components/AuthShell";
 import { Input } from "@/shared/components/ui/Input";
 import { useTranslation } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils/cn";
+import { type as typography } from "@/shared/lib/typography";
 
 export function ForgotPasswordForm() {
   const { t } = useTranslation();
@@ -40,10 +42,8 @@ export function ForgotPasswordForm() {
               />
             </svg>
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {t("auth.checkEmail")}
-          </h1>
-          <p className="mt-3 text-sm leading-relaxed text-secondary">
+          <h1 className={typography.page}>{t("auth.checkEmail")}</h1>
+          <p className={cn("mt-3 leading-relaxed text-secondary", typography.body)}>
             {t("auth.forgotPasswordSent", { email: submittedEmail })}
           </p>
           <div className="mt-8 space-y-3">
@@ -69,10 +69,8 @@ export function ForgotPasswordForm() {
   return (
     <AuthShell>
       <div className="mb-8 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {t("auth.forgotPassword")}
-        </h1>
-        <p className="mt-2 text-sm text-secondary">
+        <h1 className={typography.page}>{t("auth.forgotPassword")}</h1>
+        <p className={cn("mt-2 text-secondary", typography.body)}>
           {t("auth.sendResetLink")}
         </p>
       </div>

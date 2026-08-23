@@ -4,6 +4,7 @@ import type { SaleItem } from "@/features/sale/types/sale.types";
 import { SaleCard } from "@/features/sale/components/SaleCard";
 import { Container } from "@/shared/components/ui/Container";
 import { useTranslation } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils/cn";
 import { type as typography } from "@/shared/lib/typography";
 
 type SaleCollectionProps = {

@@ -7,6 +7,8 @@ import { AuthButton } from "@/features/auth/components/AuthButton";
 import { AuthShell } from "@/features/auth/components/AuthShell";
 import { PasswordField } from "@/features/auth/components/PasswordField";
 import { useTranslation } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils/cn";
+import { type as typography } from "@/shared/lib/typography";
 
 export function ResetPasswordForm() {
   const { t } = useTranslation();
@@ -55,10 +57,8 @@ export function ResetPasswordForm() {
               />
             </svg>
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {t("auth.passwordUpdated")}
-          </h1>
-          <p className="mt-3 text-sm text-secondary">
+          <h1 className={typography.page}>{t("auth.passwordUpdated")}</h1>
+          <p className={cn("mt-3 text-secondary", typography.body)}>
             {t("auth.signInSubtitle")}
           </p>
           <AuthButton href="/login" className="mt-8 w-full">
@@ -72,10 +72,8 @@ export function ResetPasswordForm() {
   return (
     <AuthShell>
       <div className="mb-8 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {t("auth.resetPassword")}
-        </h1>
-        <p className="mt-2 text-sm text-secondary">
+        <h1 className={typography.page}>{t("auth.resetPassword")}</h1>
+        <p className={cn("mt-2 text-secondary", typography.body)}>
           {t("auth.passwordPlaceholder")}
         </p>
       </div>

@@ -9,6 +9,7 @@ import type { SaleItem } from "@/features/sale/types/sale.types";
 import { WishlistButton } from "@/features/wishlist";
 import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
+import { type as typography } from "@/shared/lib/typography";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 
 type SaleCardProps = {
@@ -68,24 +69,24 @@ export function SaleCard({ item, className }: SaleCardProps) {
           <p className="truncate text-[10px] uppercase tracking-[0.2em] text-accent md:text-[11px] lg:text-xs">
             {product.brand}
           </p>
-          <h3 className="line-clamp-2 text-sm font-medium leading-snug md:text-[15px] lg:text-lg md:group-hover:underline">
+          <h3 className={cn("line-clamp-2 leading-snug md:group-hover:underline", typography.product)}>
             {product.name}
           </h3>
           {product.subtitle ? (
-            <p className="hidden line-clamp-1 text-sm text-secondary md:block">
+            <p className={cn("hidden line-clamp-1 text-secondary md:block", typography.body)}>
               {product.subtitle}
             </p>
           ) : null}
 
           <div className="mt-auto flex flex-wrap items-baseline gap-1.5 pt-1 md:gap-2 md:pt-2">
-            <p className="text-sm font-semibold text-accent md:text-[15px] lg:text-lg">
+            <p className="text-accent">
               <Price amountUsd={salePrice} />
             </p>
-            <p className="text-xs text-secondary line-through md:text-sm">
+            <p className={cn("text-secondary line-through", typography.body)}>
               <Price amountUsd={originalPrice} />
             </p>
           </div>
-          <p className="hidden text-xs text-secondary md:block">
+          <p className={cn("hidden text-secondary md:block", typography.body)}>
             {t("sale.saveAmount")} <Price amountUsd={savings} />
           </p>
         </div>

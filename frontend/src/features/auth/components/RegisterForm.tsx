@@ -12,6 +12,7 @@ import { PasswordField } from "@/features/auth/components/PasswordField";
 import { Input } from "@/shared/components/ui/Input";
 import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
+import { type as typography } from "@/shared/lib/typography";
 
 export function RegisterForm() {
   const { t } = useTranslation();
@@ -43,10 +44,10 @@ export function RegisterForm() {
   return (
     <AuthShell>
       <div className="mb-8 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {t("auth.createAccount")}
-        </h1>
-        <p className="mt-2 text-sm text-secondary">{t("auth.joinChronova")}</p>
+        <h1 className={typography.page}>{t("auth.createAccount")}</h1>
+        <p className={cn("mt-2 text-secondary", typography.body)}>
+          {t("auth.joinChronova")}
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">

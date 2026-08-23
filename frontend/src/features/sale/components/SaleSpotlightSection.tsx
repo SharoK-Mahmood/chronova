@@ -9,6 +9,8 @@ import type { SaleSpotlight } from "@/features/sale/types/sale.types";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
 import { useTranslation } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils/cn";
+import { type as typography } from "@/shared/lib/typography";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 
 type SaleSpotlightSectionProps = {
@@ -31,7 +33,7 @@ export function SaleSpotlightSection({ item }: SaleSpotlightSectionProps) {
             <p className="text-xs uppercase tracking-[0.3em] text-accent">
               {t("sale.bestOffer")}
             </p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+            <h2 className={cn("mt-2", typography.section)}>
               {t("sale.dealOfSeason")}
             </h2>
           </div>
@@ -71,20 +73,24 @@ export function SaleSpotlightSection({ item }: SaleSpotlightSectionProps) {
               <p className="text-sm uppercase tracking-[0.25em] text-accent">
                 {product.brand}
               </p>
-              <h3 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+              <h3 className={cn("mt-3", typography.section)}>
                 {product.name}
               </h3>
               {product.subtitle ? (
-                <p className="mt-2 text-lg text-secondary">{product.subtitle}</p>
+                <p className={cn("mt-2 text-secondary", typography.body)}>
+                  {product.subtitle}
+                </p>
               ) : null}
-              <p className="mt-4 text-sm italic text-secondary">{headline}</p>
+              <p className={cn("mt-4 italic text-secondary", typography.body)}>
+                {headline}
+              </p>
             </div>
 
             <div className="flex flex-wrap items-baseline gap-3">
-              <p className="text-3xl font-semibold text-accent">
+              <p className="text-accent">
                 <Price amountUsd={salePrice} />
               </p>
-              <p className="text-lg text-secondary line-through">
+              <p className={cn("text-secondary line-through", typography.body)}>
                 <Price amountUsd={originalPrice} />
               </p>
             </div>
@@ -101,7 +107,7 @@ export function SaleSpotlightSection({ item }: SaleSpotlightSectionProps) {
                   {t("sale.shopThisDeal")}
                 </Button>
               </div>
-              <p className="text-sm text-secondary">
+              <p className={cn("text-secondary", typography.body)}>
                 <Price amountUsd={savings} /> ·{" "}
                 {t("sale.youSave", { percent: discountPercent })}
               </p>

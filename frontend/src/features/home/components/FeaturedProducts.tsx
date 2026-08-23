@@ -4,6 +4,7 @@ import { FEATURED_PRODUCTS, ProductGrid } from "@/features/products";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
 import { useTranslation } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils/cn";
 import { type as typography } from "@/shared/lib/typography";
 
 export function FeaturedProducts() {

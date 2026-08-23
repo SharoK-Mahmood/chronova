@@ -148,3 +148,5 @@
 {"sessionId":"c7537f","runId":"pre-fix","hypothesisId":"B","location":"RouterDebugProbe.tsx:mount","message":"router probe mounted","data":{"pathname":"/","readyState":"complete","visibility":"hidden"},"timestamp":1787516971417}
 {"sessionId":"c7537f","runId":"pre-fix","hypothesisId":"B","location":"RouterDebugProbe.tsx:mount","message":"router probe mounted","data":{"pathname":"/","readyState":"complete","visibility":"hidden"},"timestamp":1787516977624}
 {"sessionId":"c7537f","runId":"pre-fix","hypothesisId":"B","location":"RouterDebugProbe.tsx:mount","message":"router probe mounted","data":{"pathname":"/","readyState":"complete","visibility":"hidden"},"timestamp":1787516977642}
+{"sessionId":"c7537f","runId":"pre-fix","hypothesisId":"B","location":"RouterDebugProbe.tsx:mount","message":"router probe mounted","data":{"pathname":"/","readyState":"complete","visibility":"hidden"},"timestamp":1787517084730}
+{"sessionId":"c7537f","runId":"pre-fix","hypothesisId":"B","location":"RouterDebugProbe.tsx:mount","message":"router probe mounted","data":{"pathname":"/","readyState":"complete","visibility":"hidden"},"timestamp":1787517085323}
