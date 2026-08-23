@@ -1,7 +1,5 @@
-import {
-  SectionPage,
-  createSectionMetadata,
-} from "@/shared/components/layout/SectionPage";
+import { AccountSettingsContent } from "@/features/account";
+import { createSectionMetadata } from "@/shared/components/layout/SectionPage";
 
 export const metadata = createSectionMetadata(
   "Account Settings",
@@ -9,10 +7,5 @@ export const metadata = createSectionMetadata(
 );
 
 export default function AccountSettingsPage() {
-  return (
-    <SectionPage
-      title="Account Settings"
-      description="Update your profile, email, and notification preferences."
-    />
-  );
+  return <AccountSettingsContent />;
 }

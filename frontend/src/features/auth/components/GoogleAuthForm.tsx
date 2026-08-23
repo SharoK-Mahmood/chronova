@@ -7,6 +7,7 @@ import { useState } from "react";
 import { AuthButton } from "@/features/auth/components/AuthButton";
 import { AuthShell } from "@/features/auth/components/AuthShell";
 import { GoogleIcon } from "@/features/auth/components/AuthIcons";
+import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
 
 const GOOGLE_ACCOUNTS = [
@@ -25,6 +26,7 @@ const GOOGLE_ACCOUNTS = [
 ] as const;
 
 export function GoogleAuthForm() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [selectedId, setSelectedId] = useState<string>(GOOGLE_ACCOUNTS[0].id);
 
@@ -39,10 +41,10 @@ export function GoogleAuthForm() {
           <GoogleIcon className="h-10 w-10" />
         </div>
         <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
-          Sign in with Google
+          {t("auth.signInGoogle")}
         </h1>
         <p className="mt-2 text-sm text-secondary">
-          Choose an account to continue to Chronova
+          {t("auth.chooseGoogleAccount")}
         </p>
       </div>
 
@@ -82,7 +84,7 @@ export function GoogleAuthForm() {
       </div>
 
       <AuthButton type="button" className="mt-6 w-full" onClick={handleContinue}>
-        Continue
+        {t("auth.continue")}
       </AuthButton>
 
       <p className="mt-6 text-center text-sm text-secondary">
@@ -90,7 +92,7 @@ export function GoogleAuthForm() {
           href="/login"
           className="font-medium text-accent transition-colors hover:text-accent/80"
         >
-          Use another account
+          {t("auth.useAnotherAccount")}
         </Link>
       </p>
     </AuthShell>

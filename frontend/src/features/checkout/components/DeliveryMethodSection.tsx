@@ -1,10 +1,14 @@
-import {
-  DELIVERY_METHODS,
-  type DeliveryMethod,
-} from "@/features/checkout/constants/delivery-methods";
+"use client";
+
+import type { DeliveryMethod } from "@/features/checkout/constants/delivery-methods";
 import { CheckoutSection } from "@/features/checkout/components/CheckoutSection";
 import type { DeliveryMethodId } from "@/features/checkout/types/checkout.types";
+import {
+  formatBusinessDays,
+  getLocalizedDeliveryMethods,
+} from "@/features/checkout/lib/localized-checkout";
 import { Price } from "@/features/currency";
+import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
 
 type DeliveryMethodSectionProps = {
@@ -16,10 +20,14 @@ function DeliveryOption({
   method,
   isSelected,
   onSelect,
+  businessDaysLabel,
+  complimentaryLabel,
 }: {
   method: DeliveryMethod;
   isSelected: boolean;
   onSelect: () => void;
+  businessDaysLabel: string;
+  complimentaryLabel: string;
 }) {
   return (
     <button
@@ -44,18 +52,14 @@ function DeliveryOption({
           <p className="font-medium">{method.label}</p>
           <p className="text-sm font-medium text-accent">
             {method.shippingUsd === 0 ? (
-              "Complimentary"
+              complimentaryLabel
             ) : (
               <Price amountUsd={method.shippingUsd} />
             )}
           </p>
         </div>
         <p className="mt-1 text-sm text-secondary">{method.description}</p>
-        <p className="mt-2 text-xs text-secondary">
-          {method.minDays === method.maxDays
-            ? `${method.minDays} business day`
-            : `${method.minDays}–${method.maxDays} business days`}
-        </p>
+        <p className="mt-2 text-xs text-secondary">{businessDaysLabel}</p>
       </div>
     </button>
   );
@@ -65,19 +69,24 @@ export function DeliveryMethodSection({
   value,
   onChange,
 }: DeliveryMethodSectionProps) {
+  const { t } = useTranslation();
+  const deliveryMethods = getLocalizedDeliveryMethods(t);
+
   return (
     <CheckoutSection
       step={3}
-      title="Delivery method"
-      description="Choose how you'd like your timepiece delivered."
+      title={t("checkout.delivery")}
+      description={t("checkout.deliveryDesc")}
     >
       <div className="space-y-3">
-        {DELIVERY_METHODS.map((method) => (
+        {deliveryMethods.map((method) => (
           <DeliveryOption
             key={method.id}
             method={method}
             isSelected={value === method.id}
             onSelect={() => onChange(method.id)}
+            complimentaryLabel={t("common.complimentary")}
+            businessDaysLabel={formatBusinessDays(t, method.minDays, method.maxDays)}
           />
         ))}
       </div>

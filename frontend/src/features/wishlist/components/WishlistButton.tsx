@@ -2,6 +2,7 @@
 
 import { useWishlist } from "@/features/wishlist/context/WishlistProvider";
 import { Button } from "@/shared/components/ui/Button";
+import { useTranslation } from "@/shared/i18n";
 import { interactiveIconButtonClasses } from "@/shared/lib/utils/button-interaction";
 import { cn } from "@/shared/lib/utils/cn";
 
@@ -36,6 +37,7 @@ export function WishlistButton({
   variant = "icon",
   className,
 }: WishlistButtonProps) {
+  const { t } = useTranslation();
   const { isInWishlist, toggleWishlist, isHydrated } = useWishlist();
   const saved = isHydrated && isInWishlist(slug);
 
@@ -45,6 +47,10 @@ export function WishlistButton({
     toggleWishlist(slug);
   }
 
+  const ariaLabel = saved
+    ? t("products.removeFromWishlistAria", { name: productName })
+    : t("products.addToWishlistAria", { name: productName });
+
   if (variant === "button") {
     return (
       <Button
@@ -52,11 +58,7 @@ export function WishlistButton({
         variant="secondary"
         onClick={handleClick}
         aria-pressed={saved}
-        aria-label={
-          saved
-            ? `Remove ${productName} from wishlist`
-            : `Add ${productName} to wishlist`
-        }
+        aria-label={ariaLabel}
         className={cn(
           "gap-2",
           saved && "border-accent bg-accent/10 text-accent hover:bg-accent/15",
@@ -64,7 +66,7 @@ export function WishlistButton({
         )}
       >
         <HeartIcon filled={saved} className="h-4 w-4" />
-        {saved ? "Saved to wishlist" : "Add to wishlist"}
+        {saved ? t("products.savedToWishlist") : t("products.addToWishlist")}
       </Button>
     );
   }
@@ -74,11 +76,7 @@ export function WishlistButton({
       type="button"
       onClick={handleClick}
       aria-pressed={saved}
-      aria-label={
-        saved
-          ? `Remove ${productName} from wishlist`
-          : `Add ${productName} to wishlist`
-      }
+      aria-label={ariaLabel}
       className={cn(
         "rounded-full bg-card/90 p-2 shadow-sm ring-1 ring-border backdrop-blur-sm",
         interactiveIconButtonClasses,

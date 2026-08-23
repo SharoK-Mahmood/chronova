@@ -1,17 +1,11 @@
+import type { RegionalAddress } from "@/shared/lib/address/regional-address";
+
 export type ContactInformation = {
   email: string;
   phone: string;
 };
 
-export type ShippingAddress = {
-  fullName: string;
-  line1: string;
-  line2: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-};
+export type ShippingAddress = RegionalAddress;
 
 export type DeliveryMethodId = "standard" | "express" | "white-glove";
 

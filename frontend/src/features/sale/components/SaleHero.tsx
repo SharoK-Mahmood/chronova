@@ -1,5 +1,8 @@
+"use client";
+
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { useTranslation } from "@/shared/i18n";
 
 type SaleHeroProps = {
   maxDiscount: number;
@@ -7,6 +10,8 @@ type SaleHeroProps = {
 };
 
 export function SaleHero({ maxDiscount, itemCount }: SaleHeroProps) {
+  const { t } = useTranslation();
+
   return (
     <section className="relative overflow-hidden bg-primary text-background">
       <div
@@ -25,28 +30,29 @@ export function SaleHero({ maxDiscount, itemCount }: SaleHeroProps) {
       <Container className="relative py-20 sm:py-28 lg:py-32">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs font-medium uppercase tracking-[0.35em] text-accent">
-            Limited Time
+            {t("sale.limitedTime")}
           </p>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-            The Sale
+            {t("sale.title")}
           </h1>
           <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-background/70 sm:text-lg">
-            Exceptional timepieces at exceptional values. Up to {maxDiscount}%
-            off select watches — while they last.
+            {t("sale.subtitle", { maxDiscount })}
           </p>
           <p className="mt-4 text-sm text-background/50">
-            {itemCount} {itemCount === 1 ? "piece" : "pieces"} on offer
+            {itemCount === 1
+              ? t("sale.onOfferOne")
+              : t("sale.onOffer", { count: itemCount })}
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Button href="#spotlight" variant="accent">
-              Best offer
+              {t("sale.bestOffer")}
             </Button>
             <Button
               href="#collection"
               variant="secondary"
               className="border-background/20 text-background hover:bg-background/10"
             >
-              Shop all deals
+              {t("sale.shopAllDeals")}
             </Button>
           </div>
         </div>

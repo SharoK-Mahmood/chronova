@@ -1,19 +1,12 @@
 import type { CheckoutFormData } from "@/features/checkout/types/checkout.types";
+import { EMPTY_REGIONAL_ADDRESS } from "@/shared/lib/address/regional-address";
 
 export const DEFAULT_CHECKOUT_FORM: CheckoutFormData = {
   contact: {
     email: "",
     phone: "",
   },
-  shippingAddress: {
-    fullName: "",
-    line1: "",
-    line2: "",
-    city: "",
-    state: "",
-    postalCode: "",
-    country: "United States",
-  },
+  shippingAddress: { ...EMPTY_REGIONAL_ADDRESS },
   deliveryMethodId: "standard",
   paymentMethodId: "card",
   cardDetails: {

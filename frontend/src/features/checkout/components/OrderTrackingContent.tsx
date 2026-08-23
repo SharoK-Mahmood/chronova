@@ -8,6 +8,7 @@ import type { PlacedOrder } from "@/features/checkout/types/checkout.types";
 import { Price } from "@/features/currency";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { useTranslation } from "@/shared/i18n";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 import { cn } from "@/shared/lib/utils/cn";
 
@@ -15,18 +16,19 @@ type OrderTrackingContentProps = {
   orderNumber: string;
 };
 
-const TRACKING_STEPS = [
-  { key: "confirmed", label: "Order placed" },
-  { key: "processing", label: "Processing" },
-  { key: "shipped", label: "Shipped" },
-  { key: "delivered", label: "Delivered" },
+const TRACKING_STEP_KEYS = [
+  { key: "confirmed", labelKey: "checkout.tracking.steps.confirmed" },
+  { key: "processing", labelKey: "checkout.tracking.steps.processing" },
+  { key: "shipped", labelKey: "checkout.tracking.steps.shipped" },
+  { key: "delivered", labelKey: "checkout.tracking.steps.delivered" },
 ] as const;
 
 function getStepIndex(status: PlacedOrder["status"]): number {
-  return TRACKING_STEPS.findIndex((step) => step.key === status);
+  return TRACKING_STEP_KEYS.findIndex((step) => step.key === status);
 }
 
 export function OrderTrackingContent({ orderNumber }: OrderTrackingContentProps) {
+  const { t } = useTranslation();
   const [order, setOrder] = useState<PlacedOrder | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -38,7 +40,7 @@ export function OrderTrackingContent({ orderNumber }: OrderTrackingContentProps)
   if (!isHydrated) {
     return (
       <Container className="py-16">
-        <p className="text-secondary">Loading order status...</p>
+        <p className="text-secondary">{t("common.loading")}</p>
       </Container>
     );
   }
@@ -46,12 +48,14 @@ export function OrderTrackingContent({ orderNumber }: OrderTrackingContentProps)
   if (!order) {
     return (
       <Container className="py-16 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">Order not found</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {t("checkout.confirmation.notFound")}
+        </h1>
         <p className="mt-3 text-secondary">
-          We couldn&apos;t find order {orderNumber} on this device.
+          {t("checkout.confirmation.notFoundDesc", { number: orderNumber })}
         </p>
         <Button href="/products" variant="accent" className="mt-8">
-          Continue shopping
+          {t("common.continueShopping")}
         </Button>
       </Container>
     );
@@ -64,13 +68,15 @@ export function OrderTrackingContent({ orderNumber }: OrderTrackingContentProps)
       <section className="border-b border-border bg-primary text-background">
         <Container className="py-12 sm:py-16">
           <p className="text-xs uppercase tracking-[0.35em] text-accent">
-            Order tracking
+            {t("checkout.tracking.title")}
           </p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
             {order.orderNumber}
           </h1>
           <p className="mt-3 text-background/70">
-            Estimated delivery: {order.estimatedDelivery.label}
+            {t("checkout.tracking.estimated", {
+              date: order.estimatedDelivery.label,
+            })}
           </p>
         </Container>
       </section>
@@ -80,16 +86,16 @@ export function OrderTrackingContent({ orderNumber }: OrderTrackingContentProps)
           <div className="space-y-6">
             <section className="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">
               <h2 className="text-lg font-semibold tracking-tight">
-                Delivery progress
+                {t("checkout.tracking.progress")}
               </h2>
               <ol className="mt-8 space-y-0">
-                {TRACKING_STEPS.map((step, index) => {
+                {TRACKING_STEP_KEYS.map((step, index) => {
                   const isComplete = index <= currentStepIndex;
                   const isCurrent = index === currentStepIndex;
 
                   return (
                     <li key={step.key} className="relative flex gap-4 pb-8 last:pb-0">
-                      {index < TRACKING_STEPS.length - 1 ? (
+                      {index < TRACKING_STEP_KEYS.length - 1 ? (
                         <span
                           className={cn(
                             "absolute left-[11px] top-6 h-[calc(100%-12px)] w-0.5",
@@ -115,11 +121,11 @@ export function OrderTrackingContent({ orderNumber }: OrderTrackingContentProps)
                             isCurrent ? "text-accent" : isComplete ? "text-foreground" : "text-secondary",
                           )}
                         >
-                          {step.label}
+                          {t(step.labelKey)}
                         </p>
                         {isCurrent ? (
                           <p className="mt-1 text-sm text-secondary">
-                            Your order is currently at this stage.
+                            {t("checkout.tracking.currentStage")}
                           </p>
                         ) : null}
                       </div>
@@ -130,7 +136,9 @@ export function OrderTrackingContent({ orderNumber }: OrderTrackingContentProps)
             </section>
 
             <section className="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">
-              <h2 className="text-lg font-semibold tracking-tight">Items</h2>
+              <h2 className="text-lg font-semibold tracking-tight">
+                {t("checkout.tracking.items")}
+              </h2>
               <ul className="mt-6 divide-y divide-border">
                 {order.lineItems.map((item) => (
                   <li key={item.slug} className="flex gap-4 py-5 first:pt-0 last:pb-0">
@@ -152,7 +160,9 @@ export function OrderTrackingContent({ orderNumber }: OrderTrackingContentProps)
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium">{item.name}</p>
-                      <p className="text-xs text-secondary">Qty {item.quantity}</p>
+                      <p className="text-xs text-secondary">
+                        {t("common.qty")} {item.quantity}
+                      </p>
                     </div>
                     <p className="text-sm font-medium">
                       <Price amountUsd={item.unitPriceUsd * item.quantity} />
@@ -164,26 +174,28 @@ export function OrderTrackingContent({ orderNumber }: OrderTrackingContentProps)
           </div>
 
           <aside className="rounded-2xl border border-border bg-card p-6 shadow-sm lg:sticky lg:top-28">
-            <h2 className="text-lg font-semibold tracking-tight">Summary</h2>
+            <h2 className="text-lg font-semibold tracking-tight">
+              {t("checkout.tracking.summary")}
+            </h2>
             <dl className="mt-6 space-y-3 text-sm">
               <div className="flex items-center justify-between">
-                <dt className="text-secondary">Subtotal</dt>
+                <dt className="text-secondary">{t("cart.subtotal")}</dt>
                 <dd className="font-medium">
                   <Price amountUsd={order.subtotalUsd} />
                 </dd>
               </div>
               <div className="flex items-center justify-between">
-                <dt className="text-secondary">Shipping</dt>
+                <dt className="text-secondary">{t("cart.shipping")}</dt>
                 <dd className="font-medium">
                   {order.shippingUsd === 0 ? (
-                    "Complimentary"
+                    t("common.complimentary")
                   ) : (
                     <Price amountUsd={order.shippingUsd} />
                   )}
                 </dd>
               </div>
               <div className="flex items-center justify-between border-t border-border pt-3 text-base">
-                <dt className="font-semibold">Total</dt>
+                <dt className="font-semibold">{t("checkout.total")}</dt>
                 <dd className="font-semibold text-accent">
                   <Price amountUsd={order.totalUsd} />
                 </dd>
@@ -194,7 +206,7 @@ export function OrderTrackingContent({ orderNumber }: OrderTrackingContentProps)
               variant="secondary"
               className="mt-6 w-full"
             >
-              View confirmation
+              {t("checkout.tracking.viewConfirmation")}
             </Button>
           </aside>
         </div>

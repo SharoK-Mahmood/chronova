@@ -1,13 +1,12 @@
 "use client";
 
-import {
-  PAYMENT_METHODS,
-  type PaymentMethod,
-} from "@/features/checkout/constants/payment-methods";
+import type { PaymentMethod } from "@/features/checkout/constants/payment-methods";
 import { CheckoutSection } from "@/features/checkout/components/CheckoutSection";
 import { FormField } from "@/features/checkout/components/FormField";
 import type { CardDetails, PaymentMethodId } from "@/features/checkout/types/checkout.types";
+import { getLocalizedPaymentMethods } from "@/features/checkout/lib/localized-checkout";
 import { Input } from "@/shared/components/ui/Input";
+import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
 
 type PaymentMethodSectionProps = {
@@ -58,6 +57,9 @@ export function PaymentMethodSection({
   onPaymentMethodChange,
   onCardDetailsChange,
 }: PaymentMethodSectionProps) {
+  const { t } = useTranslation();
+  const paymentMethods = getLocalizedPaymentMethods(t);
+
   function updateCardField<K extends keyof CardDetails>(
     field: K,
     value: CardDetails[K],
@@ -68,11 +70,11 @@ export function PaymentMethodSection({
   return (
     <CheckoutSection
       step={4}
-      title="Payment method"
-      description="All transactions are secured with bank-level encryption."
+      title={t("checkout.payment")}
+      description={t("checkout.paymentDesc")}
     >
       <div className="space-y-3">
-        {PAYMENT_METHODS.map((method) => (
+        {paymentMethods.map((method) => (
           <PaymentOption
             key={method.id}
             method={method}
@@ -84,12 +86,12 @@ export function PaymentMethodSection({
 
       {paymentMethodId === "card" ? (
         <div className="mt-6 grid gap-5 rounded-xl border border-border bg-background/60 p-5">
-          <FormField label="Name on card" htmlFor="checkout-card-name" required>
+          <FormField label={t("checkout.card.name")} htmlFor="checkout-card-name" required>
             <Input
               id="checkout-card-name"
               name="nameOnCard"
               autoComplete="cc-name"
-              placeholder="Jane Doe"
+              placeholder={t("address.placeholders.fullName")}
               required
               value={cardDetails.nameOnCard}
               onChange={(event) =>
@@ -97,7 +99,7 @@ export function PaymentMethodSection({
               }
             />
           </FormField>
-          <FormField label="Card number" htmlFor="checkout-card-number" required>
+          <FormField label={t("checkout.card.number")} htmlFor="checkout-card-number" required>
             <Input
               id="checkout-card-number"
               name="cardNumber"
@@ -112,7 +114,7 @@ export function PaymentMethodSection({
             />
           </FormField>
           <div className="grid gap-5 sm:grid-cols-2">
-            <FormField label="Expiry date" htmlFor="checkout-card-expiry" required>
+            <FormField label={t("checkout.card.expiry")} htmlFor="checkout-card-expiry" required>
               <Input
                 id="checkout-card-expiry"
                 name="expiry"
@@ -125,7 +127,7 @@ export function PaymentMethodSection({
                 }
               />
             </FormField>
-            <FormField label="Security code" htmlFor="checkout-card-cvv" required>
+            <FormField label={t("checkout.card.cvv")} htmlFor="checkout-card-cvv" required>
               <Input
                 id="checkout-card-cvv"
                 name="cvv"
@@ -143,15 +145,13 @@ export function PaymentMethodSection({
 
       {paymentMethodId === "paypal" ? (
         <p className="mt-4 rounded-xl border border-border bg-background/60 p-4 text-sm text-secondary">
-          You will be redirected to PayPal after placing your order to complete
-          payment securely.
+          {t("checkout.paypalNote")}
         </p>
       ) : null}
 
       {paymentMethodId === "bank-transfer" ? (
         <p className="mt-4 rounded-xl border border-border bg-background/60 p-4 text-sm text-secondary">
-          Wire transfer instructions will be included in your order confirmation
-          email. Your order is reserved for 48 hours pending payment.
+          {t("checkout.bankNote")}
         </p>
       ) : null}
     </CheckoutSection>

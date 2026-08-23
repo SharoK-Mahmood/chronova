@@ -6,9 +6,20 @@ import { useMemo } from "react";
 
 import { searchCatalogFull } from "@/features/search/lib/search-catalog";
 import { Container } from "@/shared/components/ui/Container";
+import { useTranslation } from "@/shared/i18n";
+
+const CATEGORY_LABEL_KEYS: Record<string, string> = {
+  watches: "search.categoryLabels.watches",
+  men: "search.categoryLabels.men",
+  women: "search.categoryLabels.women",
+  "new-arrivals": "search.categoryLabels.newArrivals",
+  sale: "search.categoryLabels.sale",
+  brands: "search.categoryLabels.brands",
+};
 
 export function SearchResultsContent() {
   const searchParams = useSearchParams();
+  const { t } = useTranslation();
   const query = searchParams.get("q") ?? "";
   const results = useMemo(() => searchCatalogFull(query), [query]);
 
@@ -16,40 +27,35 @@ export function SearchResultsContent() {
     <>
       <section className="border-b border-border bg-primary text-background">
         <Container className="max-w-5xl py-12 sm:py-16">
-          <p className="text-xs uppercase tracking-[0.35em] text-accent">Search</p>
+          <p className="text-xs uppercase tracking-[0.35em] text-accent">{t("search.title")}</p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-            {query ? `Results for “${query}”` : "Search the collection"}
+            {query ? t("search.resultsFor", { query }) : t("search.searchCollection")}
           </h1>
           {query ? (
             <p className="mt-3 text-background/70">
-              {results.totalWatchMatches}{" "}
-              {results.totalWatchMatches === 1 ? "watch" : "watches"} found
+              {results.totalWatchMatches === 1
+                ? t("search.watchFound")
+                : t("search.watchesFound", { count: results.totalWatchMatches })}
             </p>
           ) : (
-            <p className="mt-3 text-background/70">
-              Find watches, brands, and categories across Chronova.
-            </p>
+            <p className="mt-3 text-background/70">{t("search.findWatches")}</p>
           )}
         </Container>
       </section>
 
       <Container className="max-w-5xl py-12 sm:py-16">
         {!query ? (
-          <p className="text-secondary">
-            Use the search bar above to explore watches, brands, or models.
-          </p>
+          <p className="text-secondary">{t("search.useSearchBar")}</p>
         ) : results.watches.length === 0 &&
           results.brands.length === 0 &&
           results.categories.length === 0 ? (
-          <p className="text-secondary">
-            No results found. Try another brand, model, or category.
-          </p>
+          <p className="text-secondary">{t("search.noResultsTryAgain")}</p>
         ) : (
           <div className="space-y-10">
             {results.watches.length > 0 ? (
               <section>
                 <h2 className="text-xs uppercase tracking-[0.3em] text-accent">
-                  Matching watches
+                  {t("search.matchingWatches")}
                 </h2>
                 <ul className="mt-4 divide-y divide-border rounded-2xl border border-border bg-card">
                   {results.watches.map((watch) => (
@@ -68,7 +74,7 @@ export function SearchResultsContent() {
                             </p>
                           ) : null}
                         </div>
-                        <span className="text-sm text-accent">View watch →</span>
+                        <span className="text-sm text-accent">{t("search.viewWatch")}</span>
                       </Link>
                     </li>
                   ))}
@@ -79,7 +85,7 @@ export function SearchResultsContent() {
             {results.brands.length > 0 ? (
               <section>
                 <h2 className="text-xs uppercase tracking-[0.3em] text-accent">
-                  Brand matches
+                  {t("search.brandMatches")}
                 </h2>
                 <ul className="mt-4 grid gap-3 sm:grid-cols-2">
                   {results.brands.map((brand) => (
@@ -90,7 +96,7 @@ export function SearchResultsContent() {
                       >
                         <p className="font-medium">{brand.name}</p>
                         <p className="mt-1 text-sm text-secondary">
-                          View brand collection
+                          {t("search.viewBrandCollection")}
                         </p>
                       </Link>
                     </li>
@@ -102,7 +108,7 @@ export function SearchResultsContent() {
             {results.categories.length > 0 ? (
               <section>
                 <h2 className="text-xs uppercase tracking-[0.3em] text-accent">
-                  Categories
+                  {t("search.categories")}
                 </h2>
                 <ul className="mt-4 flex flex-wrap gap-3">
                   {results.categories.map((category) => (
@@ -111,7 +117,7 @@ export function SearchResultsContent() {
                         href={category.href}
                         className="inline-flex rounded-full border border-border bg-card px-4 py-2 text-sm transition-colors hover:border-accent/40 hover:text-accent"
                       >
-                        {category.label}
+                        {t(CATEGORY_LABEL_KEYS[category.id] ?? category.id)}
                       </Link>
                     </li>
                   ))}

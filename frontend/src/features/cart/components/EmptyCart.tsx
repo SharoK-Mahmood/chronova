@@ -1,16 +1,21 @@
+"use client";
+
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { useTranslation } from "@/shared/i18n";
 
 export function EmptyCart() {
+  const { t } = useTranslation();
+
   return (
     <>
       <section className="border-b border-border bg-primary text-background">
         <Container className="py-16 text-center sm:py-20">
           <p className="text-xs uppercase tracking-[0.35em] text-accent">
-            Your Selection
+            {t("cart.yourSelection")}
           </p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-            Shopping Bag
+            {t("cart.shoppingBag")}
           </h1>
         </Container>
       </section>
@@ -32,15 +37,14 @@ export function EmptyCart() {
           </svg>
         </div>
         <h2 className="text-2xl font-semibold tracking-tight">
-          Your bag is empty
+          {t("cart.empty")}
         </h2>
         <p className="mx-auto mt-3 max-w-md text-secondary">
-          Browse the collection and add a watch — it will appear here so you
-          can review before you buy.
+          {t("cart.emptyDesc")}
         </p>
         <div className="mt-8">
           <Button href="/products" variant="accent">
-            Explore collection
+            {t("cart.exploreCollection")}
           </Button>
         </div>
       </Container>

@@ -4,19 +4,23 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { useTranslation } from "@/shared/i18n";
+
 type AuthShellProps = {
   children: ReactNode;
 };
 
 export function AuthShell({ children }: AuthShellProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-1 items-center justify-center px-4 py-16 sm:py-24">
       <div className="w-full max-w-md">
         <div className="mb-8 flex flex-col items-center text-center">
-          <Link href="/" aria-label="Chronova home">
+          <Link href="/" aria-label={t("nav.homeAria")}>
             <Image
               src="/chronova-logo.png"
-              alt="Chronova"
+              alt={t("site.name")}
               width={220}
               height={60}
               priority

@@ -9,6 +9,7 @@ import { EmptyWishlist } from "@/features/wishlist/components/EmptyWishlist";
 import { WishlistItemCard } from "@/features/wishlist/components/WishlistItemCard";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { useTranslation } from "@/shared/i18n";
 
 function toSummary(product: NonNullable<ReturnType<typeof getProductBySlug>>): ProductSummary {
   return {
@@ -25,6 +26,7 @@ function toSummary(product: NonNullable<ReturnType<typeof getProductBySlug>>): P
 }
 
 export function WishlistContent() {
+  const { t } = useTranslation();
   const { slugs, isHydrated, count } = useWishlist();
 
   const products = useMemo(() => {
@@ -37,7 +39,7 @@ export function WishlistContent() {
   if (!isHydrated) {
     return (
       <Container className="py-16">
-        <p className="text-secondary">Loading your wishlist...</p>
+        <p className="text-secondary">{t("wishlist.loading")}</p>
       </Container>
     );
   }
@@ -50,13 +52,15 @@ export function WishlistContent() {
     <Container className="py-12 sm:py-16">
       <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight">Wishlist</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">{t("wishlist.title")}</h1>
           <p className="mt-2 text-secondary">
-            {count} saved {count === 1 ? "watch" : "watches"}
+            {count === 1
+              ? t("wishlist.savedOne")
+              : t("wishlist.saved", { count })}
           </p>
         </div>
         <Button href="/products" variant="secondary">
-          Continue shopping
+          {t("common.continueShopping")}
         </Button>
       </div>
 

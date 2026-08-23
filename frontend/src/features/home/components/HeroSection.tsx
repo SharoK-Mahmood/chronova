@@ -1,11 +1,15 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
-import { SITE } from "@/shared/constants/site";
+import { useTranslation } from "@/shared/i18n";
 
 export function HeroSection() {
+  const { t } = useTranslation();
+
   return (
     <section className="relative min-h-[92vh] overflow-hidden bg-primary text-background">
       <div
@@ -34,24 +38,23 @@ export function HeroSection() {
           <div className="max-w-xl text-center lg:text-left">
             <p className="inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[0.4em] text-accent">
               <span className="h-px w-8 bg-accent/60" aria-hidden />
-              {SITE.tagline}
+              {t("site.tagline")}
             </p>
             <h1 className="mt-6 text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.25rem] xl:text-6xl">
-              Where precision
+              {t("home.heroTitle")}
               <span className="mt-1 block text-background/90">
                 meets{" "}
                 <span className="bg-gradient-to-r from-accent via-[#e8c547] to-accent bg-clip-text text-transparent">
-                  timeless elegance
+                  {t("home.heroTitleAccent")}
                 </span>
               </span>
             </h1>
             <p className="mt-6 text-base leading-relaxed text-background/65 sm:text-lg">
-              {SITE.description} Discover exceptional watches from the world&apos;s
-              most revered maisons — curated for the discerning collector.
+              {t("home.heroSubtitle")}
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-center lg:justify-start [perspective:1200px]">
               <Button href="/products" effect="luxury" className="px-8 py-3.5 text-base">
-                Shop collection
+                {t("home.shopCollection")}
               </Button>
               <Button
                 href="/products/land-dweller-40"
@@ -59,25 +62,25 @@ export function HeroSection() {
                 effect="luxury"
                 className="border-background/25 text-background hover:border-accent/50 hover:bg-background/10 px-8 py-3.5 text-base"
               >
-                View bestseller
+                {t("home.viewBestseller")}
               </Button>
             </div>
             <dl className="mt-12 grid grid-cols-3 gap-6 border-t border-background/10 pt-8 text-center lg:text-left">
               <div>
                 <dt className="text-[10px] uppercase tracking-[0.25em] text-background/45">
-                  Maisons
+                  {t("home.maisons")}
                 </dt>
                 <dd className="mt-1 text-2xl font-semibold text-accent">10+</dd>
               </div>
               <div>
                 <dt className="text-[10px] uppercase tracking-[0.25em] text-background/45">
-                  Timepieces
+                  {t("home.timepieces")}
                 </dt>
                 <dd className="mt-1 text-2xl font-semibold text-accent">50+</dd>
               </div>
               <div>
                 <dt className="text-[10px] uppercase tracking-[0.25em] text-background/45">
-                  Service
+                  {t("home.service")}
                 </dt>
                 <dd className="mt-1 text-2xl font-semibold text-accent">24/7</dd>
               </div>
@@ -112,7 +115,7 @@ export function HeroSection() {
         </div>
 
         <div className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-background/40 lg:flex">
-          <span className="text-[10px] uppercase tracking-[0.35em]">Scroll</span>
+          <span className="text-[10px] uppercase tracking-[0.35em]">{t("home.scroll")}</span>
           <span className="h-10 w-px bg-gradient-to-b from-accent/60 to-transparent" />
         </div>
       </Container>

@@ -6,11 +6,12 @@ import type {
   DeliveryMethodId,
   OrderLineItem,
 } from "@/features/checkout/types/checkout.types";
-import { getDeliveryMethod } from "@/features/checkout/constants/delivery-methods";
 import {
   calculateSubtotalUsd,
 } from "@/features/checkout/lib/build-order-line-items";
+import { getLocalizedDeliveryMethod } from "@/features/checkout/lib/localized-checkout";
 import { Price, useCurrency } from "@/features/currency";
+import { useTranslation } from "@/shared/i18n";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 import { cn } from "@/shared/lib/utils/cn";
 
@@ -25,12 +26,15 @@ export function CheckoutOrderSummary({
   deliveryMethodId,
   className,
 }: CheckoutOrderSummaryProps) {
+  const { t } = useTranslation();
   const { currency } = useCurrency();
-  const deliveryMethod = getDeliveryMethod(deliveryMethodId);
+  const deliveryMethod = getLocalizedDeliveryMethod(deliveryMethodId, t);
   const subtotalUsd = calculateSubtotalUsd(lineItems);
   const shippingUsd = deliveryMethod.shippingUsd;
   const totalUsd = subtotalUsd + shippingUsd;
   const itemCount = lineItems.reduce((total, item) => total + item.quantity, 0);
+  const currencyLabel =
+    currency === "USD" ? t("common.usd") : t("common.iqd");
 
   return (
     <aside
@@ -40,10 +44,11 @@ export function CheckoutOrderSummary({
       )}
     >
       <p className="text-xs uppercase tracking-[0.25em] text-accent">
-        Order summary
+        {t("checkout.orderSummary")}
       </p>
       <h2 className="mt-2 text-lg font-semibold tracking-tight">
-        {itemCount} {itemCount === 1 ? "piece" : "pieces"}
+        {itemCount}{" "}
+        {itemCount === 1 ? t("common.piece") : t("common.pieces")}
       </h2>
 
       <ul className="mt-6 max-h-72 space-y-4 overflow-y-auto pr-1">
@@ -74,7 +79,9 @@ export function CheckoutOrderSummary({
                 {item.brand}
               </p>
               <p className="truncate text-sm font-medium">{item.name}</p>
-              <p className="mt-1 text-xs text-secondary">Qty {item.quantity}</p>
+              <p className="mt-1 text-xs text-secondary">
+                {t("common.qty")} {item.quantity}
+              </p>
             </div>
             <p className="shrink-0 text-sm font-medium">
               <Price amountUsd={item.unitPriceUsd * item.quantity} />
@@ -85,23 +92,23 @@ export function CheckoutOrderSummary({
 
       <dl className="mt-6 space-y-3 border-t border-border pt-6 text-sm">
         <div className="flex items-center justify-between">
-          <dt className="text-secondary">Subtotal</dt>
+          <dt className="text-secondary">{t("cart.subtotal")}</dt>
           <dd className="font-medium">
             <Price amountUsd={subtotalUsd} />
           </dd>
         </div>
         <div className="flex items-center justify-between">
-          <dt className="text-secondary">Shipping</dt>
+          <dt className="text-secondary">{t("cart.shipping")}</dt>
           <dd className="font-medium">
             {shippingUsd === 0 ? (
-              <span className="text-accent">Complimentary</span>
+              <span className="text-accent">{t("common.complimentary")}</span>
             ) : (
               <Price amountUsd={shippingUsd} />
             )}
           </dd>
         </div>
         <div className="flex items-center justify-between border-t border-border pt-3 text-base">
-          <dt className="font-semibold">Total</dt>
+          <dt className="font-semibold">{t("checkout.total")}</dt>
           <dd className="font-semibold text-accent">
             <Price amountUsd={totalUsd} />
           </dd>
@@ -109,8 +116,8 @@ export function CheckoutOrderSummary({
       </dl>
 
       <p className="mt-3 text-xs text-secondary">
-        Prices shown in {currency === "USD" ? "US Dollars" : "Iraqi Dinar"}.
-        Duties and taxes may apply based on destination.
+        {t("common.pricesIn", { currency: currencyLabel })}{" "}
+        {t("common.dutiesNote")}
       </p>
     </aside>
   );
@@ -120,7 +127,8 @@ export function useCheckoutTotals(
   lineItems: OrderLineItem[],
   deliveryMethodId: DeliveryMethodId,
 ) {
-  const deliveryMethod = getDeliveryMethod(deliveryMethodId);
+  const { t } = useTranslation();
+  const deliveryMethod = getLocalizedDeliveryMethod(deliveryMethodId, t);
   const subtotalUsd = calculateSubtotalUsd(lineItems);
   const shippingUsd = deliveryMethod.shippingUsd;
 

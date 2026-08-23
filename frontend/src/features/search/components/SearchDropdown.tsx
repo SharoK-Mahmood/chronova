@@ -5,12 +5,22 @@ import { useRouter } from "next/navigation";
 
 import { buildSearchUrl } from "@/features/search/constants/search-categories";
 import type { SearchResults } from "@/features/search/types/search.types";
+import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
 
 type SearchDropdownProps = {
   results: SearchResults;
   onNavigate?: () => void;
   className?: string;
+};
+
+const CATEGORY_LABEL_KEYS: Record<string, string> = {
+  watches: "search.categoryLabels.watches",
+  men: "search.categoryLabels.men",
+  women: "search.categoryLabels.women",
+  "new-arrivals": "search.categoryLabels.newArrivals",
+  sale: "search.categoryLabels.sale",
+  brands: "search.categoryLabels.brands",
 };
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -52,6 +62,7 @@ export function SearchDropdown({
   className,
 }: SearchDropdownProps) {
   const router = useRouter();
+  const { t } = useTranslation();
   const hasQuery = results.query.length > 0;
   const hasResults =
     results.watches.length > 0 ||
@@ -76,14 +87,14 @@ export function SearchDropdown({
         )}
       >
         <p className="px-4 text-sm text-secondary">
-          No results for &ldquo;{results.query}&rdquo;
+          {t("common.noResults", { query: results.query })}
         </p>
         <button
           type="button"
           onClick={goToAllResults}
           className="mt-3 w-full px-4 text-left text-sm font-medium text-accent hover:underline"
         >
-          Search the full catalog
+          {t("common.searchCatalog")}
         </button>
       </div>
     );
@@ -100,7 +111,7 @@ export function SearchDropdown({
     >
       {results.watches.length > 0 ? (
         <div className="border-b border-border/80 pb-1">
-          <SectionLabel>Matching watches</SectionLabel>
+          <SectionLabel>{t("search.matchingWatches")}</SectionLabel>
           {results.watches.map((watch) => (
             <ResultLink
               key={watch.slug}
@@ -115,13 +126,13 @@ export function SearchDropdown({
 
       {results.brands.length > 0 ? (
         <div className="border-b border-border/80 pb-1">
-          <SectionLabel>Brand matches</SectionLabel>
+          <SectionLabel>{t("search.brandMatches")}</SectionLabel>
           {results.brands.map((brand) => (
             <ResultLink
               key={brand.slug}
               href={`/brands/${brand.slug}`}
               title={brand.name}
-              subtitle="View brand collection"
+              subtitle={t("search.viewBrandCollection")}
               onNavigate={onNavigate}
             />
           ))}
@@ -130,12 +141,12 @@ export function SearchDropdown({
 
       {results.categories.length > 0 ? (
         <div className="border-b border-border/80 pb-1">
-          <SectionLabel>Categories</SectionLabel>
+          <SectionLabel>{t("search.categories")}</SectionLabel>
           {results.categories.map((category) => (
             <ResultLink
               key={category.id}
               href={category.href}
-              title={category.label}
+              title={t(CATEGORY_LABEL_KEYS[category.id] ?? category.id)}
               onNavigate={onNavigate}
             />
           ))}
@@ -149,8 +160,8 @@ export function SearchDropdown({
       >
         <span>
           {primaryBrand
-            ? `View all ${primaryBrand} results`
-            : "View all results"}
+            ? t("common.viewAllBrandResults", { brand: primaryBrand })
+            : t("common.viewAllResults")}
         </span>
         <span aria-hidden>→</span>
       </button>

@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -6,8 +8,10 @@ import { Price } from "@/features/currency";
 import { getProductBySlug } from "@/features/products/data/mock-products";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { useTranslation } from "@/shared/i18n";
 
 export function HomeSpotlight() {
+  const { t } = useTranslation();
   const product = getProductBySlug("land-dweller-40");
 
   if (!product) {
@@ -25,15 +29,14 @@ export function HomeSpotlight() {
         <div className="mb-14 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-accent">
-              Signature piece
+              {t("home.spotlight.eyebrow")}
             </p>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              The defining watch of the season
+              {t("home.spotlight.title")}
             </h2>
           </div>
           <p className="max-w-xs text-sm leading-relaxed text-secondary">
-            An icon reimagined — where contemporary design meets decades of
-            horological mastery.
+            {t("home.spotlight.subtitle")}
           </p>
         </div>
 
@@ -53,7 +56,7 @@ export function HomeSpotlight() {
               <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-primary/5 to-transparent" />
             </div>
             <div className="absolute -left-3 top-8 hidden rounded-full border border-accent/30 bg-card px-4 py-2 text-[10px] uppercase tracking-[0.3em] text-accent shadow-sm lg:block">
-              Bestseller
+              {t("home.spotlight.bestseller")}
             </div>
           </Link>
 
@@ -80,7 +83,7 @@ export function HomeSpotlight() {
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button href={`/products/${product.slug}`} effect="luxury">
-                  Discover
+                  {t("home.spotlight.discover")}
                 </Button>
                 <AddToCartButton
                   slug={product.slug}

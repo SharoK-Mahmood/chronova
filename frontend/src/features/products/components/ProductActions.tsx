@@ -3,6 +3,7 @@
 import { AddToCartButton } from "@/features/cart";
 import { WishlistButton } from "@/features/wishlist";
 import { Button } from "@/shared/components/ui/Button";
+import { useTranslation } from "@/shared/i18n";
 
 type ProductActionsProps = {
   slug: string;
@@ -15,6 +16,8 @@ export function ProductActions({
   name,
   unitPriceUsd,
 }: ProductActionsProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
       <AddToCartButton
@@ -25,7 +28,7 @@ export function ProductActions({
       />
       <WishlistButton slug={slug} productName={name} variant="button" />
       <Button href="/products" variant="secondary">
-        Back to shop
+        {t("products.backToShop")}
       </Button>
     </div>
   );

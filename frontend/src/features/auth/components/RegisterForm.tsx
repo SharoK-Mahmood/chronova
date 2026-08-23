@@ -10,9 +10,11 @@ import { AuthShell } from "@/features/auth/components/AuthShell";
 import { GoogleSignInButton } from "@/features/auth/components/GoogleSignInButton";
 import { PasswordField } from "@/features/auth/components/PasswordField";
 import { Input } from "@/shared/components/ui/Input";
+import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
 
 export function RegisterForm() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,12 +28,12 @@ export function RegisterForm() {
     const confirmPassword = formData.get("confirmPassword") as string;
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError(t("auth.passwordMismatch"));
       return;
     }
 
     if (!agreedToTerms) {
-      setError("Please agree to the Terms of Service and Privacy Policy.");
+      setError(t("auth.agreeTerms"));
       return;
     }
 
@@ -41,17 +43,17 @@ export function RegisterForm() {
   return (
     <AuthShell>
       <div className="mb-8 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">Create Account</h1>
-        <p className="mt-2 text-sm text-secondary">
-          Join Chronova to track orders, save favourites, and more.
-        </p>
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {t("auth.createAccount")}
+        </h1>
+        <p className="mt-2 text-sm text-secondary">{t("auth.joinChronova")}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <div className="space-y-2">
             <label htmlFor="firstName" className="text-sm font-medium">
-              First Name
+              {t("auth.firstName")}
             </label>
             <Input
               id="firstName"
@@ -64,7 +66,7 @@ export function RegisterForm() {
           </div>
           <div className="space-y-2">
             <label htmlFor="lastName" className="text-sm font-medium">
-              Last Name
+              {t("auth.lastName")}
             </label>
             <Input
               id="lastName"
@@ -79,7 +81,7 @@ export function RegisterForm() {
 
         <div className="space-y-2">
           <label htmlFor="email" className="text-sm font-medium">
-            Email
+            {t("auth.email")}
           </label>
           <Input
             id="email"
@@ -94,17 +96,17 @@ export function RegisterForm() {
         <PasswordField
           id="password"
           name="password"
-          label="Password"
+          label={t("auth.password")}
           autoComplete="new-password"
-          placeholder="Create a password"
+          placeholder={t("auth.passwordPlaceholder")}
         />
 
         <PasswordField
           id="confirmPassword"
           name="confirmPassword"
-          label="Confirm Password"
+          label={t("auth.confirmPassword")}
           autoComplete="new-password"
-          placeholder="Confirm your password"
+          placeholder={t("auth.passwordPlaceholder")}
         />
 
         <label className="flex cursor-pointer items-start gap-3">
@@ -118,16 +120,7 @@ export function RegisterForm() {
               "focus:ring-2 focus:ring-accent/20 focus:ring-offset-0",
             )}
           />
-          <span className="text-sm text-secondary">
-            I agree to the{" "}
-            <Link href="/terms" className="text-accent hover:text-accent/80">
-              Terms of Service
-            </Link>{" "}
-            and{" "}
-            <Link href="/privacy" className="text-accent hover:text-accent/80">
-              Privacy Policy
-            </Link>
-          </span>
+          <span className="text-sm text-secondary">{t("auth.agreeTerms")}</span>
         </label>
 
         {error ? (
@@ -137,7 +130,7 @@ export function RegisterForm() {
         ) : null}
 
         <AuthButton type="submit" className="w-full">
-          Create Account
+          {t("auth.createAccount")}
         </AuthButton>
       </form>
 
@@ -145,12 +138,11 @@ export function RegisterForm() {
       <GoogleSignInButton />
 
       <p className="mt-8 text-center text-sm text-secondary">
-        Already have an account?{" "}
         <Link
           href="/login"
           className="font-medium text-accent transition-colors hover:text-accent/80"
         >
-          Log In
+          {t("auth.logIn")}
         </Link>
       </p>
     </AuthShell>

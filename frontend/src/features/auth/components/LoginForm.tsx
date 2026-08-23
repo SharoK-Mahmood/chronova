@@ -10,9 +10,11 @@ import { AuthShell } from "@/features/auth/components/AuthShell";
 import { GoogleSignInButton } from "@/features/auth/components/GoogleSignInButton";
 import { PasswordField } from "@/features/auth/components/PasswordField";
 import { Input } from "@/shared/components/ui/Input";
+import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
 
 export function LoginForm() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [rememberMe, setRememberMe] = useState(false);
 
@@ -24,16 +26,18 @@ export function LoginForm() {
   return (
     <AuthShell>
       <div className="mb-8 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">Welcome Back</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {t("auth.welcomeBack")}
+        </h1>
         <p className="mt-2 text-sm text-secondary">
-          Sign in to access your orders and saved pieces.
+          {t("auth.signInSubtitle")}
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="space-y-2">
           <label htmlFor="email" className="text-sm font-medium">
-            Email
+            {t("auth.email")}
           </label>
           <Input
             id="email"
@@ -47,12 +51,12 @@ export function LoginForm() {
 
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-4">
-            <span className="text-sm font-medium">Password</span>
+            <span className="text-sm font-medium">{t("auth.password")}</span>
             <Link
               href="/forgot-password"
               className="text-xs font-medium text-accent transition-colors hover:text-accent/80"
             >
-              Forgot Password?
+              {t("auth.forgotPassword")}
             </Link>
           </div>
           <PasswordField id="password" name="password" />
@@ -69,11 +73,11 @@ export function LoginForm() {
               "focus:ring-2 focus:ring-accent/20 focus:ring-offset-0",
             )}
           />
-          <span className="text-sm text-secondary">Remember me</span>
+          <span className="text-sm text-secondary">{t("auth.rememberMe")}</span>
         </label>
 
         <AuthButton type="submit" variant="accent" className="w-full">
-          Log In
+          {t("auth.logIn")}
         </AuthButton>
       </form>
 
@@ -81,12 +85,12 @@ export function LoginForm() {
       <GoogleSignInButton />
 
       <p className="mt-8 text-center text-sm text-secondary">
-        Don&apos;t have an account?{" "}
+        {t("auth.noAccount")}{" "}
         <Link
           href="/register"
           className="font-medium text-accent transition-colors hover:text-accent/80"
         >
-          Create Account
+          {t("auth.createAccount")}
         </Link>
       </p>
     </AuthShell>

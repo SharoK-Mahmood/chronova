@@ -1,7 +1,12 @@
+"use client";
+
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { useTranslation } from "@/shared/i18n";
 
 export function HomeCta() {
+  const { t } = useTranslation();
+
   return (
     <section className="relative overflow-hidden border-t border-border bg-primary py-24 text-background sm:py-32">
       <div
@@ -15,18 +20,17 @@ export function HomeCta() {
 
       <Container className="relative text-center">
         <p className="text-xs uppercase tracking-[0.4em] text-accent">
-          The Chronova experience
+          {t("home.cta.eyebrow")}
         </p>
         <h2 className="mx-auto mt-5 max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
-          Begin your journey into exceptional horology
+          {t("home.cta.title")}
         </h2>
         <p className="mx-auto mt-5 max-w-lg text-background/65">
-          Whether acquiring your first luxury watch or expanding a distinguished
-          collection — we are here to guide every step.
+          {t("home.cta.subtitle")}
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row [perspective:1200px]">
           <Button href="/products" effect="luxury" className="px-8 py-3.5 text-base">
-            Explore collection
+            {t("home.cta.explore")}
           </Button>
           <Button
             href="/sale"
@@ -34,7 +38,7 @@ export function HomeCta() {
             effect="luxury"
             className="border-background/25 text-background hover:border-accent/50 hover:bg-background/10 px-8 py-3.5 text-base"
           >
-            View sale
+            {t("home.cta.viewSale")}
           </Button>
         </div>
       </Container>

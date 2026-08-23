@@ -5,12 +5,14 @@ import { usePathname } from "next/navigation";
 
 import { useCart } from "@/features/cart";
 import { useWishlist } from "@/features/wishlist";
+import { AccountMenuDropdown } from "@/features/account/components/AccountMenuDropdown";
 import { BrandsNavLink } from "@/shared/components/layout/BrandsNavMenu";
 import { NavIcon } from "@/shared/components/layout/NavIcon";
 import {
   MAIN_NAV_LINKS,
   UTILITY_NAV_LINKS,
 } from "@/shared/constants/site";
+import { useTranslation } from "@/shared/i18n";
 import { navIconButtonClasses } from "@/shared/lib/utils/button-interaction";
 import { cn } from "@/shared/lib/utils/cn";
 
@@ -49,6 +51,7 @@ export function MainNavLinks({
   variant = "desktop",
 }: MainNavLinksProps) {
   const pathname = usePathname();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -59,6 +62,7 @@ export function MainNavLinks({
           getMainNavLinkClassName(isActive, isHighlighted),
           className,
         );
+        const label = t(link.labelKey);
 
         if (link.href === "/brands" && variant === "desktop") {
           return (
@@ -66,6 +70,7 @@ export function MainNavLinks({
               key={link.href}
               isActive={isActive}
               className={linkClassName}
+              label={label}
             />
           );
         }
@@ -77,7 +82,7 @@ export function MainNavLinks({
             aria-current={isActive ? "page" : undefined}
             className={linkClassName}
           >
-            {link.label}
+            {label}
           </Link>
         );
       })}
@@ -87,6 +92,7 @@ export function MainNavLinks({
 
 export function UtilityNavLinks() {
   const pathname = usePathname();
+  const { t } = useTranslation();
   const { count: wishlistCount, isHydrated: wishlistHydrated } = useWishlist();
   const { itemCount: cartCount, isHydrated: cartHydrated, openDrawer } = useCart();
 
@@ -94,6 +100,7 @@ export function UtilityNavLinks() {
     <>
       {UTILITY_NAV_LINKS.map((link) => {
         const isActive = isNavLinkActive(pathname, link.href);
+        const label = t(link.labelKey);
         const showWishlistCount =
           link.icon === "wishlist" && wishlistHydrated && wishlistCount > 0;
         const showCartCount =
@@ -105,6 +112,10 @@ export function UtilityNavLinks() {
               ? cartCount
               : 0;
         const showBadge = showWishlistCount || showCartCount;
+        const badgeLabel =
+          badgeCount === 1
+            ? `${label}, 1 ${t("common.item")}`
+            : `${label}, ${badgeCount} ${t("common.items")}`;
 
         if (link.icon === "cart") {
           return (
@@ -112,10 +123,8 @@ export function UtilityNavLinks() {
               key={link.href}
               type="button"
               onClick={openDrawer}
-              aria-label={
-                showBadge ? `${link.label}, ${badgeCount} items` : link.label
-              }
-              title={link.label}
+              aria-label={showBadge ? badgeLabel : label}
+              title={label}
               className={cn(
                 "relative rounded-full p-2 text-secondary",
                 navIconButtonClasses,
@@ -132,15 +141,17 @@ export function UtilityNavLinks() {
           );
         }
 
+        if (link.icon === "account") {
+          return <AccountMenuDropdown key={link.href} />;
+        }
+
         return (
           <Link
             key={link.href}
             href={link.href}
-            aria-label={
-              showBadge ? `${link.label}, ${badgeCount} items` : link.label
-            }
+            aria-label={showBadge ? badgeLabel : label}
             aria-current={isActive ? "page" : undefined}
-            title={link.label}
+            title={label}
             className={cn(
               "relative rounded-full p-2 text-secondary",
               navIconButtonClasses,

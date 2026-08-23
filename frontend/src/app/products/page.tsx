@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { CATALOG_PRODUCTS, ProductGrid } from "@/features/products";
+import { CatalogPageHeader } from "@/shared/components/layout/CatalogPageHeader";
 import { Container } from "@/shared/components/ui/Container";
 
 export const metadata: Metadata = {
@@ -11,13 +12,10 @@ export const metadata: Metadata = {
 export default function ProductsPage() {
   return (
     <Container className="py-12 sm:py-16">
-      <div className="mb-10">
-        <h1 className="text-3xl font-semibold tracking-tight">Watches</h1>
-        <p className="mt-2 text-secondary">
-          Explore every watch in the Chronova collection.
-        </p>
-      </div>
-
+      <CatalogPageHeader
+        titleKey="catalog.watchesTitle"
+        descriptionKey="catalog.watchesDesc"
+      />
       <ProductGrid products={CATALOG_PRODUCTS} />
     </Container>
   );

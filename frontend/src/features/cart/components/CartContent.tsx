@@ -11,10 +11,14 @@ import { Button } from "@/shared/components/ui/Button";
 import { textLinkButtonClasses } from "@/shared/lib/utils/button-interaction";
 import { cn } from "@/shared/lib/utils/cn";
 import { Container } from "@/shared/components/ui/Container";
+import { useTranslation } from "@/shared/i18n";
 
 export function CartContent() {
+  const { t } = useTranslation();
   const { entries, isHydrated, itemCount, clearCart } = useCart();
   const { currency } = useCurrency();
+  const currencyLabel =
+    currency === "USD" ? t("common.usd") : t("common.iqd");
 
   const subtotalUsd = useMemo(() => {
     return entries.reduce((total, entry) => {
@@ -28,7 +32,7 @@ export function CartContent() {
   if (!isHydrated) {
     return (
       <Container className="py-16">
-        <p className="text-secondary">Loading your bag...</p>
+        <p className="text-secondary">{t("cart.loading")}</p>
       </Container>
     );
   }
@@ -42,17 +46,16 @@ export function CartContent() {
       <section className="border-b border-border bg-primary text-background">
         <Container className="py-12 sm:py-16">
           <p className="text-xs uppercase tracking-[0.35em] text-accent">
-            Your Selection
+            {t("cart.yourSelection")}
           </p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-            Shopping Bag
+            {t("cart.shoppingBag")}
           </h1>
           <p className="mt-3 max-w-xl text-background/70">
-            Review each timepiece below — your curated selection is ready when
-            you are.
+            {t("cart.bagReview")}
           </p>
           <p className="mt-4 text-sm text-background/50">
-            {itemCount} {itemCount === 1 ? "piece" : "pieces"} in your bag
+            {t("cart.bagCount", { count: itemCount })}
           </p>
         </Container>
       </section>
@@ -64,14 +67,14 @@ export function CartContent() {
             onClick={clearCart}
             className={cn("text-sm text-secondary", textLinkButtonClasses)}
           >
-            Clear bag
+            {t("cart.clearBag")}
           </button>
         </div>
 
         <div className="grid gap-10 lg:grid-cols-[1fr_340px] lg:items-start">
           <div className="space-y-4">
             <p className="text-xs uppercase tracking-[0.25em] text-secondary">
-              Items in your bag
+              {t("cart.inYourBag")}
             </p>
             <div className="divide-y divide-border rounded-2xl border border-border bg-card">
               {entries.map((entry) => (
@@ -84,42 +87,38 @@ export function CartContent() {
 
           <aside className="sticky top-8 rounded-2xl border border-border bg-card p-6 shadow-sm">
             <h2 className="text-lg font-semibold tracking-tight">
-              Order summary
+              {t("cart.orderSummary")}
             </h2>
-            <p className="mt-1 text-sm text-secondary">
-              Confirm your selection before completing purchase.
-            </p>
             <dl className="mt-6 space-y-3 text-sm">
               <div className="flex items-center justify-between">
-                <dt className="text-secondary">Subtotal</dt>
+                <dt className="text-secondary">{t("cart.subtotal")}</dt>
                 <dd className="font-medium">
                   <Price amountUsd={subtotalUsd} />
                 </dd>
               </div>
               <div className="flex items-center justify-between">
-                <dt className="text-secondary">Shipping</dt>
-                <dd className="text-secondary">Calculated at checkout</dd>
+                <dt className="text-secondary">{t("cart.shipping")}</dt>
+                <dd className="text-secondary">{t("cart.shippingAtCheckout")}</dd>
               </div>
               <div className="flex items-center justify-between border-t border-border pt-3 text-base">
-                <dt className="font-semibold">Estimated total</dt>
+                <dt className="font-semibold">{t("cart.estimatedTotal")}</dt>
                 <dd className="font-semibold text-accent">
                   <Price amountUsd={subtotalUsd} />
                 </dd>
               </div>
             </dl>
             <p className="mt-3 text-xs text-secondary">
-              Prices shown in{" "}
-              {currency === "USD" ? "US Dollars" : "Iraqi Dinar"}.
+              {t("common.pricesIn", { currency: currencyLabel })}
             </p>
             <Button
               href="/checkout"
               variant="accent"
               className="mt-6 w-full"
             >
-              Complete purchase
+              {t("cart.completePurchase")}
             </Button>
             <Button href="/products" variant="secondary" className="mt-3 w-full">
-              Continue shopping
+              {t("common.continueShopping")}
             </Button>
           </aside>
         </div>

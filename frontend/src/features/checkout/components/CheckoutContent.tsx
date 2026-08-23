@@ -13,7 +13,10 @@ import { DeliveryMethodSection } from "@/features/checkout/components/DeliveryMe
 import { PaymentMethodSection } from "@/features/checkout/components/PaymentMethodSection";
 import { ShippingAddressSection } from "@/features/checkout/components/ShippingAddressSection";
 import { DEFAULT_CHECKOUT_FORM } from "@/features/checkout/constants/default-checkout-form";
-import { getPaymentMethod } from "@/features/checkout/constants/payment-methods";
+import {
+  getLocalizedDeliveryMethod,
+  getLocalizedPaymentMethod,
+} from "@/features/checkout/lib/localized-checkout";
 import { buildOrderLineItems } from "@/features/checkout/lib/build-order-line-items";
 import { estimateDelivery } from "@/features/checkout/lib/estimate-delivery";
 import { generateOrderNumber } from "@/features/checkout/lib/generate-order-number";
@@ -22,9 +25,11 @@ import type { CheckoutFormData } from "@/features/checkout/types/checkout.types"
 import { useCurrency } from "@/features/currency";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { useTranslation } from "@/shared/i18n";
 
 export function CheckoutContent() {
   const router = useRouter();
+  const { t } = useTranslation();
   const { entries, isHydrated, itemCount, clearCart } = useCart();
   const { currency } = useCurrency();
   const [form, setForm] = useState<CheckoutFormData>(DEFAULT_CHECKOUT_FORM);
@@ -40,7 +45,7 @@ export function CheckoutContent() {
   if (!isHydrated) {
     return (
       <Container className="py-16">
-        <p className="text-secondary">Preparing checkout...</p>
+        <p className="text-secondary">{t("checkout.preparing")}</p>
       </Container>
     );
   }
@@ -49,13 +54,11 @@ export function CheckoutContent() {
     return (
       <Container className="py-16 text-center">
         <h1 className="text-2xl font-semibold tracking-tight">
-          Your bag is empty
+          {t("cart.empty")}
         </h1>
-        <p className="mt-3 text-secondary">
-          Add a timepiece to your bag before proceeding to checkout.
-        </p>
+        <p className="mt-3 text-secondary">{t("cart.emptyDesc")}</p>
         <Button href="/products" variant="accent" className="mt-8">
-          Browse watches
+          {t("common.browseWatches")}
         </Button>
       </Container>
     );
@@ -68,7 +71,7 @@ export function CheckoutContent() {
     if (form.paymentMethodId === "card") {
       const { nameOnCard, cardNumber, expiry, cvv } = form.cardDetails;
       if (!nameOnCard || !cardNumber || !expiry || !cvv) {
-        setError("Please complete all card payment fields.");
+        setError(t("checkout.cardError"));
         return;
       }
     }
@@ -76,7 +79,8 @@ export function CheckoutContent() {
     setIsSubmitting(true);
 
     const orderNumber = generateOrderNumber();
-    const paymentMethod = getPaymentMethod(form.paymentMethodId);
+    const paymentMethod = getLocalizedPaymentMethod(form.paymentMethodId, t);
+    const localizedDelivery = getLocalizedDeliveryMethod(form.deliveryMethodId, t);
     const estimatedDelivery = estimateDelivery(deliveryMethod);
 
     const order = {
@@ -85,7 +89,7 @@ export function CheckoutContent() {
       contact: form.contact,
       shippingAddress: form.shippingAddress,
       deliveryMethodId: form.deliveryMethodId,
-      deliveryLabel: deliveryMethod.label,
+      deliveryLabel: localizedDelivery.label,
       paymentMethodId: form.paymentMethodId,
       paymentLabel: paymentMethod.label,
       lineItems,
@@ -157,13 +161,13 @@ export function CheckoutContent() {
       <section className="border-b border-border bg-primary text-background">
         <Container className="py-12 sm:py-16">
           <p className="text-xs uppercase tracking-[0.35em] text-accent">
-            Secure Checkout
+            {t("checkout.secure")}
           </p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-            Complete your purchase
+            {t("checkout.title")}
           </h1>
           <p className="mt-3 max-w-xl text-background/70">
-            A few details stand between you and your next exceptional timepiece.
+            {t("checkout.subtitle")}
           </p>
         </Container>
       </section>
@@ -220,12 +224,11 @@ export function CheckoutContent() {
                 className="w-full px-8 py-4 text-base"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Placing order..." : "Place order"}
+                {isSubmitting ? t("checkout.placingOrder") : t("checkout.placeOrder")}
               </Button>
 
               <p className="text-center text-xs text-secondary">
-                By placing your order, you agree to Chronova&apos;s terms of sale
-                and privacy policy.
+                {t("checkout.termsNote")}
               </p>
             </div>
 

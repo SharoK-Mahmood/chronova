@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 
 import { CURRENCIES, type CurrencyCode } from "@/features/currency/constants/currency";
 import { useCurrency } from "@/features/currency/context/CurrencyProvider";
+import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
 
 type CurrencySelectorProps = {
@@ -33,6 +34,7 @@ function ChevronIcon({ open }: { open: boolean }) {
 
 export function CurrencySelector({ className }: CurrencySelectorProps) {
   const { currency, setCurrency, isHydrated } = useCurrency();
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const listboxId = useId();
@@ -81,6 +83,10 @@ export function CurrencySelector({ className }: CurrencySelectorProps) {
     setOpen(false);
   }
 
+  function getCurrencyLabel(code: CurrencyCode): string {
+    return code === "USD" ? t("currency.usDollar") : t("currency.iraqiDinar");
+  }
+
   return (
     <div ref={rootRef} className={cn("relative", className)}>
       <button
@@ -104,12 +110,11 @@ export function CurrencySelector({ className }: CurrencySelectorProps) {
         <ul
           id={listboxId}
           role="listbox"
-          aria-label="Choose display currency"
+          aria-label={t("currency.choose")}
           className="absolute right-0 top-[calc(100%+0.375rem)] z-50 min-w-[10.5rem] overflow-hidden rounded-xl border border-border bg-card py-1 shadow-[0_12px_40px_-12px_rgba(17,17,17,0.18)]"
         >
         {options.map((code) => {
           const isSelected = currency === code;
-          const { label } = CURRENCIES[code];
 
           return (
             <li key={code} role="presentation">
@@ -135,7 +140,7 @@ export function CurrencySelector({ className }: CurrencySelectorProps) {
                     {code}
                   </span>
                   <span className="mt-0.5 block text-[10px] normal-case tracking-normal text-secondary">
-                    {label}
+                    {getCurrencyLabel(code)}
                   </span>
                 </span>
                 {isSelected ? (

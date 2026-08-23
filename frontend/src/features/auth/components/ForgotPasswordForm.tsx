@@ -6,8 +6,10 @@ import { useState, type FormEvent } from "react";
 import { AuthButton } from "@/features/auth/components/AuthButton";
 import { AuthShell } from "@/features/auth/components/AuthShell";
 import { Input } from "@/shared/components/ui/Input";
+import { useTranslation } from "@/shared/i18n";
 
 export function ForgotPasswordForm() {
+  const { t } = useTranslation();
   const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -38,28 +40,26 @@ export function ForgotPasswordForm() {
               />
             </svg>
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight">Check your email</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {t("auth.checkEmail")}
+          </h1>
           <p className="mt-3 text-sm leading-relaxed text-secondary">
-            We sent a password reset link to{" "}
-            <span className="font-medium text-foreground">{submittedEmail}</span>.
-            Click the link in the email to create a new password.
-          </p>
-          <p className="mt-4 text-xs text-secondary">
-            Didn&apos;t receive it? Check your spam folder or try again.
+            {t("auth.checkEmail")}:{" "}
+            <span className="font-medium text-foreground">{submittedEmail}</span>
           </p>
           <div className="mt-8 space-y-3">
             <AuthButton href="/reset-password" className="w-full">
-              Reset password now
+              {t("auth.resetPassword")}
             </AuthButton>
             <AuthButton
               type="button"
               className="w-full"
               onClick={() => setSubmittedEmail(null)}
             >
-              Try another email
+              {t("auth.useAnotherAccount")}
             </AuthButton>
             <AuthButton href="/login" variant="secondary" className="w-full">
-              Back to Log In
+              {t("auth.backToLogin")}
             </AuthButton>
           </div>
         </div>
@@ -70,16 +70,18 @@ export function ForgotPasswordForm() {
   return (
     <AuthShell>
       <div className="mb-8 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">Forgot Password?</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {t("auth.forgotPassword")}
+        </h1>
         <p className="mt-2 text-sm text-secondary">
-          Enter your email and we&apos;ll send you a link to reset your password.
+          {t("auth.sendResetLink")}
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="space-y-2">
           <label htmlFor="email" className="text-sm font-medium">
-            Email
+            {t("auth.email")}
           </label>
           <Input
             id="email"
@@ -92,17 +94,17 @@ export function ForgotPasswordForm() {
         </div>
 
         <AuthButton type="submit" className="w-full">
-          Send Reset Link
+          {t("auth.sendResetLink")}
         </AuthButton>
       </form>
 
       <p className="mt-8 text-center text-sm text-secondary">
-        Remember your password?{" "}
+        {t("auth.backToLogin")}{" "}
         <Link
           href="/login"
           className="font-medium text-accent transition-colors hover:text-accent/80"
         >
-          Log In
+          {t("auth.logIn")}
         </Link>
       </p>
     </AuthShell>

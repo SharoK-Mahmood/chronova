@@ -13,6 +13,7 @@ import {
 
 import { getBrandSummaries } from "@/features/brands";
 import { Container } from "@/shared/components/ui/Container";
+import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
 
 type BrandsMenuContextValue = {
@@ -79,9 +80,10 @@ export function BrandsMenuProvider({ children }: BrandsMenuProviderProps) {
 type BrandsNavLinkProps = {
   isActive: boolean;
   className?: string;
+  label: string;
 };
 
-export function BrandsNavLink({ isActive, className }: BrandsNavLinkProps) {
+export function BrandsNavLink({ isActive, className, label }: BrandsNavLinkProps) {
   const { isOpen, open, scheduleClose, cancelClose } = useBrandsMenu();
 
   return (
@@ -100,7 +102,7 @@ export function BrandsNavLink({ isActive, className }: BrandsNavLinkProps) {
         aria-expanded={isOpen}
         className={className}
       >
-        Brands
+        {label}
       </Link>
     </div>
   );
@@ -108,6 +110,7 @@ export function BrandsNavLink({ isActive, className }: BrandsNavLinkProps) {
 
 export function BrandsMegaMenuPanel() {
   const { isOpen, open, scheduleClose, cancelClose } = useBrandsMenu();
+  const { t } = useTranslation();
   const brands = getBrandSummaries();
 
   return (
@@ -133,13 +136,13 @@ export function BrandsMegaMenuPanel() {
         <Container className="max-w-5xl py-5">
           <div className="mb-4 flex items-center justify-between gap-4">
             <p className="text-[11px] uppercase tracking-[0.3em] text-accent">
-              Shop by brand
+              {t("nav.shopByBrand")}
             </p>
             <Link
               href="/brands"
               className="text-xs text-secondary transition-colors hover:text-accent"
             >
-              View all
+              {t("nav.viewAllBrands")}
             </Link>
           </div>
 
@@ -155,8 +158,10 @@ export function BrandsMegaMenuPanel() {
                 </p>
                 <p className="mt-0.5 text-[11px] text-secondary/80">
                   {brand.productCount > 0
-                    ? `${brand.productCount} ${brand.productCount === 1 ? "watch" : "watches"}`
-                    : "Coming soon"}
+                    ? brand.productCount === 1
+                      ? t("nav.watchCountOne")
+                      : t("nav.watchCount", { count: brand.productCount })
+                    : t("nav.comingSoon")}
                 </p>
               </Link>
             ))}

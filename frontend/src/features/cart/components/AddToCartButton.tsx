@@ -6,6 +6,7 @@ import {
   interactiveIconButtonClasses,
 } from "@/shared/lib/utils/button-interaction";
 import { cn } from "@/shared/lib/utils/cn";
+import { useTranslation } from "@/shared/i18n";
 
 type AddToCartButtonProps = {
   slug: string;
@@ -43,6 +44,7 @@ export function AddToCartButton({
   variant = "icon",
   className,
 }: AddToCartButtonProps) {
+  const { t } = useTranslation();
   const { addToCart, isInCart, getQuantity } = useCart();
   const inCart = isInCart(slug);
   const quantity = getQuantity(slug);
@@ -61,7 +63,7 @@ export function AddToCartButton({
         className={cn("gap-2", className)}
       >
         <CartIcon className="h-4 w-4" />
-        {inCart ? `In cart (${quantity})` : "Add to cart"}
+        {inCart ? t("cart.inCart", { count: quantity }) : t("cart.addToCart")}
       </Button>
     );
   }
@@ -70,7 +72,7 @@ export function AddToCartButton({
     <button
       type="button"
       onClick={handleClick}
-      aria-label={`Add ${productName} to cart`}
+      aria-label={`${t("cart.addToCart")}: ${productName}`}
       className={cn(
         "rounded-full bg-card/90 p-2 shadow-sm ring-1 ring-border backdrop-blur-sm",
         interactiveIconButtonClasses,

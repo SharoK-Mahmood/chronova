@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { SearchDropdown } from "@/features/search/components/SearchDropdown";
 import { buildSearchUrl } from "@/features/search/constants/search-categories";
 import { searchCatalog } from "@/features/search/lib/search-catalog";
+import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
 
 type HeaderSearchProps = {
@@ -32,6 +33,7 @@ function SearchIcon({ className }: { className?: string }) {
 
 export function HeaderSearch({ variant = "desktop", className }: HeaderSearchProps) {
   const router = useRouter();
+  const { t } = useTranslation();
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
@@ -83,7 +85,7 @@ export function HeaderSearch({ variant = "desktop", className }: HeaderSearchPro
     <div ref={rootRef} className={cn("relative", className)}>
       <form onSubmit={handleSubmit} role="search">
         <label htmlFor={`search-${variant}`} className="sr-only">
-          Search watches, brands, or models
+          {t("search.label")}
         </label>
         <div
           className={cn(
@@ -110,7 +112,7 @@ export function HeaderSearch({ variant = "desktop", className }: HeaderSearchPro
               setOpen(true);
             }}
             onFocus={() => setOpen(true)}
-            placeholder="Search watches, brands, or models..."
+            placeholder={t("search.placeholder")}
             className={cn(
               "min-w-0 flex-1 bg-transparent text-foreground outline-none placeholder:text-secondary/70",
               isMobile ? "text-sm" : "text-[13px]",

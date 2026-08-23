@@ -1,7 +1,12 @@
+"use client";
+
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { useTranslation } from "@/shared/i18n";
 
 export function NewArrivalsHero() {
+  const { t } = useTranslation();
+
   return (
     <section className="relative overflow-hidden bg-primary text-background">
       <div
@@ -16,28 +21,24 @@ export function NewArrivalsHero() {
       <Container className="relative py-20 sm:py-28 lg:py-32">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs font-medium uppercase tracking-[0.35em] text-accent">
-            Just Landed
+            {t("newArrivals.justLanded")}
           </p>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-            New Arrivals
+            {t("newArrivals.title")}
           </h1>
           <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-background/70 sm:text-lg">
-            The latest expressions of horological excellence — curated for those
-            who arrive before the world catches on.
+            {t("newArrivals.subtitle")}
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button
-              href="#spotlight"
-              variant="accent"
-            >
-              View spotlight
+            <Button href="#spotlight" variant="accent">
+              {t("newArrivals.viewSpotlight")}
             </Button>
             <Button
               href="#collection"
               variant="secondary"
               className="border-background/20 text-background hover:bg-background/10"
             >
-              Browse collection
+              {t("newArrivals.browseCollection")}
             </Button>
           </div>
         </div>

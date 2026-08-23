@@ -6,8 +6,10 @@ import { useState, type FormEvent } from "react";
 import { AuthButton } from "@/features/auth/components/AuthButton";
 import { AuthShell } from "@/features/auth/components/AuthShell";
 import { PasswordField } from "@/features/auth/components/PasswordField";
+import { useTranslation } from "@/shared/i18n";
 
 export function ResetPasswordForm() {
+  const { t } = useTranslation();
   const [error, setError] = useState<string | null>(null);
   const [isComplete, setIsComplete] = useState(false);
 
@@ -20,7 +22,7 @@ export function ResetPasswordForm() {
     const confirmPassword = formData.get("confirmPassword") as string;
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError(t("auth.passwordMismatch"));
       return;
     }
 
@@ -54,14 +56,13 @@ export function ResetPasswordForm() {
             </svg>
           </div>
           <h1 className="text-2xl font-semibold tracking-tight">
-            Password updated
+            {t("auth.passwordUpdated")}
           </h1>
           <p className="mt-3 text-sm text-secondary">
-            Your password has been reset successfully. You can now sign in with
-            your new password.
+            {t("auth.signInSubtitle")}
           </p>
           <AuthButton href="/login" className="mt-8 w-full">
-            Log In
+            {t("auth.logIn")}
           </AuthButton>
         </div>
       </AuthShell>
@@ -71,9 +72,11 @@ export function ResetPasswordForm() {
   return (
     <AuthShell>
       <div className="mb-8 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">Reset Password</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {t("auth.resetPassword")}
+        </h1>
         <p className="mt-2 text-sm text-secondary">
-          Enter a new password for your Chronova account.
+          {t("auth.passwordPlaceholder")}
         </p>
       </div>
 
@@ -81,17 +84,17 @@ export function ResetPasswordForm() {
         <PasswordField
           id="password"
           name="password"
-          label="New Password"
+          label={t("auth.password")}
           autoComplete="new-password"
-          placeholder="Enter new password"
+          placeholder={t("auth.passwordPlaceholder")}
         />
 
         <PasswordField
           id="confirmPassword"
           name="confirmPassword"
-          label="Confirm New Password"
+          label={t("auth.confirmPassword")}
           autoComplete="new-password"
-          placeholder="Confirm new password"
+          placeholder={t("auth.passwordPlaceholder")}
         />
 
         {error ? (
@@ -101,7 +104,7 @@ export function ResetPasswordForm() {
         ) : null}
 
         <AuthButton type="submit" className="w-full">
-          Reset Password
+          {t("auth.resetPassword")}
         </AuthButton>
       </form>
 
@@ -110,7 +113,7 @@ export function ResetPasswordForm() {
           href="/login"
           className="font-medium text-accent transition-colors hover:text-accent/80"
         >
-          Back to Log In
+          {t("auth.backToLogin")}
         </Link>
       </p>
     </AuthShell>

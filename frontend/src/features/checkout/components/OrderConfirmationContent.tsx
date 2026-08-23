@@ -8,6 +8,11 @@ import type { PlacedOrder } from "@/features/checkout/types/checkout.types";
 import { Price } from "@/features/currency";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { useTranslation } from "@/shared/i18n";
+import {
+  formatRegionalAddress,
+  migrateToRegionalAddress,
+} from "@/shared/lib/address/regional-address";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 import { cn } from "@/shared/lib/utils/cn";
 
@@ -15,22 +20,10 @@ type OrderConfirmationContentProps = {
   orderNumber: string;
 };
 
-function formatAddress(order: PlacedOrder): string {
-  const { shippingAddress } = order;
-  const lines = [
-    shippingAddress.fullName,
-    shippingAddress.line1,
-    shippingAddress.line2,
-    `${shippingAddress.city}, ${shippingAddress.state} ${shippingAddress.postalCode}`,
-    shippingAddress.country,
-  ].filter(Boolean);
-
-  return lines.join("\n");
-}
-
 export function OrderConfirmationContent({
   orderNumber,
 }: OrderConfirmationContentProps) {
+  const { t } = useTranslation();
   const [order, setOrder] = useState<PlacedOrder | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -42,7 +35,7 @@ export function OrderConfirmationContent({
   if (!isHydrated) {
     return (
       <Container className="py-16">
-        <p className="text-secondary">Loading your confirmation...</p>
+        <p className="text-secondary">{t("common.loading")}</p>
       </Container>
     );
   }
@@ -51,18 +44,20 @@ export function OrderConfirmationContent({
     return (
       <Container className="py-16 text-center">
         <h1 className="text-2xl font-semibold tracking-tight">
-          Order not found
+          {t("checkout.confirmation.notFound")}
         </h1>
         <p className="mt-3 text-secondary">
-          We couldn&apos;t locate order {orderNumber}. It may have expired from
-          this device.
+          {t("checkout.confirmation.notFoundDesc", { number: orderNumber })}
         </p>
         <Button href="/products" variant="accent" className="mt-8">
-          Continue shopping
+          {t("common.continueShopping")}
         </Button>
       </Container>
     );
   }
+
+  const address = migrateToRegionalAddress(order.shippingAddress);
+  const addressLines = address ? formatRegionalAddress(address, t) : [];
 
   return (
     <>
@@ -83,17 +78,16 @@ export function OrderConfirmationContent({
               </svg>
             </div>
             <p className="text-xs uppercase tracking-[0.35em] text-accent">
-              Thank you
+              {t("checkout.confirmation.thankYou")}
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Order placed successfully
+              {t("checkout.confirmation.success")}
             </h1>
             <p className="mt-4 text-background/70">
-              A confirmation has been sent to{" "}
-              <span className="font-medium text-background">{order.contact.email}</span>
+              {t("checkout.confirmation.sentTo", { email: order.contact.email })}
             </p>
             <p className="mt-6 inline-flex rounded-full border border-accent/30 bg-accent/10 px-4 py-2 text-sm font-medium text-accent">
-              Order {order.orderNumber}
+              {t("checkout.confirmation.order", { number: order.orderNumber })}
             </p>
           </div>
         </Container>
@@ -104,7 +98,7 @@ export function OrderConfirmationContent({
           <div className="space-y-6">
             <section className="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">
               <h2 className="text-lg font-semibold tracking-tight">
-                Products purchased
+                {t("checkout.confirmation.products")}
               </h2>
               <ul className="mt-6 divide-y divide-border">
                 {order.lineItems.map((item) => (
@@ -134,7 +128,7 @@ export function OrderConfirmationContent({
                         <p className="mt-1 text-sm text-secondary">{item.subtitle}</p>
                       ) : null}
                       <p className="mt-2 text-sm text-secondary">
-                        Qty {item.quantity}
+                        {t("common.qty")} {item.quantity}
                       </p>
                     </div>
                     <p className="shrink-0 font-medium">
@@ -147,10 +141,10 @@ export function OrderConfirmationContent({
 
             <section className="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">
               <h2 className="text-lg font-semibold tracking-tight">
-                Shipping address
+                {t("checkout.confirmation.shippingAddress")}
               </h2>
               <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-secondary">
-                {formatAddress(order)}
+                {addressLines.join("\n")}
               </p>
             </section>
           </div>
@@ -158,25 +152,25 @@ export function OrderConfirmationContent({
           <aside className="space-y-6 lg:sticky lg:top-28">
             <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
               <h2 className="text-lg font-semibold tracking-tight">
-                Order details
+                {t("checkout.confirmation.orderDetails")}
               </h2>
               <dl className="mt-6 space-y-4 text-sm">
                 <div>
-                  <dt className="text-secondary">Total amount</dt>
+                  <dt className="text-secondary">{t("checkout.confirmation.totalAmount")}</dt>
                   <dd className="mt-1 text-2xl font-semibold text-accent">
                     <Price amountUsd={order.totalUsd} />
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-secondary">Delivery method</dt>
+                  <dt className="text-secondary">{t("checkout.confirmation.deliveryMethod")}</dt>
                   <dd className="mt-1 font-medium">{order.deliveryLabel}</dd>
                 </div>
                 <div>
-                  <dt className="text-secondary">Payment method</dt>
+                  <dt className="text-secondary">{t("checkout.confirmation.paymentMethod")}</dt>
                   <dd className="mt-1 font-medium">{order.paymentLabel}</dd>
                 </div>
                 <div>
-                  <dt className="text-secondary">Estimated delivery</dt>
+                  <dt className="text-secondary">{t("checkout.confirmation.estimatedDelivery")}</dt>
                   <dd className="mt-1 font-medium">{order.estimatedDelivery.label}</dd>
                 </div>
               </dl>
@@ -188,10 +182,10 @@ export function OrderConfirmationContent({
                   effect="luxury"
                   className="w-full"
                 >
-                  Track order
+                  {t("checkout.confirmation.trackOrder")}
                 </Button>
                 <Button href="/products" variant="secondary" className="w-full">
-                  Continue shopping
+                  {t("common.continueShopping")}
                 </Button>
               </div>
             </div>

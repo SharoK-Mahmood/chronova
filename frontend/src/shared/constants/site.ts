@@ -4,24 +4,36 @@ export const SITE = {
   tagline: "Time, refined.",
 } as const;
 
+export type NavLabelKey =
+  | "nav.home"
+  | "nav.watches"
+  | "nav.men"
+  | "nav.women"
+  | "nav.brands"
+  | "nav.newArrivals"
+  | "nav.sale"
+  | "nav.wishlist"
+  | "nav.cart"
+  | "nav.account";
+
 export const MAIN_NAV_LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/products", label: "Watches" },
-  { href: "/men", label: "Men" },
-  { href: "/women", label: "Women" },
-  { href: "/brands", label: "Brands" },
-  { href: "/new-arrivals", label: "New Arrivals" },
-  { href: "/sale", label: "Sale", highlight: true },
+  { href: "/", labelKey: "nav.home" as const },
+  { href: "/products", labelKey: "nav.watches" as const },
+  { href: "/men", labelKey: "nav.men" as const },
+  { href: "/women", labelKey: "nav.women" as const },
+  { href: "/brands", labelKey: "nav.brands" as const },
+  { href: "/new-arrivals", labelKey: "nav.newArrivals" as const },
+  { href: "/sale", labelKey: "nav.sale" as const, highlight: true },
 ] as const;
 
 export type UtilityNavIcon = "wishlist" | "cart" | "account";
 
 export const UTILITY_NAV_LINKS: ReadonlyArray<{
   href: string;
-  label: string;
+  labelKey: NavLabelKey;
   icon: UtilityNavIcon;
 }> = [
-  { href: "/wishlist", label: "Wishlist", icon: "wishlist" },
-  { href: "/cart", label: "Cart", icon: "cart" },
-  { href: "/account", label: "Account", icon: "account" },
+  { href: "/wishlist", labelKey: "nav.wishlist", icon: "wishlist" },
+  { href: "/cart", labelKey: "nav.cart", icon: "cart" },
+  { href: "/account", labelKey: "nav.account", icon: "account" },
 ];

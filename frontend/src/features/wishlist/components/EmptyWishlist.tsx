@@ -1,7 +1,12 @@
+"use client";
+
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { useTranslation } from "@/shared/i18n";
 
 export function EmptyWishlist() {
+  const { t } = useTranslation();
+
   return (
     <Container className="py-20 text-center">
       <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
@@ -22,13 +27,13 @@ export function EmptyWishlist() {
         </svg>
       </div>
       <h1 className="text-3xl font-semibold tracking-tight">
-        Your wishlist is empty
+        {t("wishlist.empty")}
       </h1>
       <p className="mt-3 text-secondary">
-        Save the watches you love and come back to them anytime.
+        {t("wishlist.emptyDesc")}
       </p>
       <div className="mt-8">
-        <Button href="/products">Browse watches</Button>
+        <Button href="/products">{t("common.browseWatches")}</Button>
       </div>
     </Container>
   );
