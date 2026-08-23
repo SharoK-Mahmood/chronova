@@ -1,7 +1,6 @@
 "use client";
 
 import type { ContactInformation } from "@/features/checkout/types/checkout.types";
-import { CheckoutSection } from "@/features/checkout/components/CheckoutSection";
 import { FormField } from "@/features/checkout/components/FormField";
 import { Input } from "@/shared/components/ui/Input";
 import { useTranslation } from "@/shared/i18n";
@@ -18,12 +17,14 @@ export function ContactInformationSection({
   const { t } = useTranslation();
 
   return (
-    <CheckoutSection
-      step={1}
-      title={t("checkout.contact")}
-      description={t("checkout.contactDesc")}
-    >
-      <div className="grid gap-5 sm:grid-cols-2">
+    <section>
+      <div className="mb-4">
+        <h2 className="text-lg font-semibold tracking-tight">
+          {t("checkout.contact")}
+        </h2>
+        <p className="mt-1 text-sm text-secondary">{t("checkout.contactDesc")}</p>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
         <FormField label={t("checkout.email")} htmlFor="checkout-email" required>
           <Input
             id="checkout-email"
@@ -53,6 +54,6 @@ export function ContactInformationSection({
           />
         </FormField>
       </div>
-    </CheckoutSection>
+    </section>
   );
 }

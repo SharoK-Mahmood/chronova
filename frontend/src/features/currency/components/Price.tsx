@@ -7,14 +7,27 @@ import { type as typography } from "@/shared/lib/typography";
 type PriceProps = {
   amountUsd: number;
   className?: string;
+  /** Compact text for dense lists (avoids display price scale overflow). */
+  size?: "display" | "inline";
 };
 
-export function Price({ amountUsd, className }: PriceProps) {
+export function Price({
+  amountUsd,
+  className,
+  size = "display",
+}: PriceProps) {
   const { formatPrice, isHydrated } = useCurrency();
 
   return (
-    <span className={cn(typography.price, className)}>
-      {isHydrated ? formatPrice(amountUsd) : `$${amountUsd.toLocaleString("en-US")}`}
+    <span
+      className={cn(
+        size === "display" ? typography.price : "font-medium tabular-nums",
+        className,
+      )}
+    >
+      {isHydrated
+        ? formatPrice(amountUsd)
+        : `$${amountUsd.toLocaleString("en-US")}`}
     </span>
   );
 }

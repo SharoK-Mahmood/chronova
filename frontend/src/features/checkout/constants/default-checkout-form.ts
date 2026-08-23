@@ -15,4 +15,6 @@ export const DEFAULT_CHECKOUT_FORM: CheckoutFormData = {
     expiry: "",
     cvv: "",
   },
+  paypalEmail: "",
+  bankAcknowledged: false,
 };

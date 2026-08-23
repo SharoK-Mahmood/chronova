@@ -1,14 +1,13 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Image from "next/image";
 
 import type {
   DeliveryMethodId,
   OrderLineItem,
 } from "@/features/checkout/types/checkout.types";
-import {
-  calculateSubtotalUsd,
-} from "@/features/checkout/lib/build-order-line-items";
+import { calculateSubtotalUsd } from "@/features/checkout/lib/build-order-line-items";
 import { getLocalizedDeliveryMethod } from "@/features/checkout/lib/localized-checkout";
 import { Price, useCurrency } from "@/features/currency";
 import { useTranslation } from "@/shared/i18n";
@@ -19,12 +18,14 @@ type CheckoutOrderSummaryProps = {
   lineItems: OrderLineItem[];
   deliveryMethodId: DeliveryMethodId;
   className?: string;
+  actions?: ReactNode;
 };
 
 export function CheckoutOrderSummary({
   lineItems,
   deliveryMethodId,
   className,
+  actions,
 }: CheckoutOrderSummaryProps) {
   const { t } = useTranslation();
   const { currency } = useCurrency();
@@ -39,7 +40,8 @@ export function CheckoutOrderSummary({
   return (
     <aside
       className={cn(
-        "rounded-2xl border border-border bg-card p-6 shadow-sm lg:sticky lg:top-28",
+        "flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-7",
+        "lg:sticky lg:top-28 lg:min-h-[30rem]",
         className,
       )}
     >
@@ -51,9 +53,9 @@ export function CheckoutOrderSummary({
         {itemCount === 1 ? t("common.piece") : t("common.pieces")}
       </h2>
 
-      <ul className="mt-6 max-h-72 space-y-4 overflow-y-auto pr-1">
+      <ul className="mt-6 space-y-4">
         {lineItems.map((item) => (
-          <li key={item.slug} className="flex gap-3">
+          <li key={item.slug} className="flex min-w-0 gap-3.5">
             <div
               className={cn(
                 "relative h-16 w-16 shrink-0 overflow-hidden rounded-xl",
@@ -73,52 +75,70 @@ export function CheckoutOrderSummary({
                   <div className="h-6 w-6 rounded-full border border-border bg-card" />
                 </div>
               )}
+              <span className="absolute -end-1.5 -top-1.5 z-10 flex h-5 min-w-5 items-center justify-center rounded-full bg-secondary px-1 text-[10px] font-semibold text-background">
+                {item.quantity}
+              </span>
             </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-accent">
-                {item.brand}
-              </p>
-              <p className="truncate text-sm font-medium">{item.name}</p>
-              <p className="mt-1 text-xs text-secondary">
-                {t("common.qty")} {item.quantity}
-              </p>
+
+            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+              <div className="min-w-0">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-accent">
+                  {item.brand}
+                </p>
+                <p className="mt-0.5 text-sm font-medium leading-snug break-words">
+                  {item.name}
+                </p>
+              </div>
+              <Price
+                amountUsd={item.unitPriceUsd * item.quantity}
+                size="inline"
+                className="text-sm font-semibold"
+              />
             </div>
-            <p className="shrink-0 text-sm font-medium">
-              <Price amountUsd={item.unitPriceUsd * item.quantity} />
-            </p>
           </li>
         ))}
       </ul>
 
-      <dl className="mt-6 space-y-3 border-t border-border pt-6 text-sm">
-        <div className="flex items-center justify-between">
+      <dl className="mt-6 space-y-3 border-t border-border pt-5 text-sm">
+        <div className="flex items-center justify-between gap-3">
           <dt className="text-secondary">{t("cart.subtotal")}</dt>
           <dd className="font-medium">
-            <Price amountUsd={subtotalUsd} />
+            <Price amountUsd={subtotalUsd} size="inline" className="text-sm" />
           </dd>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           <dt className="text-secondary">{t("cart.shipping")}</dt>
           <dd className="font-medium">
             {shippingUsd === 0 ? (
               <span className="text-accent">{t("common.complimentary")}</span>
             ) : (
-              <Price amountUsd={shippingUsd} />
+              <Price amountUsd={shippingUsd} size="inline" className="text-sm" />
             )}
           </dd>
         </div>
-        <div className="flex items-center justify-between border-t border-border pt-3 text-base">
-          <dt className="font-semibold">{t("checkout.total")}</dt>
-          <dd className="font-semibold text-accent">
-            <Price amountUsd={totalUsd} />
+        <div className="flex items-center justify-between gap-3 border-t border-border pt-4">
+          <dt className="text-base font-semibold">{t("checkout.total")}</dt>
+          <dd className="text-base font-semibold text-accent">
+            <span className="me-1.5 text-xs font-medium uppercase text-secondary">
+              {currency}
+            </span>
+            <Price
+              amountUsd={totalUsd}
+              size="inline"
+              className="text-base font-semibold"
+            />
           </dd>
         </div>
       </dl>
 
-      <p className="mt-3 text-xs text-secondary">
+      <p className="mt-4 text-xs leading-relaxed text-secondary">
         {t("common.pricesIn", { currency: currencyLabel })}{" "}
         {t("common.dutiesNote")}
       </p>
+
+      {actions ? (
+        <div className="mt-auto border-t border-border pt-5">{actions}</div>
+      ) : null}
     </aside>
   );
 }

@@ -24,6 +24,8 @@ export type CheckoutFormData = {
   deliveryMethodId: DeliveryMethodId;
   paymentMethodId: PaymentMethodId;
   cardDetails: CardDetails;
+  paypalEmail: string;
+  bankAcknowledged: boolean;
 };
 
 export type OrderLineItem = {
