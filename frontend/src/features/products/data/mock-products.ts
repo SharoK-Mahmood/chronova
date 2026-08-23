@@ -80,7 +80,7 @@ const FEATURED_WOMEN: Product[] = [
     price: 15200,
     currency: "USD",
     imageUrl:
-      "https://images.unsplash.com/photo-1542496658-ba5938be05ae?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1200&q=80",
     category: "women",
     inStock: true,
   },

@@ -1,5 +1,7 @@
 "use client";
 
+import { useId } from "react";
+
 import { CURRENCIES, type CurrencyCode } from "@/features/currency/constants/currency";
 import { useCurrency } from "@/features/currency/context/CurrencyProvider";
 import { cn } from "@/shared/lib/utils/cn";
@@ -10,6 +12,7 @@ type CurrencySelectorProps = {
 
 export function CurrencySelector({ className }: CurrencySelectorProps) {
   const { currency, setCurrency, isHydrated } = useCurrency();
+  const selectId = `currency-select-${useId()}`;
 
   if (!isHydrated) {
     return (
@@ -25,11 +28,11 @@ export function CurrencySelector({ className }: CurrencySelectorProps) {
 
   return (
     <div className={cn("flex items-center", className)}>
-      <label htmlFor="currency-select" className="sr-only">
+      <label htmlFor={selectId} className="sr-only">
         Display currency
       </label>
       <select
-        id="currency-select"
+        id={selectId}
         value={currency}
         onChange={(event) => setCurrency(event.target.value as CurrencyCode)}
         className="rounded-full border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground outline-none transition-all duration-200 hover:scale-[1.02] hover:border-accent/50 hover:shadow-md hover:ring-2 hover:ring-accent/20 focus:border-accent/50 focus:ring-2 focus:ring-accent/20"
