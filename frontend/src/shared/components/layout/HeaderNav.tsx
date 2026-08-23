@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useWishlist } from "@/features/wishlist";
 import { BrandsNavLink } from "@/shared/components/layout/BrandsNavMenu";
 import { NavIcon } from "@/shared/components/layout/NavIcon";
 import {
@@ -84,27 +85,36 @@ export function MainNavLinks({
 
 export function UtilityNavLinks() {
   const pathname = usePathname();
+  const { count, isHydrated } = useWishlist();
 
   return (
     <>
       {UTILITY_NAV_LINKS.map((link) => {
         const isActive = isNavLinkActive(pathname, link.href);
+        const showWishlistCount = link.icon === "wishlist" && isHydrated && count > 0;
 
         return (
           <Link
             key={link.href}
             href={link.href}
-            aria-label={link.label}
+            aria-label={
+              showWishlistCount ? `${link.label}, ${count} items` : link.label
+            }
             aria-current={isActive ? "page" : undefined}
             title={link.label}
             className={cn(
-              "rounded-full p-2 transition-all duration-200",
+              "relative rounded-full p-2 transition-all duration-200",
               isActive
                 ? "bg-background text-accent ring-1 ring-accent/30"
                 : "text-secondary hover:bg-background hover:text-accent hover:ring-1 hover:ring-accent/20",
             )}
           >
             <NavIcon icon={link.icon} />
+            {showWishlistCount ? (
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-semibold text-primary">
+                {count > 9 ? "9+" : count}
+              </span>
+            ) : null}
           </Link>
         );
       })}

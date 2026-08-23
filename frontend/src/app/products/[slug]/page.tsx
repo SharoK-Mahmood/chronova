@@ -3,7 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { CATALOG_PRODUCTS, getProductBySlug } from "@/features/products";
-import { Button } from "@/shared/components/ui/Button";
+import { ProductActions } from "@/features/products/components/ProductActions";
 import { Container } from "@/shared/components/ui/Container";
 import { cn } from "@/shared/lib/utils/cn";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
@@ -107,12 +107,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
           <p className="text-secondary">{product.description}</p>
 
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Button>Add to cart</Button>
-            <Button href="/products" variant="secondary">
-              Back to shop
-            </Button>
-          </div>
+          <ProductActions slug={product.slug} name={product.name} />
         </div>
       </div>
     </Container>

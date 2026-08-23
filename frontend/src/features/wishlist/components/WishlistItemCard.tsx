@@ -1,14 +1,16 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
 import type { ProductSummary } from "@/features/products/types/product.types";
 import { WishlistButton } from "@/features/wishlist";
+import { Button } from "@/shared/components/ui/Button";
 import { cn } from "@/shared/lib/utils/cn";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 
-type ProductCardProps = {
+type WishlistItemCardProps = {
   product: ProductSummary;
-  className?: string;
 };
 
 function formatPrice(price: number, currency: string): string {
@@ -18,28 +20,21 @@ function formatPrice(price: number, currency: string): string {
   }).format(price);
 }
 
-export function ProductCard({ product, className }: ProductCardProps) {
+export function WishlistItemCard({ product }: WishlistItemCardProps) {
   const imageAlt = product.subtitle
     ? `${product.brand} ${product.name}, ${product.subtitle}`
     : product.name;
 
   return (
-    <article
-      className={cn(
-        "group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-shadow hover:shadow-lg",
-        className,
-      )}
-    >
-      <Link href={`/products/${product.slug}`} className="flex flex-1 flex-col">
-        <div
+    <article className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-shadow hover:shadow-lg">
+      <div className="relative">
+        <Link
+          href={`/products/${product.slug}`}
           className={cn(
             "relative flex aspect-square items-center justify-center p-8",
             hasProductPhoto(product.imageUrl) ? "bg-white" : "bg-background",
           )}
         >
-          <div className="absolute right-3 top-3 z-10">
-            <WishlistButton slug={product.slug} productName={product.name} />
-          </div>
           {hasProductPhoto(product.imageUrl) ? (
             <Image
               src={product.imageUrl}
@@ -51,24 +46,35 @@ export function ProductCard({ product, className }: ProductCardProps) {
           ) : (
             <div className="h-24 w-24 rounded-full border border-border bg-card shadow-sm" />
           )}
+        </Link>
+        <div className="absolute right-3 top-3">
+          <WishlistButton slug={product.slug} productName={product.name} />
         </div>
+      </div>
 
-        <div className="flex flex-1 flex-col gap-1 p-4">
+      <div className="flex flex-1 flex-col gap-3 p-4">
+        <div>
           <p className="text-xs uppercase tracking-widest text-accent">
             {product.brand}
           </p>
-          <h3 className="font-medium group-hover:underline">{product.name}</h3>
+          <Link
+            href={`/products/${product.slug}`}
+            className="mt-1 block font-medium group-hover:underline"
+          >
+            {product.name}
+          </Link>
           {product.subtitle ? (
-            <p className="text-sm text-secondary">{product.subtitle}</p>
+            <p className="mt-1 text-sm text-secondary">{product.subtitle}</p>
           ) : null}
-          {product.reference ? (
-            <p className="text-xs text-secondary">Reference {product.reference}</p>
-          ) : null}
-          <p className="mt-1 text-sm text-accent">
+          <p className="mt-2 text-sm text-accent">
             {formatPrice(product.price, product.currency)}
           </p>
         </div>
-      </Link>
+
+        <Button href={`/products/${product.slug}`} variant="secondary" className="w-full">
+          View product
+        </Button>
+      </div>
     </article>
   );
 }
