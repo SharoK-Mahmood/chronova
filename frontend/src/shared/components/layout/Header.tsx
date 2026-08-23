@@ -15,7 +15,7 @@ import { Container } from "@/shared/components/ui/Container";
 export function Header() {
   return (
     <BrandsMenuProvider>
-      <header className="relative z-40 border-b border-border bg-card">
+      <header className="sticky top-0 z-40 border-b border-border bg-card/95 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-card/90">
         <Container>
           <div className="flex h-20 items-center gap-6 lg:gap-8">
             <Link href="/" className="shrink-0" aria-label="Chronova home">

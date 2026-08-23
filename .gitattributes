@@ -1,2 +1,4 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Auto detect text files and keep LF in the working tree.
+# This overrides Windows core.autocrlf=true so GitHub Desktop
+# does not warn that LF will be converted to CRLF on checkout.
+* text=auto eol=lf
