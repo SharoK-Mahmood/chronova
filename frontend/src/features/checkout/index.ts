@@ -13,9 +13,11 @@ export {
 export { validateCheckout } from "@/features/checkout/lib/validate-checkout";
 export { buildPlacedOrder } from "@/features/checkout/lib/build-placed-order";
 export {
+  createOrder,
   getOrderByNumber,
-  saveOrder,
-} from "@/features/checkout/lib/order-storage";
+  listOrders,
+  updateOrderStatus,
+} from "@/features/checkout/services/orders.service";
 export type {
   CheckoutFormData,
   ContactInformation,

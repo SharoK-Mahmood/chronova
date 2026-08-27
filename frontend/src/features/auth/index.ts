@@ -6,4 +6,5 @@ export { GoogleSignInButton } from "@/features/auth/components/GoogleSignInButto
 export { LoginForm } from "@/features/auth/components/LoginForm";
 export { RegisterForm } from "@/features/auth/components/RegisterForm";
 export { ResetPasswordForm } from "@/features/auth/components/ResetPasswordForm";
-export type { AuthSession, User } from "@/features/auth/types/auth.types";
+export { AuthProvider, useAuth } from "@/features/auth/context/AuthProvider";
+export type { AuthSession, User, UserRole } from "@/features/auth/types/auth.types";

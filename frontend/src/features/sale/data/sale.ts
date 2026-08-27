@@ -1,4 +1,4 @@
-import { getProductBySlug } from "@/features/products/data/mock-products";
+import type { Product } from "@/features/products/types/product.types";
 import type { SaleItem, SaleSpotlight } from "@/features/sale/types/sale.types";
 
 const SPOTLIGHT_SLUG = "chronova-heritage";
@@ -21,8 +21,9 @@ const SALE_ENTRIES: Array<{
 
 function buildSaleItem(
   entry: (typeof SALE_ENTRIES)[number],
+  products: Product[],
 ): SaleItem | undefined {
-  const product = getProductBySlug(entry.slug);
+  const product = products.find((item) => item.slug === entry.slug);
 
   if (!product) {
     return undefined;
@@ -42,12 +43,13 @@ function buildSaleItem(
   };
 }
 
-export function getSaleSpotlight(): SaleSpotlight | undefined {
+export function getSaleSpotlight(products: Product[]): SaleSpotlight | undefined {
   const item = buildSaleItem(
     SALE_ENTRIES.find((entry) => entry.slug === SPOTLIGHT_SLUG) ?? {
       slug: SPOTLIGHT_SLUG,
       salePrice: 449,
     },
+    products,
   );
 
   if (!item) {
@@ -60,15 +62,15 @@ export function getSaleSpotlight(): SaleSpotlight | undefined {
   };
 }
 
-export function getSaleCollection(): SaleItem[] {
+export function getSaleCollection(products: Product[]): SaleItem[] {
   return SALE_ENTRIES.filter((entry) => entry.slug !== SPOTLIGHT_SLUG)
-    .map(buildSaleItem)
+    .map((entry) => buildSaleItem(entry, products))
     .filter((item): item is SaleItem => item !== undefined);
 }
 
-export function getAllSaleItems(): SaleItem[] {
-  const spotlight = getSaleSpotlight();
-  const collection = getSaleCollection();
+export function getAllSaleItems(products: Product[]): SaleItem[] {
+  const spotlight = getSaleSpotlight(products);
+  const collection = getSaleCollection(products);
 
   if (!spotlight) {
     return collection;
@@ -77,10 +79,10 @@ export function getAllSaleItems(): SaleItem[] {
   return [spotlight, ...collection];
 }
 
-export function getMaxDiscount(): number {
-  return Math.max(...getAllSaleItems().map((item) => item.discountPercent), 0);
+export function getMaxDiscount(products: Product[]): number {
+  return Math.max(...getAllSaleItems(products).map((item) => item.discountPercent), 0);
 }
 
-export function getTotalSavings(): number {
-  return getAllSaleItems().reduce((total, item) => total + item.savings, 0);
+export function getTotalSavings(products: Product[]): number {
+  return getAllSaleItems(products).reduce((total, item) => total + item.savings, 0);
 }

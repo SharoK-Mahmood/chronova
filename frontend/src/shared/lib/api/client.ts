@@ -1,5 +1,6 @@
 import type { ApiError } from "@/shared/types/common.types";
 import { env } from "@/config/env";
+import { getAccessToken } from "@/features/auth/lib/token-storage";
 
 type RequestOptions = Omit<RequestInit, "body"> & {
   body?: unknown;
@@ -20,12 +21,15 @@ export async function apiClient<T>(
   path: string,
   options: RequestOptions = {},
 ): Promise<T> {
-  const { body, headers, ...rest } = options;
+  const { body, headers, cache, ...rest } = options;
+  const token = getAccessToken();
 
   const response = await fetch(`${env.apiUrl}${path}`, {
+    cache: cache ?? "no-store",
     ...rest,
     headers: {
-      "Content-Type": "application/json",
+      ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
     body: body !== undefined ? JSON.stringify(body) : undefined,

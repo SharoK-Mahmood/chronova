@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { listProducts } from "@/features/products";
+import type { Product } from "@/features/products";
 import {
   getAllSaleItems,
   getMaxDiscount,
@@ -18,11 +20,21 @@ export const metadata: Metadata = {
     "Shop limited-time offers on select luxury timepieces at Chronova — exceptional watches at exceptional values.",
 };
 
-export default function SalePage() {
-  const spotlight = getSaleSpotlight();
-  const collection = getSaleCollection();
-  const allItems = getAllSaleItems();
-  const maxDiscount = getMaxDiscount();
+export const dynamic = "force-dynamic";
+
+export default async function SalePage() {
+  let products: Product[] = [];
+
+  try {
+    products = await listProducts();
+  } catch {
+    products = [];
+  }
+
+  const spotlight = getSaleSpotlight(products);
+  const collection = getSaleCollection(products);
+  const allItems = getAllSaleItems(products);
+  const maxDiscount = getMaxDiscount(products);
 
   if (!spotlight) {
     notFound();

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
 import { AuthButton } from "@/features/auth/components/AuthButton";
@@ -9,19 +9,55 @@ import { AuthDivider } from "@/features/auth/components/AuthDivider";
 import { AuthShell } from "@/features/auth/components/AuthShell";
 import { GoogleSignInButton } from "@/features/auth/components/GoogleSignInButton";
 import { PasswordField } from "@/features/auth/components/PasswordField";
+import { useAuth } from "@/features/auth/context/AuthProvider";
 import { Input } from "@/shared/components/ui/Input";
 import { useTranslation } from "@/shared/i18n";
+import { ApiClientError } from "@/shared/lib/api/client";
 import { cn } from "@/shared/lib/utils/cn";
 import { type as typography } from "@/shared/lib/typography";
+
+function safeNextPath(value: string | null): string {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) {
+    return "/account/settings";
+  }
+
+  return value;
+}
 
 export function LoginForm() {
   const { t } = useTranslation();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { login } = useAuth();
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    router.push("/account/settings");
+    setError(null);
+
+    const formData = new FormData(event.currentTarget);
+    const email = String(formData.get("email") ?? "");
+    const password = String(formData.get("password") ?? "");
+
+    setIsSubmitting(true);
+
+    try {
+      const session = await login({ email, password });
+      const fallback =
+        session.user.role === "admin" ? "/admin" : "/account/settings";
+      const next = searchParams.get("next");
+      router.push(next ? safeNextPath(next) : fallback);
+    } catch (cause) {
+      setError(
+        cause instanceof ApiClientError
+          ? cause.message
+          : t("auth.loginFailed"),
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -79,8 +115,22 @@ export function LoginForm() {
           <span className="text-sm text-secondary">{t("auth.rememberMe")}</span>
         </label>
 
-        <AuthButton type="submit" variant="accent" className="w-full">
-          {t("auth.logIn")}
+        {error ? (
+          <p
+            role="alert"
+            className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
+            {error}
+          </p>
+        ) : null}
+
+        <AuthButton
+          type="submit"
+          variant="accent"
+          className="w-full"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? t("common.loading") : t("auth.logIn")}
         </AuthButton>
       </form>
 

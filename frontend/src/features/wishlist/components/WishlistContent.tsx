@@ -2,8 +2,8 @@
 
 import { useMemo } from "react";
 
-import { getProductBySlug } from "@/features/products/data/mock-products";
 import type { ProductSummary } from "@/features/products/types/product.types";
+import { useProductCatalog } from "@/features/products";
 import { useWishlist } from "@/features/wishlist/context/WishlistProvider";
 import { EmptyWishlist } from "@/features/wishlist/components/EmptyWishlist";
 import { WishlistItemCard } from "@/features/wishlist/components/WishlistItemCard";
@@ -11,7 +11,17 @@ import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
 import { useTranslation } from "@/shared/i18n";
 
-function toSummary(product: NonNullable<ReturnType<typeof getProductBySlug>>): ProductSummary {
+function toSummary(product: {
+  id: string;
+  name: string;
+  slug: string;
+  price: number;
+  currency: string;
+  imageUrl: string;
+  brand: string;
+  reference?: string;
+  subtitle?: string;
+}): ProductSummary {
   return {
     id: product.id,
     name: product.name,
@@ -28,13 +38,14 @@ function toSummary(product: NonNullable<ReturnType<typeof getProductBySlug>>): P
 export function WishlistContent() {
   const { t } = useTranslation();
   const { slugs, isHydrated, count } = useWishlist();
+  const { getProductBySlug } = useProductCatalog();
 
   const products = useMemo(() => {
     return slugs
       .map((slug) => getProductBySlug(slug))
       .filter((product): product is NonNullable<typeof product> => product !== undefined)
       .map(toSummary);
-  }, [slugs]);
+  }, [slugs, getProductBySlug]);
 
   if (!isHydrated) {
     return (

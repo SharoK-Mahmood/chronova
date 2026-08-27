@@ -5,14 +5,19 @@ import Link from "next/link";
 
 import { AddToCartButton } from "@/features/cart";
 import { Price } from "@/features/currency";
-import { getProductBySlug } from "@/features/products/data/mock-products";
+import { useProductCatalog } from "@/features/products";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
 import { useTranslation } from "@/shared/i18n";
 
 export function HomeSpotlight() {
   const { t } = useTranslation();
+  const { getProductBySlug, isLoading } = useProductCatalog();
   const product = getProductBySlug("land-dweller-40");
+
+  if (isLoading) {
+    return null;
+  }
 
   if (!product) {
     return null;

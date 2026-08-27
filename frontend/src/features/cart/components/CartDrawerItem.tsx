@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useCart } from "@/features/cart/context/CartProvider";
 import type { StoredCartEntry } from "@/features/cart/types/cart.types";
 import { Price } from "@/features/currency";
-import { getProductBySlug } from "@/features/products/data/mock-products";
+import { useProductCatalog } from "@/features/products";
 import { useTranslation } from "@/shared/i18n";
 import {
   subtleControlButtonClasses,
@@ -23,6 +23,7 @@ type CartDrawerItemProps = {
 export function CartDrawerItem({ entry, onNavigate }: CartDrawerItemProps) {
   const { t } = useTranslation();
   const { updateQuantity, removeFromCart } = useCart();
+  const { getProductBySlug } = useProductCatalog();
   const product = getProductBySlug(entry.slug);
 
   if (!product) {

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { SearchDropdown } from "@/features/search/components/SearchDropdown";
 import { buildSearchUrl } from "@/features/search/constants/search-categories";
 import { searchCatalog } from "@/features/search/lib/search-catalog";
+import { useProductCatalog } from "@/features/products";
 import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
 import { type as typography } from "@/shared/lib/typography";
@@ -35,6 +36,7 @@ function SearchIcon({ className }: { className?: string }) {
 export function HeaderSearch({ variant = "desktop", className }: HeaderSearchProps) {
   const router = useRouter();
   const { t } = useTranslation();
+  const { products } = useProductCatalog();
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const inputId = `search-${variant}-${useId()}`;
@@ -42,7 +44,7 @@ export function HeaderSearch({ variant = "desktop", className }: HeaderSearchPro
   const [open, setOpen] = useState(false);
   const isMobile = variant === "mobile";
 
-  const results = useMemo(() => searchCatalog(query), [query]);
+  const results = useMemo(() => searchCatalog(query, products), [query, products]);
   const showDropdown = open && query.trim().length > 0;
 
   useEffect(() => {

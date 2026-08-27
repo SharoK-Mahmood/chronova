@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 
 import { RegisterForm } from "@/features/auth";
@@ -8,5 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function RegisterPage() {
-  return <RegisterForm />;
+  return (
+    <Suspense>
+      <RegisterForm />
+    </Suspense>
+  );
 }

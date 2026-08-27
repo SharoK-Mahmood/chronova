@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 
 import { searchCatalogFull } from "@/features/search/lib/search-catalog";
+import { useProductCatalog } from "@/features/products";
 import { Container } from "@/shared/components/ui/Container";
 import { useTranslation } from "@/shared/i18n";
 
@@ -20,8 +21,12 @@ const CATEGORY_LABEL_KEYS: Record<string, string> = {
 export function SearchResultsContent() {
   const searchParams = useSearchParams();
   const { t } = useTranslation();
+  const { products } = useProductCatalog();
   const query = searchParams.get("q") ?? "";
-  const results = useMemo(() => searchCatalogFull(query), [query]);
+  const results = useMemo(
+    () => searchCatalogFull(query, products),
+    [query, products],
+  );
 
   return (
     <>

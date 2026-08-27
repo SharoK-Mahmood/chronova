@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { listProducts } from "@/features/products";
+import type { Product } from "@/features/products";
 import {
   getNewArrivalSpotlight,
   getNewArrivalsCollection,
@@ -16,9 +18,19 @@ export const metadata: Metadata = {
     "Discover the latest luxury timepieces just landed at Chronova — curated for the discerning collector.",
 };
 
-export default function NewArrivalsPage() {
-  const spotlight = getNewArrivalSpotlight();
-  const collection = getNewArrivalsCollection();
+export const dynamic = "force-dynamic";
+
+export default async function NewArrivalsPage() {
+  let products: Product[] = [];
+
+  try {
+    products = await listProducts();
+  } catch {
+    products = [];
+  }
+
+  const spotlight = getNewArrivalSpotlight(products);
+  const collection = getNewArrivalsCollection(products);
 
   if (!spotlight) {
     notFound();

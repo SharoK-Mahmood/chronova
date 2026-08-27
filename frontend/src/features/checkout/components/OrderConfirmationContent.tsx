@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import { getOrderByNumber } from "@/features/checkout/lib/order-storage";
+import { getOrderByNumber } from "@/features/checkout/services/orders.service";
 import type { PlacedOrder } from "@/features/checkout/types/checkout.types";
 import { Price } from "@/features/currency";
 import { Button } from "@/shared/components/ui/Button";
@@ -28,8 +28,28 @@ export function OrderConfirmationContent({
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    setOrder(getOrderByNumber(orderNumber));
-    setIsHydrated(true);
+    let cancelled = false;
+
+    void getOrderByNumber(orderNumber)
+      .then((next) => {
+        if (!cancelled) {
+          setOrder(next);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setOrder(null);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setIsHydrated(true);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [orderNumber]);
 
   if (!isHydrated) {

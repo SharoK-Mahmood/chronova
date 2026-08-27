@@ -4,25 +4,24 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState, type FormEvent } from "react";
 
 import { useCart } from "@/features/cart";
+import { useAuth } from "@/features/auth/context/AuthProvider";
 import { ContactInformationSection } from "@/features/checkout/components/ContactInformationSection";
 import {
   CheckoutOrderSummary,
-  useCheckoutTotals,
 } from "@/features/checkout/components/CheckoutOrderSummary";
 import { CheckoutPanel } from "@/features/checkout/components/CheckoutPanel";
 import { DeliveryMethodSection } from "@/features/checkout/components/DeliveryMethodSection";
 import { PaymentMethodSection } from "@/features/checkout/components/PaymentMethodSection";
 import { ShippingAddressSection } from "@/features/checkout/components/ShippingAddressSection";
 import { DEFAULT_CHECKOUT_FORM } from "@/features/checkout/constants/default-checkout-form";
-import {
-  buildPlacedOrder,
-  getPaymentSubmitLabelKey,
-} from "@/features/checkout/lib/build-placed-order";
-import { saveOrder } from "@/features/checkout/lib/order-storage";
+import { getPaymentSubmitLabelKey } from "@/features/checkout/lib/build-placed-order";
+import { createOrder } from "@/features/checkout/services/orders.service";
 import { buildOrderLineItems } from "@/features/checkout/lib/build-order-line-items";
 import { validateCheckout } from "@/features/checkout/lib/validate-checkout";
 import type { CheckoutFormData } from "@/features/checkout/types/checkout.types";
 import { useCurrency } from "@/features/currency";
+import { useProductCatalog } from "@/features/products";
+import { ApiClientError } from "@/shared/lib/api/client";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
 import { useTranslation } from "@/shared/i18n";
@@ -34,24 +33,37 @@ export function CheckoutContent() {
   const { t } = useTranslation();
   const { entries, isHydrated, itemCount, clearCart } = useCart();
   const { currency } = useCurrency();
+  const { getProductBySlug } = useProductCatalog();
+  const { isAuthenticated, isHydrated: isAuthHydrated } = useAuth();
   const [form, setForm] = useState<CheckoutFormData>(DEFAULT_CHECKOUT_FORM);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const lineItems = useMemo(() => buildOrderLineItems(entries), [entries]);
-  const { subtotalUsd, shippingUsd, totalUsd } = useCheckoutTotals(
-    lineItems,
-    form.deliveryMethodId,
+  const lineItems = useMemo(
+    () => buildOrderLineItems(entries, getProductBySlug),
+    [entries, getProductBySlug],
   );
 
   function patchForm(patch: Partial<CheckoutFormData>) {
     setForm((current) => ({ ...current, ...patch }));
   }
 
-  if (!isHydrated) {
+  if (!isHydrated || !isAuthHydrated) {
     return (
       <Container className="py-12">
         <p className="text-secondary">{t("checkout.preparing")}</p>
+      </Container>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <Container className="py-12 text-center">
+        <h1 className={cn(typography.page)}>{t("auth.signInToCheckout")}</h1>
+        <p className="mt-3 text-secondary">{t("auth.signInToContinue")}</p>
+        <Button href="/login?next=/checkout" variant="accent" className="mt-8">
+          {t("auth.logIn")}
+        </Button>
       </Container>
     );
   }
@@ -68,7 +80,7 @@ export function CheckoutContent() {
     );
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
 
@@ -86,19 +98,31 @@ export function CheckoutContent() {
 
     setIsSubmitting(true);
 
-    const order = buildPlacedOrder({
-      form,
-      lineItems,
-      subtotalUsd,
-      shippingUsd,
-      totalUsd,
-      currency,
-      t,
-    });
+    try {
+      const order = await createOrder({
+        contact: form.contact,
+        shippingAddress: form.shippingAddress,
+        deliveryMethodId: form.deliveryMethodId,
+        paymentMethodId: form.paymentMethodId,
+        paypalEmail: form.paypalEmail.trim() || undefined,
+        items: lineItems.map((item) => ({
+          slug: item.slug,
+          quantity: item.quantity,
+        })),
+        currency,
+      });
 
-    saveOrder(order);
-    clearCart();
-    router.push(`/checkout/confirmation/${order.orderNumber}`);
+      clearCart();
+      router.push(`/checkout/confirmation/${order.orderNumber}`);
+    } catch (cause) {
+      setError(
+        cause instanceof ApiClientError
+          ? cause.message
+          : t("checkout.placeOrderError"),
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   const submitLabel = isSubmitting

@@ -1,8 +1,11 @@
 import type { StoredCartEntry } from "@/features/cart/types/cart.types";
 import type { OrderLineItem } from "@/features/checkout/types/checkout.types";
-import { getProductBySlug } from "@/features/products/data/mock-products";
+import type { Product } from "@/features/products/types/product.types";
 
-export function buildOrderLineItems(entries: StoredCartEntry[]): OrderLineItem[] {
+export function buildOrderLineItems(
+  entries: StoredCartEntry[],
+  getProductBySlug: (slug: string) => Product | undefined,
+): OrderLineItem[] {
   return entries.flatMap((entry) => {
     const product = getProductBySlug(entry.slug);
     if (!product) {

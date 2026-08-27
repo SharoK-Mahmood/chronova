@@ -1,6 +1,6 @@
 "use client";
 
-import { FEATURED_PRODUCTS, ProductGrid } from "@/features/products";
+import { ProductGrid, useProductCatalog } from "@/features/products";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
 import { useTranslation } from "@/shared/i18n";
@@ -9,6 +9,7 @@ import { type as typography } from "@/shared/lib/typography";
 
 export function FeaturedProducts() {
   const { t } = useTranslation();
+  const { featuredProducts, isLoading } = useProductCatalog();
 
   return (
     <section className="py-12 md:py-16 lg:py-28">
@@ -30,7 +31,11 @@ export function FeaturedProducts() {
           </Button>
         </div>
 
-        <ProductGrid products={FEATURED_PRODUCTS} />
+        {isLoading ? (
+          <p className="text-secondary">{t("common.loading")}</p>
+        ) : (
+          <ProductGrid products={featuredProducts} />
+        )}
       </Container>
     </section>
   );

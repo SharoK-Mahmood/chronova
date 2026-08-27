@@ -6,7 +6,7 @@ import { CartLineRow } from "@/features/cart/components/CartLineRow";
 import { EmptyCart } from "@/features/cart/components/EmptyCart";
 import { useCart } from "@/features/cart/context/CartProvider";
 import { Price, useCurrency } from "@/features/currency";
-import { getProductBySlug } from "@/features/products/data/mock-products";
+import { useProductCatalog } from "@/features/products";
 import { Button } from "@/shared/components/ui/Button";
 import { textLinkButtonClasses } from "@/shared/lib/utils/button-interaction";
 import { cn } from "@/shared/lib/utils/cn";
@@ -16,6 +16,7 @@ import { useTranslation } from "@/shared/i18n";
 export function CartContent() {
   const { t } = useTranslation();
   const { entries, isHydrated, itemCount, clearCart } = useCart();
+  const { getProductBySlug } = useProductCatalog();
   const { currency } = useCurrency();
   const currencyLabel =
     currency === "USD" ? t("common.usd") : t("common.iqd");
@@ -27,7 +28,7 @@ export function CartContent() {
       const unitPrice = entry.unitPriceUsd ?? product.price;
       return total + unitPrice * entry.quantity;
     }, 0);
-  }, [entries]);
+  }, [entries, getProductBySlug]);
 
   if (!isHydrated) {
     return (

@@ -1,4 +1,4 @@
-import { CATALOG_PRODUCTS } from "@/features/products/data/mock-products";
+import type { Product } from "@/features/products/types/product.types";
 import type { Brand, BrandSummary } from "@/features/brands/types/brand.types";
 
 export const COMMON_BRANDS: Brand[] = [
@@ -85,16 +85,16 @@ export function getBrandBySlug(slug: string): Brand | undefined {
   return COMMON_BRANDS.find((brand) => brand.slug === slug);
 }
 
-export function getBrandSummaries(): BrandSummary[] {
+export function getBrandSummaries(products: Product[] = []): BrandSummary[] {
   return COMMON_BRANDS.map((brand) => {
-    const products = CATALOG_PRODUCTS.filter(
+    const brandProducts = products.filter(
       (product) => product.brand.toLowerCase() === brand.name.toLowerCase(),
     );
 
     return {
       ...brand,
-      productCount: products.length,
-      imageUrl: products[0]?.imageUrl,
+      productCount: brandProducts.length,
+      imageUrl: brandProducts[0]?.imageUrl,
     };
   });
 }

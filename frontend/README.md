@@ -16,7 +16,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000). The storefront expects the API at `NEXT_PUBLIC_API_URL` (default `http://localhost:3001/api`). See the root [README](../README.md) for backend setup and seed admin credentials.
 
 ## Scripts
 

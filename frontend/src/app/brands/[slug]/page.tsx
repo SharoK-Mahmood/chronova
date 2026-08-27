@@ -6,11 +6,14 @@ import {
   COMMON_BRANDS,
   getBrandBySlug,
 } from "@/features/brands";
-import { getProductsByBrand } from "@/features/products";
+import { listProducts } from "@/features/products";
+import type { Product } from "@/features/products";
 
 type BrandPageProps = {
   params: Promise<{ slug: string }>;
 };
+
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return COMMON_BRANDS.map((brand) => ({ slug: brand.slug }));
@@ -40,7 +43,13 @@ export default async function BrandPage({ params }: BrandPageProps) {
     notFound();
   }
 
-  const products = getProductsByBrand(brand.name);
+  let products: Product[] = [];
+
+  try {
+    products = await listProducts({ brand: brand.name });
+  } catch {
+    products = [];
+  }
 
   return <BrandPageContent brand={brand} products={products} />;
 }

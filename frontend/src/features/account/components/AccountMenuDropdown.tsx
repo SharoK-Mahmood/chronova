@@ -6,6 +6,7 @@ import { useEffect, useId, useRef, useState } from "react";
 
 import { SETTINGS_NAV_ITEMS } from "@/features/account/constants/settings-nav";
 import { useAccountSettings } from "@/features/account/context/AccountSettingsProvider";
+import { useAuth } from "@/features/auth/context/AuthProvider";
 import type { SettingsSectionId } from "@/features/account/types/account-settings.types";
 import { NavIcon } from "@/shared/components/layout/NavIcon";
 import { useTranslation } from "@/shared/i18n";
@@ -21,6 +22,7 @@ export function AccountMenuDropdown({ className }: AccountMenuDropdownProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const { settings, isHydrated } = useAccountSettings();
+  const { user, isAdmin, logout } = useAuth();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const menuId = useId();
@@ -56,6 +58,7 @@ export function AccountMenuDropdown({ className }: AccountMenuDropdownProps) {
 
   function handleSignOut() {
     setOpen(false);
+    logout();
     router.push("/login");
   }
 
@@ -95,18 +98,34 @@ export function AccountMenuDropdown({ className }: AccountMenuDropdownProps) {
               <p
                 className={cn(
                   "truncate text-sm font-medium",
-                  settings.profile.name ? "text-foreground" : "text-secondary",
+                  user || settings.profile.name ? "text-foreground" : "text-secondary",
                 )}
               >
-                {settings.profile.name || t("account.accountSection.namePlaceholder")}
+                {user
+                  ? `${user.firstName} ${user.lastName}`.trim()
+                  : settings.profile.name || t("account.accountSection.namePlaceholder")}
               </p>
               <p className="mt-0.5 truncate text-xs text-secondary">
-                {settings.profile.email || t("account.accountSection.emailPlaceholder")}
+                {user?.email ||
+                  settings.profile.email ||
+                  t("account.accountSection.emailPlaceholder")}
               </p>
             </div>
           ) : null}
 
           <ul className="py-1">
+            {isAdmin ? (
+              <li role="none">
+                <Link
+                  href="/admin"
+                  role="menuitem"
+                  onClick={() => setOpen(false)}
+                  className="block px-4 py-2.5 text-sm text-accent transition-colors hover:bg-background"
+                >
+                  {t("nav.admin")}
+                </Link>
+              </li>
+            ) : null}
             {SETTINGS_NAV_ITEMS.map((item) => (
               <li key={item.id} role="none">
                 <Link
@@ -122,14 +141,25 @@ export function AccountMenuDropdown({ className }: AccountMenuDropdownProps) {
           </ul>
 
           <div className="border-t border-border p-1">
-            <button
-              type="button"
-              role="menuitem"
-              onClick={handleSignOut}
-              className="w-full rounded-lg px-4 py-2.5 text-left text-sm text-secondary transition-colors hover:bg-background hover:text-foreground"
-            >
-              {t("auth.signOut")}
-            </button>
+            {user ? (
+              <button
+                type="button"
+                role="menuitem"
+                onClick={handleSignOut}
+                className="w-full rounded-lg px-4 py-2.5 text-left text-sm text-secondary transition-colors hover:bg-background hover:text-foreground"
+              >
+                {t("auth.signOut")}
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                role="menuitem"
+                onClick={() => setOpen(false)}
+                className="block rounded-lg px-4 py-2.5 text-sm text-secondary transition-colors hover:bg-background hover:text-foreground"
+              >
+                {t("auth.logIn")}
+              </Link>
+            )}
           </div>
         </div>
       ) : null}

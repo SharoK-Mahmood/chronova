@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
 import { AuthButton } from "@/features/auth/components/AuthButton";
@@ -9,24 +9,37 @@ import { AuthDivider } from "@/features/auth/components/AuthDivider";
 import { AuthShell } from "@/features/auth/components/AuthShell";
 import { GoogleSignInButton } from "@/features/auth/components/GoogleSignInButton";
 import { PasswordField } from "@/features/auth/components/PasswordField";
+import { useAuth } from "@/features/auth/context/AuthProvider";
 import { Input } from "@/shared/components/ui/Input";
 import { useTranslation } from "@/shared/i18n";
+import { ApiClientError } from "@/shared/lib/api/client";
 import { cn } from "@/shared/lib/utils/cn";
 import { type as typography } from "@/shared/lib/typography";
+
+function safeNextPath(value: string | null): string {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) {
+    return "/account/settings";
+  }
+
+  return value;
+}
 
 export function RegisterForm() {
   const { t } = useTranslation();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { register } = useAuth();
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
 
     const formData = new FormData(event.currentTarget);
-    const password = formData.get("password") as string;
-    const confirmPassword = formData.get("confirmPassword") as string;
+    const password = String(formData.get("password") ?? "");
+    const confirmPassword = String(formData.get("confirmPassword") ?? "");
 
     if (password !== confirmPassword) {
       setError(t("auth.passwordMismatch"));
@@ -38,7 +51,25 @@ export function RegisterForm() {
       return;
     }
 
-    router.push("/account/settings");
+    setIsSubmitting(true);
+
+    try {
+      await register({
+        email: String(formData.get("email") ?? ""),
+        password,
+        firstName: String(formData.get("firstName") ?? ""),
+        lastName: String(formData.get("lastName") ?? ""),
+      });
+      router.push(safeNextPath(searchParams.get("next")));
+    } catch (cause) {
+      setError(
+        cause instanceof ApiClientError
+          ? cause.message
+          : t("auth.registerFailed"),
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -134,8 +165,8 @@ export function RegisterForm() {
           </p>
         ) : null}
 
-        <AuthButton type="submit" className="w-full">
-          {t("auth.createAccount")}
+        <AuthButton type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? t("common.loading") : t("auth.createAccount")}
         </AuthButton>
       </form>
 

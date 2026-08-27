@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-import { CATALOG_PRODUCTS, getProductBySlug } from "@/features/products";
+import { getProduct } from "@/features/products";
 import { ProductActions } from "@/features/products/components/ProductActions";
 import { ProductPrice } from "@/features/products/components/ProductPrice";
+import { ApiClientError } from "@/shared/lib/api/client";
 import { Container } from "@/shared/components/ui/Container";
 import { cn } from "@/shared/lib/utils/cn";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
@@ -13,15 +14,25 @@ type ProductPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
-  return CATALOG_PRODUCTS.map((product) => ({ slug: product.slug }));
+export const dynamic = "force-dynamic";
+
+async function loadProduct(slug: string) {
+  try {
+    return await getProduct(slug);
+  } catch (error) {
+    if (error instanceof ApiClientError && error.status === 404) {
+      return null;
+    }
+
+    return null;
+  }
 }
 
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await loadProduct(slug);
 
   if (!product) {
     return { title: "Product not found" };
@@ -43,7 +54,7 @@ export async function generateMetadata({
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await loadProduct(slug);
 
   if (!product) {
     notFound();

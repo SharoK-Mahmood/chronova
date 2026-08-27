@@ -16,8 +16,9 @@ import {
 import { SettingsSection } from "@/features/account/components/SettingsSection";
 import { SettingsToggle } from "@/features/account/components/SettingsToggle";
 import { useAccountSettings } from "@/features/account/context/AccountSettingsProvider";
+import { useAuth } from "@/features/auth/context/AuthProvider";
 import { LANGUAGE_OPTIONS } from "@/features/account/constants/settings-nav";
-import { getAllOrders } from "@/features/checkout/lib/order-storage";
+import { listOrders } from "@/features/checkout/services/orders.service";
 import type { PlacedOrder } from "@/features/checkout/types/checkout.types";
 import { CurrencySelector, Price } from "@/features/currency";
 import { Button } from "@/shared/components/ui/Button";
@@ -47,6 +48,7 @@ export function AccountSettingsContent() {
   const { t, language } = useTranslation();
   const { settings, isHydrated, updateSettings, setLanguage } =
     useAccountSettings();
+  const { logout } = useAuth();
   const { activeSection, scrollToSection } = useScrollToSettingsSection();
   const [orders, setOrders] = useState<PlacedOrder[]>([]);
 
@@ -56,7 +58,9 @@ export function AccountSettingsContent() {
     : (settings.billingAddress ?? EMPTY_ADDRESS);
 
   useEffect(() => {
-    setOrders(getAllOrders());
+    void listOrders()
+      .then(setOrders)
+      .catch(() => setOrders([]));
   }, []);
 
   if (!isHydrated) {
@@ -68,6 +72,7 @@ export function AccountSettingsContent() {
   }
 
   function handleLogout() {
+    logout();
     router.push("/login");
   }
 

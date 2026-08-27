@@ -12,6 +12,7 @@ import {
 } from "react";
 
 import { getBrandSummaries } from "@/features/brands";
+import { useProductCatalog } from "@/features/products";
 import { Container } from "@/shared/components/ui/Container";
 import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
@@ -111,7 +112,8 @@ export function BrandsNavLink({ isActive, className, label }: BrandsNavLinkProps
 export function BrandsMegaMenuPanel() {
   const { isOpen, open, scheduleClose, cancelClose } = useBrandsMenu();
   const { t } = useTranslation();
-  const brands = getBrandSummaries();
+  const { products } = useProductCatalog();
+  const brands = getBrandSummaries(products);
 
   return (
     <div

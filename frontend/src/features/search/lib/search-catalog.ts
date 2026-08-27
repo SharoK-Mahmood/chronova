@@ -1,7 +1,7 @@
 import { COMMON_BRANDS } from "@/features/brands/data/brands";
 import { SEARCH_CATEGORIES } from "@/features/search/constants/search-categories";
 import type { SearchResults } from "@/features/search/types/search.types";
-import { CATALOG_PRODUCTS } from "@/features/products/data/mock-products";
+import type { Product } from "@/features/products/types/product.types";
 
 const WATCH_PREVIEW_LIMIT = 5;
 const BRAND_PREVIEW_LIMIT = 3;
@@ -19,7 +19,7 @@ function matchesQuery(value: string | undefined, query: string): boolean {
   return normalize(value).includes(query);
 }
 
-export function searchCatalog(rawQuery: string): SearchResults {
+export function searchCatalog(rawQuery: string, products: Product[]): SearchResults {
   const query = normalize(rawQuery);
 
   if (!query) {
@@ -32,7 +32,7 @@ export function searchCatalog(rawQuery: string): SearchResults {
     };
   }
 
-  const watchMatches = CATALOG_PRODUCTS.filter(
+  const watchMatches = products.filter(
     (product) =>
       matchesQuery(product.name, query) ||
       matchesQuery(product.brand, query) ||
@@ -71,7 +71,7 @@ export function searchCatalog(rawQuery: string): SearchResults {
   };
 }
 
-export function searchCatalogFull(rawQuery: string): SearchResults {
+export function searchCatalogFull(rawQuery: string, products: Product[]): SearchResults {
   const query = normalize(rawQuery);
 
   if (!query) {
@@ -84,9 +84,9 @@ export function searchCatalogFull(rawQuery: string): SearchResults {
     };
   }
 
-  const preview = searchCatalog(query);
+  const preview = searchCatalog(query, products);
 
-  const watchMatches = CATALOG_PRODUCTS.filter(
+  const watchMatches = products.filter(
     (product) =>
       matchesQuery(product.name, query) ||
       matchesQuery(product.brand, query) ||

@@ -1,4 +1,4 @@
-import { getProductBySlug } from "@/features/products/data/mock-products";
+import type { Product } from "@/features/products/types/product.types";
 import type {
   NewArrival,
   NewArrivalSpotlight,
@@ -45,8 +45,9 @@ const COLLECTION_ENTRIES: Array<{
 
 function buildArrival(
   entry: (typeof COLLECTION_ENTRIES)[number],
+  products: Product[],
 ): NewArrival | undefined {
-  const product = getProductBySlug(entry.slug);
+  const product = products.find((item) => item.slug === entry.slug);
 
   if (!product) {
     return undefined;
@@ -59,8 +60,10 @@ function buildArrival(
   };
 }
 
-export function getNewArrivalSpotlight(): NewArrivalSpotlight | undefined {
-  const product = getProductBySlug(SPOTLIGHT_SLUG);
+export function getNewArrivalSpotlight(
+  products: Product[],
+): NewArrivalSpotlight | undefined {
+  const product = products.find((item) => item.slug === SPOTLIGHT_SLUG);
 
   if (!product) {
     return undefined;
@@ -75,18 +78,18 @@ export function getNewArrivalSpotlight(): NewArrivalSpotlight | undefined {
   };
 }
 
-export function getNewArrivalsCollection(): NewArrival[] {
-  return COLLECTION_ENTRIES.map(buildArrival).filter(
+export function getNewArrivalsCollection(products: Product[]): NewArrival[] {
+  return COLLECTION_ENTRIES.map((entry) => buildArrival(entry, products)).filter(
     (arrival): arrival is NewArrival => arrival !== undefined,
   );
 }
 
-export function getAllNewArrivals(): NewArrival[] {
-  const spotlight = getNewArrivalSpotlight();
+export function getAllNewArrivals(products: Product[]): NewArrival[] {
+  const spotlight = getNewArrivalSpotlight(products);
 
   if (!spotlight) {
-    return getNewArrivalsCollection();
+    return getNewArrivalsCollection(products);
   }
 
-  return [spotlight, ...getNewArrivalsCollection()];
+  return [spotlight, ...getNewArrivalsCollection(products)];
 }
