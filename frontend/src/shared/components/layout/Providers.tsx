@@ -1,7 +1,9 @@
 "use client";
 
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import type { ReactNode } from "react";
 
+import { env } from "@/config/env";
 import { AccountSettingsProvider } from "@/features/account";
 import { AuthProvider } from "@/features/auth/context/AuthProvider";
 import { CartDrawer, CartProvider } from "@/features/cart";
@@ -13,7 +15,7 @@ type ProvidersProps = {
   children: ReactNode;
 };
 
-export function Providers({ children }: ProvidersProps) {
+function AppProviders({ children }: ProvidersProps) {
   return (
     <AuthProvider>
       <CurrencyProvider>
@@ -29,5 +31,17 @@ export function Providers({ children }: ProvidersProps) {
         </AccountSettingsProvider>
       </CurrencyProvider>
     </AuthProvider>
+  );
+}
+
+export function Providers({ children }: ProvidersProps) {
+  if (!env.googleClientId) {
+    return <AppProviders>{children}</AppProviders>;
+  }
+
+  return (
+    <GoogleOAuthProvider clientId={env.googleClientId}>
+      <AppProviders>{children}</AppProviders>
+    </GoogleOAuthProvider>
   );
 }

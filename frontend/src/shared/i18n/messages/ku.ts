@@ -181,6 +181,10 @@ export const messages: Messages = {
     registerFailed: "نەتوانرا هەژمار دروست بکرێت. دووبارە هەوڵبدە.",
     signInToContinue: "بۆ بەردەوامبوون بچۆ ژوورەوە.",
     signInToCheckout: "بۆ تەواوکردنی داواکاری بچۆ ژوورەوە.",
+    googleNotConfigured:
+      "چوونەژوورەوە بە Google ڕێکنەخراوە. NEXT_PUBLIC_GOOGLE_CLIENT_ID و GOOGLE_CLIENT_ID زیاد بکە.",
+    googleFailed: "چوونەژوورەوە بە Google سەرکەوتوو نەبوو. دووبارە هەوڵبدە.",
+    googleSignInSubtitle: "بە هەژماری ڕاستەقینەی Google بەردەوام بە بۆ کرۆنۆڤا.",
   },
   account: {
     welcome: "بەخێربێیتەوە",

@@ -39,6 +39,7 @@ The API listens on [http://localhost:3001](http://localhost:3001).
 | `CORS_ORIGIN` | `http://localhost:3000` | Allowed frontend origin |
 | `ADMIN_EMAIL` | `admin@chronova.local` | Seed admin email |
 | `ADMIN_PASSWORD` | `ChronovaAdmin123!` | Seed admin password |
+| `GOOGLE_CLIENT_ID` | _(empty)_ | Same Google OAuth Web Client ID as the frontend |
 
 ## Seed admin
 
@@ -47,12 +48,15 @@ The API listens on [http://localhost:3001](http://localhost:3001).
 
 Register a customer from the storefront, or log in as admin and open `/admin`.
 
+Google Sign-In: set `GOOGLE_CLIENT_ID` (and `NEXT_PUBLIC_GOOGLE_CLIENT_ID` on the frontend). See the root README.
+
 ## Endpoints
 
 ### Auth
 
 - `POST /api/auth/register`
 - `POST /api/auth/login`
+- `POST /api/auth/google` — body `{ "credential": "<Google ID token>" }`
 - `GET /api/auth/me` (Bearer token)
 
 ### Products

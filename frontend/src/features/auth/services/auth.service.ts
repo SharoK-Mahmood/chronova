@@ -27,6 +27,15 @@ export async function loginAccount(input: LoginInput): Promise<AuthSession> {
   });
 }
 
+export async function loginWithGoogleCredential(
+  credential: string,
+): Promise<AuthSession> {
+  return apiClient<AuthSession>("/auth/google", {
+    method: "POST",
+    body: { credential },
+  });
+}
+
 export async function getCurrentUser(): Promise<User> {
   const response = await apiClient<{ user: User }>("/auth/me");
   return response.user;

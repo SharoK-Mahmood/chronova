@@ -1,6 +1,8 @@
+import { OAuth2Client } from "google-auth-library";
 import { z } from "zod";
 
-import { conflict, unauthorized } from "../lib/http-error.js";
+import { env } from "../env.js";
+import { badRequest, conflict, unauthorized } from "../lib/http-error.js";
 import { signAccessToken } from "../lib/jwt.js";
 import { hashPassword, verifyPassword } from "../lib/passwords.js";
 import { prisma } from "../lib/prisma.js";
@@ -16,6 +18,10 @@ const registerSchema = z.object({
 const loginSchema = z.object({
   email: z.string().trim().email(),
   password: z.string().min(1, "Password is required"),
+});
+
+const googleSchema = z.object({
+  credential: z.string().min(1, "Google credential is required"),
 });
 
 function toAuthUser(user: {
@@ -38,6 +44,24 @@ export function toAuthSession(user: AuthUser) {
   return {
     user: toPublicUser(user),
     accessToken: signAccessToken({ sub: user.id, role: user.role }),
+  };
+}
+
+function splitName(fullName: string | undefined, email: string) {
+  const parts = (fullName ?? "").trim().split(/\s+/).filter(Boolean);
+
+  if (parts.length === 0) {
+    const local = email.split("@")[0] || "Chronova";
+    return { firstName: local, lastName: "Customer" };
+  }
+
+  if (parts.length === 1) {
+    return { firstName: parts[0], lastName: "Customer" };
+  }
+
+  return {
+    firstName: parts[0],
+    lastName: parts.slice(1).join(" "),
   };
 }
 
@@ -68,9 +92,91 @@ export async function login(input: unknown) {
   const email = data.email.toLowerCase();
 
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user || !(await verifyPassword(data.password, user.passwordHash))) {
+
+  if (!user) {
     throw unauthorized("Invalid email or password");
   }
+
+  if (!user.passwordHash) {
+    throw unauthorized(
+      "This account uses Google Sign-In. Please continue with Google.",
+    );
+  }
+
+  if (!(await verifyPassword(data.password, user.passwordHash))) {
+    throw unauthorized("Invalid email or password");
+  }
+
+  return toAuthSession(toAuthUser(user));
+}
+
+export async function loginWithGoogle(input: unknown) {
+  if (!env.googleClientId) {
+    throw badRequest(
+      "Google Sign-In is not configured on the server",
+      "GOOGLE_NOT_CONFIGURED",
+    );
+  }
+
+  const { credential } = googleSchema.parse(input);
+  const client = new OAuth2Client(env.googleClientId);
+
+  let payload;
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: env.googleClientId,
+    });
+    payload = ticket.getPayload();
+  } catch {
+    throw unauthorized("Invalid Google Sign-In token");
+  }
+
+  if (!payload?.sub || !payload.email) {
+    throw unauthorized("Google account is missing required profile details");
+  }
+
+  if (payload.email_verified === false) {
+    throw unauthorized("Google email address is not verified");
+  }
+
+  const email = payload.email.toLowerCase();
+  const googleId = payload.sub;
+  const { firstName, lastName } = splitName(payload.name, email);
+
+  const existingByGoogle = await prisma.user.findUnique({
+    where: { googleId },
+  });
+
+  if (existingByGoogle) {
+    return toAuthSession(toAuthUser(existingByGoogle));
+  }
+
+  const existingByEmail = await prisma.user.findUnique({ where: { email } });
+
+  if (existingByEmail) {
+    const linked = await prisma.user.update({
+      where: { id: existingByEmail.id },
+      data: {
+        googleId,
+        firstName: existingByEmail.firstName || firstName,
+        lastName: existingByEmail.lastName || lastName,
+      },
+    });
+
+    return toAuthSession(toAuthUser(linked));
+  }
+
+  const user = await prisma.user.create({
+    data: {
+      email,
+      googleId,
+      passwordHash: null,
+      firstName,
+      lastName,
+      role: "customer",
+    },
+  });
 
   return toAuthSession(toAuthUser(user));
 }

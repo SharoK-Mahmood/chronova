@@ -13,6 +13,7 @@ import {
 import {
   getCurrentUser,
   loginAccount,
+  loginWithGoogleCredential,
   registerAccount,
   type LoginInput,
   type RegisterInput,
@@ -31,6 +32,7 @@ type AuthContextValue = {
   isAdmin: boolean;
   login: (input: LoginInput) => Promise<AuthSession>;
   register: (input: RegisterInput) => Promise<AuthSession>;
+  loginWithGoogle: (credential: string) => Promise<AuthSession>;
   logout: () => void;
 };
 
@@ -79,6 +81,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return session;
   }, []);
 
+  const loginWithGoogle = useCallback(async (credential: string) => {
+    const session = await loginWithGoogleCredential(credential);
+    setAccessToken(session.accessToken);
+    setUser(session.user);
+    return session;
+  }, []);
+
   const logout = useCallback(() => {
     clearAccessToken();
     setUser(null);
@@ -92,9 +101,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       isAdmin: user?.role === "admin",
       login,
       register,
+      loginWithGoogle,
       logout,
     }),
-    [user, isHydrated, login, register, logout],
+    [user, isHydrated, login, register, loginWithGoogle, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

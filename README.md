@@ -34,7 +34,27 @@ Open [http://localhost:3000](http://localhost:3000). Admin is at [http://localho
 | Email | `admin@chronova.local` |
 | Password | `ChronovaAdmin123!` |
 
-Customers register at `/register`. Only users with `role === "admin"` can open `/admin`.
+Customers register at `/register` or sign in with Google. Only users with `role === "admin"` can open `/admin`.
+
+## Google Sign-In
+
+Fake account pickers were removed. Chronova uses real Google Identity.
+
+1. Create an OAuth 2.0 **Web** client in [Google Cloud Console](https://console.cloud.google.com/apis/credentials).
+2. Under **Authorized JavaScript origins**, add `http://localhost:3000`.
+3. Copy the Client ID into both env files (same value):
+
+```bash
+# frontend/.env.local
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+
+# backend/.env
+GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+```
+
+4. Restart frontend and backend.
+
+Without those variables, the Google button shows a configuration message instead of Jane Doe / shopper mocks.
 
 ## Root scripts
 

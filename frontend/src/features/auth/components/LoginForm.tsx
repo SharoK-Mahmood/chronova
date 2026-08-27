@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { Suspense, useState, type FormEvent } from "react";
 
 import { AuthButton } from "@/features/auth/components/AuthButton";
 import { AuthDivider } from "@/features/auth/components/AuthDivider";
@@ -135,7 +135,9 @@ export function LoginForm() {
       </form>
 
       <AuthDivider />
-      <GoogleSignInButton />
+      <Suspense fallback={null}>
+        <GoogleSignInButton />
+      </Suspense>
 
       <p className="mt-8 text-center text-sm text-secondary">
         {t("auth.noAccount")}{" "}

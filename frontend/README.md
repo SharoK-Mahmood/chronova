@@ -71,5 +71,6 @@ Code used by two or more features belongs in `src/shared/`. Keep features indepe
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `NEXT_PUBLIC_API_URL` | Backend API base URL | `http://localhost:3001/api` |
+| `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | Google OAuth Web Client ID | _(empty — required for Google Sign-In)_ |
 
 Copy `.env.example` to `.env.local` and adjust values for your environment.

@@ -20,4 +20,5 @@ export const env = {
   adminPassword: process.env.ADMIN_PASSWORD ?? "ChronovaAdmin123!",
   adminFirstName: process.env.ADMIN_FIRST_NAME ?? "Chronova",
   adminLastName: process.env.ADMIN_LAST_NAME ?? "Admin",
+  googleClientId: process.env.GOOGLE_CLIENT_ID ?? "",
 } as const;

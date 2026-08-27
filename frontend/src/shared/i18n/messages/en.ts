@@ -179,6 +179,10 @@ export const messages = {
     registerFailed: "Unable to create account. Please try again.",
     signInToContinue: "Sign in to continue.",
     signInToCheckout: "Sign in to place your order.",
+    googleNotConfigured:
+      "Google Sign-In is not configured. Add NEXT_PUBLIC_GOOGLE_CLIENT_ID and GOOGLE_CLIENT_ID to your env files.",
+    googleFailed: "Google Sign-In failed. Please try again.",
+    googleSignInSubtitle: "Continue with your real Google account to Chronova.",
   },
   account: {
     welcome: "Welcome back",

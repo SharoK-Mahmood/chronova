@@ -181,6 +181,10 @@ export const messages: Messages = {
     registerFailed: "تعذر إنشاء الحساب. حاول مرة أخرى.",
     signInToContinue: "سجّل الدخول للمتابعة.",
     signInToCheckout: "سجّل الدخول لإتمام طلبك.",
+    googleNotConfigured:
+      "تسجيل الدخول عبر Google غير مُعد. أضف NEXT_PUBLIC_GOOGLE_CLIENT_ID و GOOGLE_CLIENT_ID إلى ملفات البيئة.",
+    googleFailed: "فشل تسجيل الدخول عبر Google. حاول مرة أخرى.",
+    googleSignInSubtitle: "تابع بحساب Google الحقيقي إلى كرونova.",
   },
   account: {
     welcome: "مرحباً بعودتك",

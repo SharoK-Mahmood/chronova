@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, type FormEvent } from "react";
@@ -171,7 +172,9 @@ export function RegisterForm() {
       </form>
 
       <AuthDivider />
-      <GoogleSignInButton />
+      <Suspense fallback={null}>
+        <GoogleSignInButton />
+      </Suspense>
 
       <p className="mt-8 text-center text-sm text-secondary">
         <Link

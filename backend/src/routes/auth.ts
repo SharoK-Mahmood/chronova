@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { asyncHandler } from "../lib/async-handler.js";
 import { requireAuth, toPublicUser, type AuthedRequest } from "../middleware/auth.js";
-import { login, register } from "../services/auth.service.js";
+import { login, loginWithGoogle, register } from "../services/auth.service.js";
 
 export const authRouter = Router();
 
@@ -18,6 +18,14 @@ authRouter.post(
   "/login",
   asyncHandler(async (req, res) => {
     const session = await login(req.body);
+    res.json(session);
+  }),
+);
+
+authRouter.post(
+  "/google",
+  asyncHandler(async (req, res) => {
+    const session = await loginWithGoogle(req.body);
     res.json(session);
   }),
 );

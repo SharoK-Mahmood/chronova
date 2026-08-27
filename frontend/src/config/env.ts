@@ -10,4 +10,5 @@ function getEnv(key: string, fallback?: string): string {
 
 export const env = {
   apiUrl: getEnv("NEXT_PUBLIC_API_URL", "http://localhost:3001/api"),
+  googleClientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? "",
 } as const;
