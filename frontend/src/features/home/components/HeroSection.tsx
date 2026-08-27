@@ -81,6 +81,8 @@ export function HeroSection() {
                   alt="Rolex Land-Dweller 40"
                   fill
                   priority
+                  loading="eager"
+                  fetchPriority="high"
                   sizes="(min-width: 768px) 32rem, 90vw"
                   className="object-contain p-6 transition-transform duration-700 ease-out group-hover:scale-105"
                 />
