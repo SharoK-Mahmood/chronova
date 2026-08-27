@@ -7,6 +7,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { SETTINGS_NAV_ITEMS } from "@/features/account/constants/settings-nav";
 import { useAccountSettings } from "@/features/account/context/AccountSettingsProvider";
 import { useAuth } from "@/features/auth/context/AuthProvider";
+import { formatUserDisplayName } from "@/features/auth/lib/format-user-name";
 import type { SettingsSectionId } from "@/features/account/types/account-settings.types";
 import { NavIcon } from "@/shared/components/layout/NavIcon";
 import { useTranslation } from "@/shared/i18n";
@@ -102,7 +103,7 @@ export function AccountMenuDropdown({ className }: AccountMenuDropdownProps) {
                 )}
               >
                 {user
-                  ? `${user.firstName} ${user.lastName}`.trim()
+                  ? formatUserDisplayName(user)
                   : settings.profile.name || t("account.accountSection.namePlaceholder")}
               </p>
               <p className="mt-0.5 truncate text-xs text-secondary">

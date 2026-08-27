@@ -40,3 +40,18 @@ export async function getCurrentUser(): Promise<User> {
   const response = await apiClient<{ user: User }>("/auth/me");
   return response.user;
 }
+
+export type UpdateProfileInput = {
+  name: string;
+  email: string;
+};
+
+export async function updateCurrentUser(
+  input: UpdateProfileInput,
+): Promise<User> {
+  const response = await apiClient<{ user: User }>("/auth/me", {
+    method: "PATCH",
+    body: input,
+  });
+  return response.user;
+}

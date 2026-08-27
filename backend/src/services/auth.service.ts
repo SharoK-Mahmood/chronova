@@ -52,11 +52,11 @@ function splitName(fullName: string | undefined, email: string) {
 
   if (parts.length === 0) {
     const local = email.split("@")[0] || "Chronova";
-    return { firstName: local, lastName: "Customer" };
+    return { firstName: local, lastName: "" };
   }
 
   if (parts.length === 1) {
-    return { firstName: parts[0], lastName: "Customer" };
+    return { firstName: parts[0], lastName: "" };
   }
 
   return {
@@ -179,4 +179,30 @@ export async function loginWithGoogle(input: unknown) {
   });
 
   return toAuthSession(toAuthUser(user));
+}
+
+const updateProfileSchema = z.object({
+  name: z.string().trim().min(1, "Name is required"),
+  email: z.string().trim().email(),
+});
+
+export async function updateProfile(userId: string, input: unknown) {
+  const data = updateProfileSchema.parse(input);
+  const email = data.email.toLowerCase();
+  const { firstName, lastName } = splitName(data.name, email);
+
+  const emailTaken = await prisma.user.findFirst({
+    where: { email, NOT: { id: userId } },
+  });
+
+  if (emailTaken) {
+    throw conflict("An account with this email already exists", "EMAIL_IN_USE");
+  }
+
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data: { email, firstName, lastName },
+  });
+
+  return toPublicUser(toAuthUser(user));
 }

@@ -202,6 +202,20 @@ export const messages: Messages = {
     settingsTitle: "ڕێکخستنەکان",
     settingsSubtitle: "پرۆفایل، ناونیشان، داواکاری، و هەڵبژاردنەکانت بەڕێوەببە.",
     loadingSettings: "ڕێکخستنەکان بار دەکرێن...",
+    saveChanges: "پاشەکەوتکردنی گۆڕانکارییەکان",
+    saving: "پاشەکەوت دەکرێت…",
+    saveSuccess: "ڕێکخستنەکانت پاشەکەوت کران.",
+    saveFailed: "نەتوانرا ڕێکخستنەکان پاشەکەوت بکرێن.",
+    unsavedChanges: "گۆڕانکاریی پاشەکەوتنەکراوت هەیە.",
+    allChangesSaved: "هەموو گۆڕانکارییەکان پاشەکەوت کران.",
+    leaveDialog: {
+      title: "گۆڕانکاریی پاشەکەوتنەکراو",
+      description:
+        "گۆڕانکارییت هەیە کە هێشتا پاشەکەوت نەکراون. پێش ڕۆیشتن پاشەکەوتیان بکە، یان فڕێیان بدە.",
+      saveAndLeave: "پاشەکەوت بکە و بڕۆ",
+      leaveWithoutSaving: "بەبێ پاشەکەوتکردن بڕۆ",
+      stay: "بەردەوام بە لە دەستکاری",
+    },
     settingsNav: {
       account: "هەژمار",
       addresses: "ناونیشانەکان",
@@ -221,6 +235,7 @@ export const messages: Messages = {
       changePassword: "گۆڕینی وشەی نهێنی",
       namePlaceholder: "ناوت",
       emailPlaceholder: "you@example.com",
+      signInRequired: "بۆ بینین و دەستکاریکردنی زانیارییەکانی هەژمارەکەت بچۆ ژوورەوە.",
     },
     addressesSection: {
       title: "ناونیشانەکان",

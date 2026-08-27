@@ -200,6 +200,20 @@ export const messages = {
     settingsTitle: "Settings",
     settingsSubtitle: "Manage your profile, addresses, orders, and preferences.",
     loadingSettings: "Loading settings...",
+    saveChanges: "Save changes",
+    saving: "Saving…",
+    saveSuccess: "Your settings have been saved.",
+    saveFailed: "Could not save your settings.",
+    unsavedChanges: "You have unsaved changes.",
+    allChangesSaved: "All changes saved.",
+    leaveDialog: {
+      title: "Unsaved changes",
+      description:
+        "You have changes that haven’t been saved yet. Save them before leaving, or discard them.",
+      saveAndLeave: "Save and leave",
+      leaveWithoutSaving: "Leave without saving",
+      stay: "Keep editing",
+    },
     settingsNav: {
       account: "Account",
       addresses: "Addresses",
@@ -219,6 +233,7 @@ export const messages = {
       changePassword: "Change password",
       namePlaceholder: "Your name",
       emailPlaceholder: "you@example.com",
+      signInRequired: "Sign in to view and edit your account details.",
     },
     addressesSection: {
       title: "Addresses",

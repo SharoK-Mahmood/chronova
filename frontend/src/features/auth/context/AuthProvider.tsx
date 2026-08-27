@@ -15,8 +15,10 @@ import {
   loginAccount,
   loginWithGoogleCredential,
   registerAccount,
+  updateCurrentUser,
   type LoginInput,
   type RegisterInput,
+  type UpdateProfileInput,
 } from "@/features/auth/services/auth.service";
 import {
   clearAccessToken,
@@ -33,6 +35,8 @@ type AuthContextValue = {
   login: (input: LoginInput) => Promise<AuthSession>;
   register: (input: RegisterInput) => Promise<AuthSession>;
   loginWithGoogle: (credential: string) => Promise<AuthSession>;
+  updateProfile: (input: UpdateProfileInput) => Promise<User>;
+  refreshUser: () => Promise<User | null>;
   logout: () => void;
 };
 
@@ -88,6 +92,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return session;
   }, []);
 
+  const updateProfile = useCallback(async (input: UpdateProfileInput) => {
+    const next = await updateCurrentUser(input);
+    setUser(next);
+    return next;
+  }, []);
+
+  const refreshUser = useCallback(async () => {
+    const token = getAccessToken();
+    if (!token) {
+      setUser(null);
+      return null;
+    }
+
+    try {
+      const current = await getCurrentUser();
+      setUser(current);
+      return current;
+    } catch {
+      clearAccessToken();
+      setUser(null);
+      return null;
+    }
+  }, []);
+
   const logout = useCallback(() => {
     clearAccessToken();
     setUser(null);
@@ -102,9 +130,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
       login,
       register,
       loginWithGoogle,
+      updateProfile,
+      refreshUser,
       logout,
     }),
-    [user, isHydrated, login, register, loginWithGoogle, logout],
+    [
+      user,
+      isHydrated,
+      login,
+      register,
+      loginWithGoogle,
+      updateProfile,
+      refreshUser,
+      logout,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -202,6 +202,20 @@ export const messages: Messages = {
     settingsTitle: "الإعدادات",
     settingsSubtitle: "إدارة ملفك وعناوينك وطلباتك وتفضيلاتك.",
     loadingSettings: "جاري تحميل الإعدادات...",
+    saveChanges: "حفظ التغييرات",
+    saving: "جارٍ الحفظ…",
+    saveSuccess: "تم حفظ إعداداتك.",
+    saveFailed: "تعذر حفظ إعداداتك.",
+    unsavedChanges: "لديك تغييرات غير محفوظة.",
+    allChangesSaved: "تم حفظ كل التغييرات.",
+    leaveDialog: {
+      title: "تغييرات غير محفوظة",
+      description:
+        "لديك تغييرات لم تُحفظ بعد. احفظها قبل المغادرة، أو تجاهلها.",
+      saveAndLeave: "حفظ والمغادرة",
+      leaveWithoutSaving: "المغادرة دون حفظ",
+      stay: "متابعة التعديل",
+    },
     settingsNav: {
       account: "الحساب",
       addresses: "العناوين",
@@ -221,6 +235,7 @@ export const messages: Messages = {
       changePassword: "تغيير كلمة المرور",
       namePlaceholder: "اسمك",
       emailPlaceholder: "you@example.com",
+      signInRequired: "سجّل الدخول لعرض وتعديل بيانات حسابك.",
     },
     addressesSection: {
       title: "العناوين",

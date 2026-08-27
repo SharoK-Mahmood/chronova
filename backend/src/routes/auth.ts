@@ -2,7 +2,12 @@ import { Router } from "express";
 
 import { asyncHandler } from "../lib/async-handler.js";
 import { requireAuth, toPublicUser, type AuthedRequest } from "../middleware/auth.js";
-import { login, loginWithGoogle, register } from "../services/auth.service.js";
+import {
+  login,
+  loginWithGoogle,
+  register,
+  updateProfile,
+} from "../services/auth.service.js";
 
 export const authRouter = Router();
 
@@ -35,5 +40,14 @@ authRouter.get(
   requireAuth,
   asyncHandler(async (req, res) => {
     res.json({ user: toPublicUser((req as AuthedRequest).user) });
+  }),
+);
+
+authRouter.patch(
+  "/me",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const user = await updateProfile((req as AuthedRequest).user.id, req.body);
+    res.json({ user });
   }),
 );
