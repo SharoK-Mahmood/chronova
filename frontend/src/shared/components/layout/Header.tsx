@@ -129,7 +129,7 @@ export function Header() {
             </nav>
 
             <HeaderSearch
-              variant="desktop"
+              variant="tablet"
               className="ms-auto min-w-0 max-w-[12rem] flex-1"
             />
 

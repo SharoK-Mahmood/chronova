@@ -9,19 +9,18 @@ import {
   CheckoutOrderSummary,
   useCheckoutTotals,
 } from "@/features/checkout/components/CheckoutOrderSummary";
+import { CheckoutPanel } from "@/features/checkout/components/CheckoutPanel";
 import { DeliveryMethodSection } from "@/features/checkout/components/DeliveryMethodSection";
 import { PaymentMethodSection } from "@/features/checkout/components/PaymentMethodSection";
 import { ShippingAddressSection } from "@/features/checkout/components/ShippingAddressSection";
 import { DEFAULT_CHECKOUT_FORM } from "@/features/checkout/constants/default-checkout-form";
-import { isCardDetailsComplete } from "@/features/checkout/lib/card-format";
 import {
-  getLocalizedDeliveryMethod,
-  getLocalizedPaymentMethod,
-} from "@/features/checkout/lib/localized-checkout";
-import { buildOrderLineItems } from "@/features/checkout/lib/build-order-line-items";
-import { estimateDelivery } from "@/features/checkout/lib/estimate-delivery";
-import { generateOrderNumber } from "@/features/checkout/lib/generate-order-number";
+  buildPlacedOrder,
+  getPaymentSubmitLabelKey,
+} from "@/features/checkout/lib/build-placed-order";
 import { saveOrder } from "@/features/checkout/lib/order-storage";
+import { buildOrderLineItems } from "@/features/checkout/lib/build-order-line-items";
+import { validateCheckout } from "@/features/checkout/lib/validate-checkout";
 import type { CheckoutFormData } from "@/features/checkout/types/checkout.types";
 import { useCurrency } from "@/features/currency";
 import { Button } from "@/shared/components/ui/Button";
@@ -29,21 +28,6 @@ import { Container } from "@/shared/components/ui/Container";
 import { useTranslation } from "@/shared/i18n";
 import { type as typography } from "@/shared/lib/typography";
 import { cn } from "@/shared/lib/utils/cn";
-
-function isInformationComplete(form: CheckoutFormData): boolean {
-  const a = form.shippingAddress;
-  return Boolean(
-    form.contact.email.trim() &&
-      form.contact.phone.trim() &&
-      a.fullName.trim() &&
-      a.phone.trim() &&
-      a.countryCode &&
-      a.governorate &&
-      a.city.trim() &&
-      a.district.trim() &&
-      a.street.trim(),
-  );
-}
 
 export function CheckoutContent() {
   const router = useRouter();
@@ -55,10 +39,14 @@ export function CheckoutContent() {
   const [error, setError] = useState<string | null>(null);
 
   const lineItems = useMemo(() => buildOrderLineItems(entries), [entries]);
-  const { subtotalUsd, shippingUsd, totalUsd, deliveryMethod } = useCheckoutTotals(
+  const { subtotalUsd, shippingUsd, totalUsd } = useCheckoutTotals(
     lineItems,
     form.deliveryMethodId,
   );
+
+  function patchForm(patch: Partial<CheckoutFormData>) {
+    setForm((current) => ({ ...current, ...patch }));
+  }
 
   if (!isHydrated) {
     return (
@@ -84,80 +72,38 @@ export function CheckoutContent() {
     event.preventDefault();
     setError(null);
 
-    if (!isInformationComplete(form)) {
-      setError(t("checkout.informationError"));
-      document.getElementById("checkout-information")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-      return;
-    }
-
-    if (
-      form.paymentMethodId === "card" &&
-      !isCardDetailsComplete(form.cardDetails)
-    ) {
-      setError(t("checkout.cardError"));
-      return;
-    }
-
-    if (form.paymentMethodId === "paypal" && !form.paypalEmail.trim()) {
-      setError(t("checkout.paypalError"));
-      return;
-    }
-
-    if (form.paymentMethodId === "bank-transfer" && !form.bankAcknowledged) {
-      setError(t("checkout.bankError"));
+    const result = validateCheckout(form);
+    if (!result.ok) {
+      setError(t(result.errorKey));
+      if (result.scrollTo) {
+        document.getElementById(result.scrollTo)?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
       return;
     }
 
     setIsSubmitting(true);
 
-    const orderNumber = generateOrderNumber();
-    const paymentMethod = getLocalizedPaymentMethod(form.paymentMethodId, t);
-    const localizedDelivery = getLocalizedDeliveryMethod(
-      form.deliveryMethodId,
-      t,
-    );
-    const estimatedDelivery = estimateDelivery(deliveryMethod);
-
-    const paymentLabel =
-      form.paymentMethodId === "paypal" && form.paypalEmail.trim()
-        ? `${paymentMethod.label} (${form.paypalEmail.trim()})`
-        : paymentMethod.label;
-
-    saveOrder({
-      orderNumber,
-      placedAt: new Date().toISOString(),
-      contact: form.contact,
-      shippingAddress: form.shippingAddress,
-      deliveryMethodId: form.deliveryMethodId,
-      deliveryLabel: localizedDelivery.label,
-      paymentMethodId: form.paymentMethodId,
-      paymentLabel,
+    const order = buildPlacedOrder({
+      form,
       lineItems,
       subtotalUsd,
       shippingUsd,
       totalUsd,
       currency,
-      estimatedDelivery,
-      status:
-        form.paymentMethodId === "bank-transfer"
-          ? ("processing" as const)
-          : ("confirmed" as const),
+      t,
     });
 
+    saveOrder(order);
     clearCart();
-    router.push(`/checkout/confirmation/${orderNumber}`);
+    router.push(`/checkout/confirmation/${order.orderNumber}`);
   }
 
   const submitLabel = isSubmitting
     ? t("checkout.placingOrder")
-    : form.paymentMethodId === "paypal"
-      ? t("checkout.continuePayPal")
-      : form.paymentMethodId === "bank-transfer"
-        ? t("checkout.confirmBankOrder")
-        : t("checkout.placeOrder");
+    : t(getPaymentSubmitLabelKey(form.paymentMethodId));
 
   const orderActions = (
     <div className="space-y-3">
@@ -196,10 +142,7 @@ export function CheckoutContent() {
               aria-label={t("checkout.title")}
               className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs font-medium text-background/70"
             >
-              <a
-                href="#checkout-information"
-                className="hover:text-accent"
-              >
+              <a href="#checkout-information" className="hover:text-accent">
                 {t("checkout.steps.information")}
               </a>
               <span className="text-background/40" aria-hidden>
@@ -224,83 +167,47 @@ export function CheckoutContent() {
           <div className="grid min-w-0 gap-6 overflow-x-hidden lg:grid-cols-[minmax(0,1fr)_minmax(18rem,22rem)] lg:items-start lg:gap-8">
             <div className="min-w-0 space-y-4">
               <div className="grid min-w-0 gap-4 md:grid-cols-2 md:items-start">
-                <section
+                <CheckoutPanel
                   id="checkout-information"
-                  className="scroll-mt-28 space-y-5 rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6 md:self-stretch"
+                  step={1}
+                  title={t("checkout.steps.information")}
+                  className="space-y-5 md:self-stretch"
                 >
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                    1 · {t("checkout.steps.information")}
-                  </p>
                   <ContactInformationSection
                     value={form.contact}
-                    onChange={(contact) =>
-                      setForm((current) => ({ ...current, contact }))
-                    }
+                    onChange={(contact) => patchForm({ contact })}
                   />
                   <div className="border-t border-border pt-5">
                     <ShippingAddressSection
                       value={form.shippingAddress}
                       onChange={(shippingAddress) =>
-                        setForm((current) => ({
-                          ...current,
-                          shippingAddress,
-                        }))
+                        patchForm({ shippingAddress })
                       }
                     />
                   </div>
-                </section>
+                </CheckoutPanel>
 
                 <div className="flex min-w-0 flex-col gap-4">
-                  <section
+                  <CheckoutPanel
                     id="checkout-shipping"
-                    className="scroll-mt-28 rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6"
+                    step={2}
+                    title={t("checkout.steps.shipping")}
                   >
-                    <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                      2 · {t("checkout.steps.shipping")}
-                    </p>
                     <DeliveryMethodSection
                       value={form.deliveryMethodId}
                       onChange={(deliveryMethodId) =>
-                        setForm((current) => ({
-                          ...current,
-                          deliveryMethodId,
-                        }))
+                        patchForm({ deliveryMethodId })
                       }
                     />
-                  </section>
+                  </CheckoutPanel>
 
-                  <section
+                  <CheckoutPanel
                     id="checkout-payment"
-                    className="scroll-mt-28 rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6"
+                    step={3}
+                    title={t("checkout.steps.payment")}
                   >
-                    <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                      3 · {t("checkout.steps.payment")}
-                    </p>
-                    <PaymentMethodSection
-                      paymentMethodId={form.paymentMethodId}
-                      cardDetails={form.cardDetails}
-                      paypalEmail={form.paypalEmail}
-                      bankAcknowledged={form.bankAcknowledged}
-                      onPaymentMethodChange={(paymentMethodId) =>
-                        setForm((current) => ({
-                          ...current,
-                          paymentMethodId,
-                        }))
-                      }
-                      onCardDetailsChange={(cardDetails) =>
-                        setForm((current) => ({ ...current, cardDetails }))
-                      }
-                      onPaypalEmailChange={(paypalEmail) =>
-                        setForm((current) => ({ ...current, paypalEmail }))
-                      }
-                      onBankAcknowledgedChange={(bankAcknowledged) =>
-                        setForm((current) => ({
-                          ...current,
-                          bankAcknowledged,
-                        }))
-                      }
-                    />
-                  </section>
+                    <PaymentMethodSection form={form} onChange={patchForm} />
+                  </CheckoutPanel>
                 </div>
               </div>
 

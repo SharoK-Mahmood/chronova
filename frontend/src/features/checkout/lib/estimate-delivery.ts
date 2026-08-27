@@ -1,4 +1,7 @@
-import type { DeliveryMethod } from "@/features/checkout/constants/delivery-methods";
+type DeliveryWindow = {
+  minDays: number;
+  maxDays: number;
+};
 
 function addBusinessDays(date: Date, days: number): Date {
   const result = new Date(date);
@@ -24,7 +27,10 @@ function formatDate(date: Date): string {
   });
 }
 
-export function estimateDelivery(method: DeliveryMethod, fromDate = new Date()) {
+export function estimateDelivery(
+  method: DeliveryWindow,
+  fromDate = new Date(),
+) {
   const from = addBusinessDays(fromDate, method.minDays);
   const to = addBusinessDays(fromDate, method.maxDays);
 

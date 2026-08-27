@@ -61,8 +61,12 @@ export function LoginForm() {
           <PasswordField id="password" name="password" />
         </div>
 
-        <label className="flex cursor-pointer items-center gap-3">
+        <label
+          htmlFor="login-remember"
+          className="flex cursor-pointer items-center gap-3"
+        >
           <input
+            id="login-remember"
             type="checkbox"
             name="remember"
             checked={rememberMe}

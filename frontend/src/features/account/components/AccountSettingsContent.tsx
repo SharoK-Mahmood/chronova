@@ -175,8 +175,13 @@ export function AccountSettingsContent() {
                 </div>
 
                 <div className="border-t border-border pt-6">
-                  <label className="mb-5 flex cursor-pointer items-center gap-3">
+                  <label
+                    htmlFor="settings-billing-same-as-shipping"
+                    className="mb-5 flex cursor-pointer items-center gap-3"
+                  >
                     <input
+                      id="settings-billing-same-as-shipping"
+                      name="billingSameAsShipping"
                       type="checkbox"
                       checked={settings.billingSameAsShipping}
                       onChange={(event) =>

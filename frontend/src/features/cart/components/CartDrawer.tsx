@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 import { CartDrawerItem } from "@/features/cart/components/CartDrawerItem";
 import { useCart } from "@/features/cart/context/CartProvider";
@@ -17,6 +17,7 @@ export function CartDrawer() {
   const { entries, itemCount, isHydrated, isDrawerOpen, closeDrawer } =
     useCart();
   const { currency } = useCurrency();
+  const drawerRef = useRef<HTMLDivElement>(null);
   const currencyLabel =
     currency === "USD" ? t("common.usd") : t("common.iqd");
 
@@ -29,12 +30,29 @@ export function CartDrawer() {
     }, 0);
   }, [entries]);
 
+  useEffect(() => {
+    if (isDrawerOpen) {
+      return;
+    }
+
+    const root = drawerRef.current;
+    const active = document.activeElement;
+    if (
+      root instanceof HTMLElement &&
+      active instanceof HTMLElement &&
+      root.contains(active)
+    ) {
+      active.blur();
+    }
+  }, [isDrawerOpen]);
+
   if (!isHydrated) {
     return null;
   }
 
   return (
     <div
+      ref={drawerRef}
       className={cn(
         "fixed inset-0 z-[60] transition-opacity duration-300",
         isDrawerOpen
@@ -42,6 +60,7 @@ export function CartDrawer() {
           : "pointer-events-none opacity-0",
       )}
       aria-hidden={!isDrawerOpen}
+      {...(!isDrawerOpen ? { inert: true as const } : {})}
     >
       <button
         type="button"

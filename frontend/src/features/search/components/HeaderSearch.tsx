@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { SearchDropdown } from "@/features/search/components/SearchDropdown";
@@ -11,7 +11,7 @@ import { cn } from "@/shared/lib/utils/cn";
 import { type as typography } from "@/shared/lib/typography";
 
 type HeaderSearchProps = {
-  variant?: "desktop" | "mobile";
+  variant?: "desktop" | "tablet" | "mobile";
   className?: string;
 };
 
@@ -37,6 +37,7 @@ export function HeaderSearch({ variant = "desktop", className }: HeaderSearchPro
   const { t } = useTranslation();
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const inputId = `search-${variant}-${useId()}`;
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const isMobile = variant === "mobile";
@@ -130,7 +131,7 @@ export function HeaderSearch({ variant = "desktop", className }: HeaderSearchPro
   return (
     <div ref={rootRef} className={cn("relative", className)}>
       <form onSubmit={handleSubmit} role="search">
-        <label htmlFor={`search-${variant}`} className="sr-only">
+        <label htmlFor={inputId} className="sr-only">
           {t("search.label")}
         </label>
         <div
@@ -150,7 +151,8 @@ export function HeaderSearch({ variant = "desktop", className }: HeaderSearchPro
           />
           <input
             ref={inputRef}
-            id={`search-${variant}`}
+            id={inputId}
+            name="q"
             type="search"
             value={query}
             onChange={(event) => {

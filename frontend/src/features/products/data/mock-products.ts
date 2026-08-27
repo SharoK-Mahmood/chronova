@@ -179,7 +179,7 @@ const SEIKO_WATCHES: Product[] = [
     price: 425,
     currency: "USD",
     imageUrl:
-      "https://images.unsplash.com/photo-1587836374828-4dbafa53fb0c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=1200&q=80",
     category: "men",
     inStock: true,
   },
@@ -195,7 +195,7 @@ const SEIKO_WATCHES: Product[] = [
     price: 1200,
     currency: "USD",
     imageUrl:
-      "https://images.unsplash.com/photo-1612817159947-7bb70193e412?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1539874754764-5a96559165b0?auto=format&fit=crop&w=1200&q=80",
     category: "men",
     inStock: true,
   },

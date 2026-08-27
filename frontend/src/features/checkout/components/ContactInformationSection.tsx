@@ -1,7 +1,7 @@
 "use client";
 
 import type { ContactInformation } from "@/features/checkout/types/checkout.types";
-import { FormField } from "@/features/checkout/components/FormField";
+import { FormField } from "@/shared/components/forms/FormField";
 import { Input } from "@/shared/components/ui/Input";
 import { useTranslation } from "@/shared/i18n";
 

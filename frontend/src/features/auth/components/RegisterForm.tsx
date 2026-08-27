@@ -110,8 +110,12 @@ export function RegisterForm() {
           placeholder={t("auth.passwordPlaceholder")}
         />
 
-        <label className="flex cursor-pointer items-start gap-3">
+        <label
+          htmlFor="register-terms"
+          className="flex cursor-pointer items-start gap-3"
+        >
           <input
+            id="register-terms"
             type="checkbox"
             name="terms"
             checked={agreedToTerms}
