@@ -2,7 +2,7 @@
 export const interactiveButtonClasses =
   "btn-interactive origin-center transition-transform duration-250 ease-out active:scale-[0.98] active:translate-y-0";
 
-/** Premium lift — scale, depth shadow, and gold glow for hero CTAs. */
+/** Premium lift — scale, depth shadow, and accent glow for hero CTAs. */
 export const luxuryButtonMotionClasses = "btn-luxury";
 
 export const luxuryPrimaryHoverClasses = "btn-luxury-primary hover:ring-2 hover:ring-accent/30";

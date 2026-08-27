@@ -18,7 +18,7 @@ const variants = {
   ghost:
     "bg-transparent hover:bg-border/60 hover:shadow-sm hover:ring-2 hover:ring-accent/10",
   accent:
-    "bg-accent text-primary shadow-sm hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/30 hover:ring-2 hover:ring-accent/40",
+    "bg-accent text-background shadow-sm hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/30 hover:ring-2 hover:ring-accent/40",
 } as const;
 
 const luxuryVariants = {
@@ -32,7 +32,7 @@ const luxuryVariants = {
   ),
   ghost: variants.ghost,
   accent: cn(
-    "bg-accent text-primary",
+    "bg-accent text-background",
     luxuryPrimaryHoverClasses,
   ),
 } as const;

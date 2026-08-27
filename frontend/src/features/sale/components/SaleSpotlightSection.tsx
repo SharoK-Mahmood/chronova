@@ -63,7 +63,7 @@ export function SaleSpotlightSection({ item }: SaleSpotlightSectionProps) {
                 </div>
               )}
             </div>
-            <div className="absolute left-6 top-6 rounded-full bg-accent px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
+            <div className="absolute left-6 top-6 rounded-full bg-accent px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-background">
               {t("sale.saveAmount")} <Price amountUsd={savings} />
             </div>
           </Link>

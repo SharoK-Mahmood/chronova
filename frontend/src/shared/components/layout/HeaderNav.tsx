@@ -135,7 +135,7 @@ export function UtilityNavLinks() {
             >
               <NavIcon icon={link.icon} />
               {showBadge ? (
-                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-semibold text-primary">
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-semibold text-background">
                   {badgeCount > 9 ? "9+" : badgeCount}
                 </span>
               ) : null}
@@ -162,7 +162,7 @@ export function UtilityNavLinks() {
           >
             <NavIcon icon={link.icon} />
             {showBadge ? (
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-semibold text-primary">
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-semibold text-background">
                 {badgeCount > 9 ? "9+" : badgeCount}
               </span>
             ) : null}

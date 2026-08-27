@@ -128,7 +128,7 @@ export function MobileBottomNav() {
                   <span className="relative">
                     {item.icon}
                     {badge > 0 ? (
-                      <span className="absolute -end-2 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[9px] font-semibold text-primary">
+                      <span className="absolute -end-2 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[9px] font-semibold text-background">
                         {badge > 9 ? "9+" : badge}
                       </span>
                     ) : null}
@@ -150,7 +150,7 @@ export function MobileBottomNav() {
                 <span className="relative">
                   {item.icon}
                   {badge > 0 ? (
-                    <span className="absolute -end-2 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[9px] font-semibold text-primary">
+                    <span className="absolute -end-2 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[9px] font-semibold text-background">
                       {badge > 9 ? "9+" : badge}
                     </span>
                   ) : null}

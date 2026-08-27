@@ -11,7 +11,7 @@ export function NewArrivalsHero() {
     <section className="relative overflow-hidden bg-primary text-background">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,162,39,0.18),transparent_55%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(25,40,65,0.22),transparent_55%)]"
       />
       <div
         aria-hidden

@@ -4,7 +4,8 @@
   --background: #f8f7f4;
   --foreground: #111111;
   --primary: #111111;
-  --accent: #c9a227;
+  /* Deep navy — luxury accent */
+  --accent: #192841;
   --secondary: #6b6b6b;
   --card: #ffffff;
   --border: #e5e5e5;
@@ -210,7 +211,7 @@ body {
     .btn-luxury-primary:hover {
       box-shadow:
         0 28px 56px -16px rgba(17, 17, 17, 0.45),
-        0 12px 32px -12px rgba(201, 162, 39, 0.22);
+        0 12px 32px -12px rgba(25, 40, 65, 0.35);
     }
   }
 
@@ -224,7 +225,7 @@ body {
       background-color: var(--card);
       box-shadow:
         0 24px 48px -18px rgba(17, 17, 17, 0.18),
-        0 8px 28px -10px rgba(201, 162, 39, 0.18);
+        0 8px 28px -10px rgba(25, 40, 65, 0.28);
     }
   }
 

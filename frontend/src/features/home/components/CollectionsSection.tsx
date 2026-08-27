@@ -60,7 +60,7 @@ export function CollectionsSection() {
             <Link
               key={collection.href}
               href={collection.href}
-              className="group relative overflow-hidden rounded-2xl border border-background/10 p-8 transition-all duration-500 hover:border-accent/40 hover:shadow-[0_20px_60px_-20px_rgba(201,162,39,0.25)] sm:p-10"
+              className="group relative overflow-hidden rounded-2xl border border-background/10 p-8 transition-all duration-500 hover:border-accent/40 hover:shadow-[0_20px_60px_-20px_rgba(25,40,65,0.3)] sm:p-10"
             >
               <div
                 aria-hidden
@@ -71,7 +71,7 @@ export function CollectionsSection() {
               />
               <div
                 aria-hidden
-                className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(201,162,39,0.12),transparent_55%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(25,40,65,0.14),transparent_55%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
               />
               <div className="relative">
                 <p className="text-[10px] uppercase tracking-[0.35em] text-accent">

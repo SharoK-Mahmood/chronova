@@ -16,11 +16,11 @@ export function HeroSection() {
     <section className="relative min-h-[92vh] overflow-hidden bg-primary text-background">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_40%,rgba(201,162,39,0.14),transparent_65%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_40%,rgba(25,40,65,0.45),transparent_65%)]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(201,162,39,0.08),transparent_50%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(90,120,160,0.12),transparent_50%)]"
       />
       <div
         aria-hidden
@@ -37,14 +37,14 @@ export function HeroSection() {
 
       <Container className="relative flex min-h-[92vh] flex-col items-center justify-center py-20 lg:py-28">
         <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
-          <p className="inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[0.4em] text-accent">
-            <span className="h-px w-8 bg-accent/60" aria-hidden />
+          <p className="inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[0.4em] text-[#9aafc5]">
+            <span className="h-px w-8 bg-[#9aafc5]/60" aria-hidden />
             {t("site.tagline")}
-            <span className="h-px w-8 bg-accent/60" aria-hidden />
+            <span className="h-px w-8 bg-[#9aafc5]/60" aria-hidden />
           </p>
           <h1 className={cn("mt-6", typography.hero)}>
             {t("home.heroTitle")}
-            <span className="mt-1 block bg-gradient-to-r from-accent via-[#e8c547] to-accent bg-clip-text text-transparent">
+            <span className="mt-1 block bg-gradient-to-r from-[#7a92b0] via-[#c5d0de] to-[#7a92b0] bg-clip-text text-transparent">
               {t("home.heroTitleAccent")}
             </span>
           </h1>

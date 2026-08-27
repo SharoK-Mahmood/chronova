@@ -47,7 +47,7 @@ export function CurrencySwitch({ className }: CurrencySwitchProps) {
               "flex min-h-10 flex-col items-center justify-center rounded-lg px-2 py-1.5 transition-colors",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30",
               selected
-                ? "bg-accent text-primary shadow-sm"
+                ? "bg-accent text-background shadow-sm"
                 : "text-secondary hover:bg-card hover:text-foreground",
             )}
           >

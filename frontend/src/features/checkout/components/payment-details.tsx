@@ -174,7 +174,7 @@ function BankPaymentDetails({ form, onChange }: PaymentDetailsProps) {
           onChange={(event) =>
             onChange({ bankAcknowledged: event.target.checked })
           }
-          className="mt-0.5 h-4 w-4 rounded border-border accent-[var(--color-accent,#c9a227)]"
+          className="mt-0.5 h-4 w-4 rounded border-border accent-[var(--color-accent,#192841)]"
           required
         />
         <span>{t("checkout.bank.acknowledge")}</span>

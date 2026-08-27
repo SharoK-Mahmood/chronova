@@ -60,7 +60,7 @@ export function SaleCard({ item, className }: SaleCardProps) {
             <div className="h-16 w-16 rounded-full border border-border bg-background shadow-sm md:h-20 md:w-20 lg:h-24 lg:w-24" />
           )}
 
-          <span className="absolute bottom-3 left-2 rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-primary md:bottom-4 md:left-4 md:px-3">
+          <span className="absolute bottom-3 left-2 rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-background md:bottom-4 md:left-4 md:px-3">
             {t("sale.percentOff", { percent: discountPercent })}
           </span>
         </div>

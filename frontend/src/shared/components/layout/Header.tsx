@@ -57,7 +57,7 @@ function MobileCartButton() {
     >
       <NavIcon icon="cart" className="h-5 w-5" />
       {showBadge ? (
-        <span className="absolute end-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-semibold text-primary">
+        <span className="absolute end-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-semibold text-background">
           {itemCount > 9 ? "9+" : itemCount}
         </span>
       ) : null}

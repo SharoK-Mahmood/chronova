@@ -11,7 +11,7 @@ export function HomeCta() {
     <section className="relative overflow-hidden border-t border-border bg-primary py-24 text-background sm:py-32">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(201,162,39,0.12),transparent_70%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(25,40,65,0.35),transparent_70%)]"
       />
       <div
         aria-hidden

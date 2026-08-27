@@ -108,7 +108,7 @@ export function OrderTrackingContent({ orderNumber }: OrderTrackingContentProps)
                         className={cn(
                           "relative z-10 mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 text-[10px] font-semibold",
                           isComplete
-                            ? "border-accent bg-accent text-primary"
+                            ? "border-accent bg-accent text-background"
                             : "border-border bg-card text-secondary",
                         )}
                       >

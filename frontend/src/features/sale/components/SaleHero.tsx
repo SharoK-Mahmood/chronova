@@ -16,7 +16,7 @@ export function SaleHero({ maxDiscount, itemCount }: SaleHeroProps) {
     <section className="relative overflow-hidden bg-primary text-background">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(201,162,39,0.22),transparent_50%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(25,40,65,0.28),transparent_50%)]"
       />
       <div
         aria-hidden
