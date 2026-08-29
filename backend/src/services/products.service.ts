@@ -100,6 +100,7 @@ export type ProductResponse = {
   reference?: string;
   subtitle?: string;
   details: ProductDetails;
+  createdAt: string;
 };
 
 function parseImageUrls(raw: string | null | undefined, fallback: string): string[] {
@@ -172,6 +173,7 @@ function toProduct(product: {
   reference: string | null;
   subtitle: string | null;
   detailsJson: string;
+  createdAt: Date;
 }): ProductResponse {
   const imageUrls = parseImageUrls(product.imageUrlsJson, product.imageUrl);
   const details = parseProductDetails(product.detailsJson);
@@ -191,6 +193,7 @@ function toProduct(product: {
     ...(product.reference ? { reference: product.reference } : {}),
     ...(product.subtitle ? { subtitle: product.subtitle } : {}),
     details,
+    createdAt: product.createdAt.toISOString(),
   };
 }
 

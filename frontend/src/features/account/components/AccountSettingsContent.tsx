@@ -109,6 +109,7 @@ export function AccountSettingsContent() {
   const { settings, isHydrated, persistPreferences } = useAccountSettings();
   const {
     user,
+    isAdmin,
     isHydrated: isAuthHydrated,
     updateProfile,
     refreshUser,
@@ -296,6 +297,15 @@ export function AccountSettingsContent() {
           <p className={cn("mt-2 max-w-xl text-background/70", typography.body)}>
             {t("account.settingsSubtitle")}
           </p>
+          {isAdmin ? (
+            <Button
+              href="/admin"
+              variant="accent"
+              className="mt-6 md:hidden"
+            >
+              {t("nav.admin")}
+            </Button>
+          ) : null}
         </Container>
       </section>
 

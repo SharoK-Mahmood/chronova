@@ -4,92 +4,99 @@ import type {
   NewArrivalSpotlight,
 } from "@/features/new-arrivals/types/new-arrival.types";
 
-const SPOTLIGHT_SLUG = "land-dweller-40";
+/** Products remain on New Arrivals for this many days after creation. */
+export const NEW_ARRIVAL_WINDOW_DAYS = 60;
 
-const COLLECTION_ENTRIES: Array<{
-  slug: string;
-  arrivedLabel: string;
-  tagline: string;
-}> = [
-  {
-    slug: "day-date-40",
-    arrivedLabel: "August 2026",
-    tagline: "Platinum prestige, ice-blue dial",
-  },
-  {
-    slug: "sky-dweller",
-    arrivedLabel: "August 2026",
-    tagline: "Dual time for the modern traveller",
-  },
-  {
-    slug: "lady-datejust-28",
-    arrivedLabel: "July 2026",
-    tagline: "Everose gold with diamond-set bezel",
-  },
-  {
-    slug: "datejust-31",
-    arrivedLabel: "July 2026",
-    tagline: "Two-tone elegance for every hour",
-  },
-  {
-    slug: "lumen-28",
-    arrivedLabel: "July 2026",
-    tagline: "Champagne dial, understated grace",
-  },
-  {
-    slug: "chronova-heritage",
-    arrivedLabel: "June 2026",
-    tagline: "House collection, timeless appeal",
-  },
-];
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-function buildArrival(
-  entry: (typeof COLLECTION_ENTRIES)[number],
-  products: Product[],
-): NewArrival | undefined {
-  const product = products.find((item) => item.slug === entry.slug);
+function formatArrivedLabel(createdAt: string): string {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    year: "numeric",
+  }).format(new Date(createdAt));
+}
 
-  if (!product) {
-    return undefined;
+function getTagline(product: Product): string {
+  const subtitle = product.subtitle?.trim();
+  if (subtitle) {
+    return subtitle;
   }
 
+  const description = product.description.trim();
+  if (description.length <= 80) {
+    return description;
+  }
+
+  return `${description.slice(0, 77)}…`;
+}
+
+function getEditorial(product: Product): string {
+  const description = product.description.trim();
+  if (description.length <= 280) {
+    return description;
+  }
+
+  return `${description.slice(0, 277)}…`;
+}
+
+function isWithinNewArrivalWindow(
+  product: Product,
+  now = Date.now(),
+): boolean {
+  if (!product.createdAt) {
+    return false;
+  }
+
+  const createdAt = new Date(product.createdAt).getTime();
+  if (Number.isNaN(createdAt)) {
+    return false;
+  }
+
+  const ageMs = now - createdAt;
+  return ageMs >= 0 && ageMs <= NEW_ARRIVAL_WINDOW_DAYS * MS_PER_DAY;
+}
+
+function sortByNewest(products: Product[]): Product[] {
+  return [...products].sort(
+    (left, right) =>
+      new Date(right.createdAt!).getTime() -
+      new Date(left.createdAt!).getTime(),
+  );
+}
+
+export function getRecentProducts(products: Product[]): Product[] {
+  return sortByNewest(products.filter(isWithinNewArrivalWindow));
+}
+
+function toNewArrival(product: Product): NewArrival {
   return {
     product,
-    arrivedLabel: entry.arrivedLabel,
-    tagline: entry.tagline,
+    arrivedLabel: formatArrivedLabel(product.createdAt!),
+    tagline: getTagline(product),
   };
 }
 
 export function getNewArrivalSpotlight(
   products: Product[],
 ): NewArrivalSpotlight | undefined {
-  const product = products.find((item) => item.slug === SPOTLIGHT_SLUG);
+  const newest = getRecentProducts(products)[0];
 
-  if (!product) {
+  if (!newest) {
     return undefined;
   }
 
   return {
-    product,
-    arrivedLabel: "August 2026",
-    tagline: "The defining release of the season",
-    editorial:
-      "A contemporary icon in Oystersteel and white gold — the Land-Dweller 40 arrives with a honeycomb-motif dial and Flat Jubilee bracelet, redefining everyday luxury.",
+    ...toNewArrival(newest),
+    editorial: getEditorial(newest),
   };
 }
 
 export function getNewArrivalsCollection(products: Product[]): NewArrival[] {
-  return COLLECTION_ENTRIES.map((entry) => buildArrival(entry, products)).filter(
-    (arrival): arrival is NewArrival => arrival !== undefined,
-  );
+  return getRecentProducts(products)
+    .slice(1)
+    .map(toNewArrival);
 }
 
 export function getAllNewArrivals(products: Product[]): NewArrival[] {
-  const spotlight = getNewArrivalSpotlight(products);
-
-  if (!spotlight) {
-    return getNewArrivalsCollection(products);
-  }
-
-  return [spotlight, ...getNewArrivalsCollection(products)];
+  return getRecentProducts(products).map(toNewArrival);
 }

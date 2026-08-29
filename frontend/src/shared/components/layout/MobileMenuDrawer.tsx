@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
+import { useAuth } from "@/features/auth/context/AuthProvider";
 import { CurrencySwitch } from "@/features/currency";
 import {
   MAIN_NAV_LINKS,
@@ -28,6 +29,7 @@ function isNavLinkActive(pathname: string, href: string): boolean {
 export function MobileMenuDrawer({ open, onClose }: MobileMenuDrawerProps) {
   const pathname = usePathname();
   const { t } = useTranslation();
+  const { isAdmin } = useAuth();
 
   useEffect(() => {
     if (!open) {
@@ -142,6 +144,26 @@ export function MobileMenuDrawer({ open, onClose }: MobileMenuDrawerProps) {
               );
             })}
           </ul>
+
+          {isAdmin ? (
+            <div className="mt-4 border-t border-border px-2 pt-4">
+              <Link
+                href="/admin"
+                aria-current={
+                  pathname.startsWith("/admin") ? "page" : undefined
+                }
+                onClick={onClose}
+                className={cn(
+                  "flex min-h-12 items-center rounded-xl px-4 text-base font-medium transition-colors",
+                  pathname.startsWith("/admin")
+                    ? "bg-accent/10 text-accent"
+                    : "text-accent hover:bg-background",
+                )}
+              >
+                {t("nav.admin")}
+              </Link>
+            </div>
+          ) : null}
         </nav>
 
         <div className="border-t border-border px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4">

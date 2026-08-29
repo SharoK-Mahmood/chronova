@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 
 import { listProducts } from "@/features/products";
 import type { Product } from "@/features/products";
@@ -32,15 +31,13 @@ export default async function NewArrivalsPage() {
   const spotlight = getNewArrivalSpotlight(products);
   const collection = getNewArrivalsCollection(products);
 
-  if (!spotlight) {
-    notFound();
-  }
-
   return (
     <>
       <NewArrivalsHero />
-      <SpotlightArrival arrival={spotlight} />
-      <NewArrivalsCollection arrivals={collection} />
+      {spotlight ? <SpotlightArrival arrival={spotlight} /> : null}
+      {collection.length > 0 ? (
+        <NewArrivalsCollection arrivals={collection} />
+      ) : null}
       <NewArrivalsCta />
     </>
   );

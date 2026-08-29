@@ -18,6 +18,8 @@ export type Product = {
   reference?: string;
   subtitle?: string;
   details?: ProductDetails;
+  /** ISO timestamp from the API; used for New Arrivals eligibility. */
+  createdAt?: string;
 };
 
 export type ProductSummary = Pick<
