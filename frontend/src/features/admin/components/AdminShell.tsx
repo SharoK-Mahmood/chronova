@@ -28,8 +28,8 @@ export function AdminShell({ children }: AdminShellProps) {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-primary text-background">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <div>
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6 sm:py-4">
+          <div className="min-w-0">
             <p className="text-[10px] uppercase tracking-[0.35em] text-accent">
               Chronova
             </p>
@@ -37,9 +37,9 @@ export function AdminShell({ children }: AdminShellProps) {
               {t("admin.dashboard")}
             </h1>
           </div>
-          <div className="flex flex-wrap items-center gap-3 text-sm">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
             {user ? (
-              <span className="hidden text-background/70 sm:inline">
+              <span className="max-w-[12rem] truncate text-background/70 sm:max-w-none sm:inline">
                 {user.email}
               </span>
             ) : null}
@@ -60,8 +60,8 @@ export function AdminShell({ children }: AdminShellProps) {
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[12rem_1fr]">
-        <nav className="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
+      <div className="mx-auto grid max-w-6xl gap-5 px-4 py-5 sm:gap-8 sm:px-6 sm:py-8 lg:grid-cols-[12rem_1fr]">
+        <nav className="-mx-4 sticky top-0 z-10 flex gap-2 overflow-x-auto border-b border-border bg-background/95 px-4 py-2 backdrop-blur-sm md:static md:mx-0 md:flex-wrap md:border-0 md:bg-transparent md:px-0 md:py-0 md:backdrop-blur-none lg:flex-col lg:flex-nowrap lg:overflow-visible">
           {NAV_ITEMS.map((item) => {
             const isActive =
               item.href === "/admin"
@@ -73,7 +73,7 @@ export function AdminShell({ children }: AdminShellProps) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "rounded-full px-4 py-2 text-sm whitespace-nowrap",
+                  "shrink-0 rounded-full px-3.5 py-2 text-sm whitespace-nowrap sm:px-4",
                   isActive
                     ? "bg-accent text-background"
                     : "border border-border bg-card text-secondary hover:text-accent",

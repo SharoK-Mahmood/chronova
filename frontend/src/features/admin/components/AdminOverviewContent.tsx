@@ -57,17 +57,17 @@ export function AdminOverviewContent() {
   return (
     <div>
       <h2 className={typography.page}>{t("admin.overview")}</h2>
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-5 grid grid-cols-2 gap-3 sm:mt-8 sm:gap-4 lg:grid-cols-3">
         {cards.map((card) => (
           <Link
             key={card.label}
             href={card.href}
-            className="rounded-2xl border border-border bg-card p-6 shadow-sm transition-colors hover:border-accent/40"
+            className="rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-accent/40 sm:p-6"
           >
-            <p className="text-xs uppercase tracking-[0.25em] text-accent">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-accent sm:text-xs sm:tracking-[0.25em]">
               {card.label}
             </p>
-            <p className="mt-3 text-3xl font-semibold tracking-tight">
+            <p className="mt-2 text-2xl font-semibold tracking-tight sm:mt-3 sm:text-3xl">
               {card.value}
             </p>
           </Link>

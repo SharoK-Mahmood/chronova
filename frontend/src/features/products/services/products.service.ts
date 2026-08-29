@@ -1,4 +1,5 @@
 import type { Product } from "@/features/products/types/product.types";
+import type { ProductDetails } from "@/features/products/types/product-details.types";
 import { apiClient } from "@/shared/lib/api/client";
 
 export type ProductWriteInput = {
@@ -7,12 +8,14 @@ export type ProductWriteInput = {
   description: string;
   price: number;
   currency?: string;
-  imageUrl: string;
-  category: string;
+  imageUrl?: string;
+  imageUrls: string[];
+  category: "men" | "women" | "unisex";
   inStock?: boolean;
   brand: string;
   reference?: string | null;
   subtitle?: string | null;
+  details?: ProductDetails;
 };
 
 export async function listProducts(filters?: {

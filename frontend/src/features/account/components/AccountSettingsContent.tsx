@@ -18,10 +18,9 @@ import { SettingsToggle } from "@/features/account/components/SettingsToggle";
 import { UnsavedChangesDialog } from "@/features/account/components/UnsavedChangesDialog";
 import { useAccountSettings } from "@/features/account/context/AccountSettingsProvider";
 import { useUnsavedChangesGuard } from "@/features/account/hooks/useUnsavedChangesGuard";
-import { readAccountSettings } from "@/features/account/lib/account-settings-storage";
+import { LANGUAGE_OPTIONS } from "@/features/account/constants/settings-nav";
 import { useAuth } from "@/features/auth/context/AuthProvider";
 import { formatUserDisplayName } from "@/features/auth/lib/format-user-name";
-import { LANGUAGE_OPTIONS } from "@/features/account/constants/settings-nav";
 import { listOrders } from "@/features/checkout/services/orders.service";
 import type { PlacedOrder } from "@/features/checkout/types/checkout.types";
 import type {
@@ -31,7 +30,11 @@ import type {
   SavedAddress,
 } from "@/features/account/types/account-settings.types";
 import type { User } from "@/features/auth/types/auth.types";
-import { CurrencySelector, Price } from "@/features/currency";
+import {
+  CurrencySelector,
+  Price,
+  type CurrencyCode,
+} from "@/features/currency";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
 import { Input } from "@/shared/components/ui/Input";
@@ -54,6 +57,7 @@ type SettingsDraft = {
   billingSameAsShipping: boolean;
   notifications: NotificationPreferences;
   language: LanguageCode;
+  currency: CurrencyCode;
 };
 
 function formatOrderDate(iso: string, locale: string): string {
@@ -64,20 +68,34 @@ function formatOrderDate(iso: string, locale: string): string {
   });
 }
 
+function withPrefillAddress(
+  address: SavedAddress | null | undefined,
+  fallbackFullName: string,
+): SavedAddress {
+  const next = { ...(address ?? EMPTY_ADDRESS) };
+  if (!next.fullName.trim() && fallbackFullName) {
+    next.fullName = fallbackFullName;
+  }
+  return next;
+}
+
 function buildDraftFromSources(
   settings: AccountSettings,
   user: User | null,
 ): SettingsDraft {
+  const displayName = user
+    ? formatUserDisplayName(user)
+    : settings.profile.name;
+
   return {
-    profileName: user
-      ? formatUserDisplayName(user)
-      : settings.profile.name,
+    profileName: displayName,
     profileEmail: user?.email ?? settings.profile.email,
-    shippingAddress: settings.shippingAddress ?? { ...EMPTY_ADDRESS },
-    billingAddress: settings.billingAddress ?? { ...EMPTY_ADDRESS },
+    shippingAddress: withPrefillAddress(settings.shippingAddress, displayName),
+    billingAddress: withPrefillAddress(settings.billingAddress, displayName),
     billingSameAsShipping: settings.billingSameAsShipping,
     notifications: { ...settings.notifications },
     language: settings.language,
+    currency: settings.currency,
   };
 }
 
@@ -88,8 +106,7 @@ function draftsEqual(a: SettingsDraft, b: SettingsDraft): boolean {
 export function AccountSettingsContent() {
   const router = useRouter();
   const { t, language } = useTranslation();
-  const { settings, isHydrated, updateSettings, setLanguage } =
-    useAccountSettings();
+  const { settings, isHydrated, persistPreferences } = useAccountSettings();
   const {
     user,
     isHydrated: isAuthHydrated,
@@ -106,15 +123,36 @@ export function AccountSettingsContent() {
   const [isSaving, setIsSaving] = useState(false);
   const [isProfileReady, setIsProfileReady] = useState(false);
   const seedGenerationRef = useRef(0);
+  const seededUserIdRef = useRef<string | null | undefined>(undefined);
+  const isDirtyRef = useRef(false);
 
   useEffect(() => {
     void listOrders()
       .then(setOrders)
       .catch(() => setOrders([]));
-  }, []);
+  }, [user?.id]);
 
   useEffect(() => {
     if (!isHydrated || !isAuthHydrated) {
+      seededUserIdRef.current = undefined;
+      setIsProfileReady(false);
+      return;
+    }
+
+    const userId = user?.id ?? null;
+
+    if (
+      isDirtyRef.current &&
+      seededUserIdRef.current === userId &&
+      draft &&
+      baseline
+    ) {
+      setIsProfileReady(true);
+      return;
+    }
+
+    if (seededUserIdRef.current === userId && draft && baseline) {
+      setIsProfileReady(true);
       return;
     }
 
@@ -127,29 +165,20 @@ export function AccountSettingsContent() {
         return;
       }
 
-      const latestSettings = readAccountSettings();
-      const next = buildDraftFromSources(latestSettings, latestUser);
+      const next = buildDraftFromSources(settings, latestUser);
       setDraft(next);
       setBaseline(next);
-
-      if (latestUser) {
-        updateSettings({
-          profile: {
-            name: formatUserDisplayName(latestUser),
-            email: latestUser.email,
-          },
-        });
-      }
-
+      seededUserIdRef.current = latestUser?.id ?? null;
       setIsProfileReady(true);
     })();
-    // Seed once per visit after auth + settings storage are ready.
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional mount/hydrate seed
-  }, [isAuthHydrated, isHydrated]);
+    // Seed when hydration completes or the signed-in user changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional hydrate seed
+  }, [isAuthHydrated, isHydrated, user?.id]);
 
   const isDirty = Boolean(
     draft && baseline && !draftsEqual(draft, baseline),
   );
+  isDirtyRef.current = isDirty;
   const { isOpen: isLeaveDialogOpen, requestLeave, confirmLeave, cancelLeave } =
     useUnsavedChangesGuard({ enabled: isDirty });
 
@@ -202,7 +231,7 @@ export function AccountSettingsContent() {
         nextEmail = updated.email;
       }
 
-      updateSettings({
+      const nextSettings: AccountSettings = {
         profile: { name: nextName, email: nextEmail },
         shippingAddress: draft.shippingAddress,
         billingAddress: draft.billingSameAsShipping
@@ -210,8 +239,11 @@ export function AccountSettingsContent() {
           : draft.billingAddress,
         billingSameAsShipping: draft.billingSameAsShipping,
         notifications: draft.notifications,
-      });
-      setLanguage(draft.language);
+        language: draft.language,
+        currency: draft.currency,
+      };
+
+      await persistPreferences(nextSettings);
 
       const saved = {
         ...draft,
@@ -561,7 +593,10 @@ export function AccountSettingsContent() {
                     {t("currency.displayDescription")}
                   </p>
                 </div>
-                <CurrencySelector />
+                <CurrencySelector
+                  value={draft.currency}
+                  onChange={(currency) => patchDraft({ currency })}
+                />
               </div>
             </SettingsSection>
 

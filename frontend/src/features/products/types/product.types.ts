@@ -1,3 +1,7 @@
+import type { ProductDetails } from "@/features/products/types/product-details.types";
+
+export type ProductCategory = "men" | "women" | "unisex";
+
 export type Product = {
   id: string;
   name: string;
@@ -6,11 +10,14 @@ export type Product = {
   price: number;
   currency: string;
   imageUrl: string;
-  category: string;
+  /** Full gallery; falls back to `[imageUrl]` when omitted. */
+  imageUrls?: string[];
+  category: ProductCategory | string;
   inStock: boolean;
   brand: string;
   reference?: string;
   subtitle?: string;
+  details?: ProductDetails;
 };
 
 export type ProductSummary = Pick<
@@ -21,6 +28,7 @@ export type ProductSummary = Pick<
   | "price"
   | "currency"
   | "imageUrl"
+  | "imageUrls"
   | "brand"
   | "reference"
   | "subtitle"

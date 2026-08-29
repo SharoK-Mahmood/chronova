@@ -9,6 +9,8 @@ import { cn } from "@/shared/lib/utils/cn";
 
 type CurrencySelectorProps = {
   className?: string;
+  value?: CurrencyCode;
+  onChange?: (currency: CurrencyCode) => void;
 };
 
 function ChevronIcon({ open }: { open: boolean }) {
@@ -32,13 +34,19 @@ function ChevronIcon({ open }: { open: boolean }) {
   );
 }
 
-export function CurrencySelector({ className }: CurrencySelectorProps) {
+export function CurrencySelector({
+  className,
+  value,
+  onChange,
+}: CurrencySelectorProps) {
   const { currency, setCurrency, isHydrated } = useCurrency();
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const listboxId = useId();
   const options = Object.keys(CURRENCIES) as CurrencyCode[];
+  const selected = value ?? currency;
+  const isControlled = value !== undefined && onChange !== undefined;
 
   useEffect(() => {
     if (!open) {
@@ -66,7 +74,7 @@ export function CurrencySelector({ className }: CurrencySelectorProps) {
     };
   }, [open]);
 
-  if (!isHydrated) {
+  if (!isHydrated && !isControlled) {
     return (
       <div
         className={cn(
@@ -79,7 +87,11 @@ export function CurrencySelector({ className }: CurrencySelectorProps) {
   }
 
   function selectCurrency(code: CurrencyCode) {
-    setCurrency(code);
+    if (isControlled) {
+      onChange(code);
+    } else {
+      setCurrency(code);
+    }
     setOpen(false);
   }
 
@@ -102,7 +114,7 @@ export function CurrencySelector({ className }: CurrencySelectorProps) {
           open && "border-accent/40 bg-card ring-1 ring-accent/15",
         )}
       >
-        <span>{currency}</span>
+        <span>{selected}</span>
         <ChevronIcon open={open} />
       </button>
 
@@ -114,7 +126,7 @@ export function CurrencySelector({ className }: CurrencySelectorProps) {
           className="absolute end-0 top-[calc(100%+0.375rem)] z-50 min-w-[10.5rem] overflow-hidden rounded-xl border border-border bg-card py-1 shadow-[0_12px_40px_-12px_rgba(17,17,17,0.18)]"
         >
         {options.map((code) => {
-          const isSelected = currency === code;
+          const isSelected = selected === code;
 
           return (
             <li key={code} role="presentation">

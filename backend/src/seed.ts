@@ -32,11 +32,18 @@ async function seed() {
         price: product.price,
         currency: product.currency,
         imageUrl: product.imageUrl,
-        category: product.category,
+        imageUrlsJson: JSON.stringify([product.imageUrl]),
+        category:
+          product.category === "women"
+            ? "women"
+            : product.category === "unisex"
+              ? "unisex"
+              : "men",
         inStock: product.inStock,
         brand: product.brand,
         reference: product.reference ?? null,
         subtitle: product.subtitle ?? null,
+        detailsJson: "{}",
       },
       create: {
         id: product.id,
@@ -46,11 +53,18 @@ async function seed() {
         price: product.price,
         currency: product.currency,
         imageUrl: product.imageUrl,
-        category: product.category,
+        imageUrlsJson: JSON.stringify([product.imageUrl]),
+        category:
+          product.category === "women"
+            ? "women"
+            : product.category === "unisex"
+              ? "unisex"
+              : "men",
         inStock: product.inStock,
         brand: product.brand,
         reference: product.reference ?? null,
         subtitle: product.subtitle ?? null,
+        detailsJson: "{}",
       },
     });
   }

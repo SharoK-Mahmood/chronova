@@ -3,6 +3,10 @@ import { Router } from "express";
 import { asyncHandler } from "../lib/async-handler.js";
 import { requireAuth, toPublicUser, type AuthedRequest } from "../middleware/auth.js";
 import {
+  getAccountPreferences,
+  updateAccountPreferences,
+} from "../services/account-preferences.service.js";
+import {
   login,
   loginWithGoogle,
   register,
@@ -49,5 +53,28 @@ authRouter.patch(
   asyncHandler(async (req, res) => {
     const user = await updateProfile((req as AuthedRequest).user.id, req.body);
     res.json({ user });
+  }),
+);
+
+authRouter.get(
+  "/me/preferences",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const preferences = await getAccountPreferences(
+      (req as AuthedRequest).user.id,
+    );
+    res.json({ preferences });
+  }),
+);
+
+authRouter.patch(
+  "/me/preferences",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const preferences = await updateAccountPreferences(
+      (req as AuthedRequest).user.id,
+      req.body,
+    );
+    res.json({ preferences });
   }),
 );

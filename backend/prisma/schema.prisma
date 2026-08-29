@@ -8,33 +8,43 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  passwordHash String?
-  googleId     String?  @unique
-  firstName    String
-  lastName     String
-  role         String   @default("customer")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  orders       Order[]
+  id                    String   @id @default(cuid())
+  email                 String   @unique
+  passwordHash          String?
+  googleId              String?  @unique
+  firstName             String
+  lastName              String
+  role                  String   @default("customer")
+  language              String   @default("en")
+  currency              String   @default("USD")
+  emailOrders           Boolean  @default(true)
+  emailPromotions       Boolean  @default(false)
+  pushNotifications     Boolean  @default(true)
+  billingSameAsShipping Boolean  @default(true)
+  shippingAddressJson   String?
+  billingAddressJson    String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  orders                Order[]
 }
 
 model Product {
-  id          String   @id @default(cuid())
-  name        String
-  slug        String   @unique
-  description String
-  price       Float
-  currency    String   @default("USD")
-  imageUrl    String
-  category    String
-  inStock     Boolean  @default(true)
-  brand       String
-  reference   String?
-  subtitle    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(cuid())
+  name          String
+  slug          String   @unique
+  description   String
+  price         Float
+  currency      String   @default("USD")
+  imageUrl      String
+  imageUrlsJson String   @default("[]")
+  category      String
+  inStock       Boolean  @default(true)
+  brand         String
+  reference     String?
+  subtitle      String?
+  detailsJson   String   @default("{}")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Order {

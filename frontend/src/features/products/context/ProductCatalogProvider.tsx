@@ -23,6 +23,11 @@ function toSummary(product: Product): ProductSummary {
     price: product.price,
     currency: product.currency,
     imageUrl: product.imageUrl,
+    imageUrls: product.imageUrls?.length
+      ? product.imageUrls
+      : product.imageUrl
+        ? [product.imageUrl]
+        : [],
     brand: product.brand,
     reference: product.reference,
     subtitle: product.subtitle,
@@ -73,7 +78,15 @@ export function ProductCatalogProvider({ children }: ProductCatalogProviderProps
 
   const getProductsByCategory = useCallback(
     (category: string) =>
-      products.filter((product) => product.category === category),
+      products.filter((product) => {
+        if (category === "men" || category === "women") {
+          return (
+            product.category === category || product.category === "unisex"
+          );
+        }
+
+        return product.category === category;
+      }),
     [products],
   );
 

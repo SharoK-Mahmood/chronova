@@ -65,7 +65,29 @@ Without those variables, the Google button shows a configuration message instead
 | `npm run dev:backend` | Backend |
 | `npm run db:setup` | Backend database + seed |
 
+## Product images
+
+All product photos live in **one folder** (not in the database):
+
+```text
+backend/uploads/products/{product-slug}/your-image.avif
+```
+
+- Admin uploads use the product **slug** as the folder name
+- You can also drop files there manually, then paste the URL in admin:
+  `/uploads/products/{slug}/filename.avif`
+- The database only stores those URL strings
+
+Migrate older flat uploads / public images:
+
+```bash
+cd backend
+npm run images:migrate
+npm run db:seed
+```
+
 ## Layout
 
 - `backend/` — Express + Prisma (SQLite locally)
+- `backend/uploads/products/` — product image library (by model slug)
 - `frontend/` — Next.js storefront and admin

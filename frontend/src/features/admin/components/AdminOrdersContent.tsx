@@ -18,6 +18,9 @@ const STATUSES: PlacedOrder["status"][] = [
   "delivered",
 ];
 
+const selectClassName =
+  "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20 sm:w-auto";
+
 export function AdminOrdersContent() {
   const { t } = useTranslation();
   const [orders, setOrders] = useState<PlacedOrder[]>([]);
@@ -53,6 +56,29 @@ export function AdminOrdersContent() {
     }
   }
 
+  function statusSelect(order: PlacedOrder) {
+    return (
+      <select
+        value={order.status}
+        disabled={updating === order.orderNumber}
+        onChange={(event) =>
+          void handleStatusChange(
+            order.orderNumber,
+            event.target.value as PlacedOrder["status"],
+          )
+        }
+        className={selectClassName}
+        aria-label={t("admin.status")}
+      >
+        {STATUSES.map((status) => (
+          <option key={status} value={status}>
+            {t(`admin.statuses.${status}`)}
+          </option>
+        ))}
+      </select>
+    );
+  }
+
   return (
     <div>
       <h2 className={typography.page}>{t("admin.orders")}</h2>
@@ -64,60 +90,85 @@ export function AdminOrdersContent() {
       ) : orders.length === 0 ? (
         <p className="mt-8 text-secondary">{t("admin.emptyOrders")}</p>
       ) : (
-        <div className="mt-8 overflow-x-auto rounded-2xl border border-border bg-card">
-          <table className="min-w-full text-left text-sm">
-            <thead className="border-b border-border text-xs uppercase tracking-[0.2em] text-secondary">
-              <tr>
-                <th className="px-4 py-3 font-medium">#</th>
-                <th className="px-4 py-3 font-medium">{t("admin.customer")}</th>
-                <th className="px-4 py-3 font-medium">{t("admin.placedAt")}</th>
-                <th className="px-4 py-3 font-medium">{t("admin.total")}</th>
-                <th className="px-4 py-3 font-medium">{t("admin.status")}</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {orders.map((order) => (
-                <tr key={order.orderNumber}>
-                  <td className="px-4 py-3 font-medium">{order.orderNumber}</td>
-                  <td className="px-4 py-3">
-                    <p>{order.contact.email}</p>
-                    <p className="text-xs text-secondary">
+        <>
+          {/* Mobile card list */}
+          <div className="mt-5 space-y-3 md:hidden">
+            {orders.map((order) => (
+              <article
+                key={order.orderNumber}
+                className="rounded-2xl border border-border bg-card p-4"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-medium">{order.orderNumber}</p>
+                    <p className="mt-1 truncate text-sm">{order.contact.email}</p>
+                    <p className="mt-0.5 text-xs text-secondary">
                       {order.lineItems.length}{" "}
                       {order.lineItems.length === 1
                         ? t("common.item")
                         : t("common.items")}
+                      {" · "}
+                      {new Date(order.placedAt).toLocaleString()}
                     </p>
-                  </td>
-                  <td className="px-4 py-3">
-                    {new Date(order.placedAt).toLocaleString()}
-                  </td>
-                  <td className="px-4 py-3">
+                  </div>
+                  <p className="shrink-0 font-medium">
                     <Price amountUsd={order.totalUsd} />
-                  </td>
-                  <td className="px-4 py-3">
-                    <select
-                      value={order.status}
-                      disabled={updating === order.orderNumber}
-                      onChange={(event) =>
-                        void handleStatusChange(
-                          order.orderNumber,
-                          event.target.value as PlacedOrder["status"],
-                        )
-                      }
-                      className="rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20"
-                    >
-                      {STATUSES.map((status) => (
-                        <option key={status} value={status}>
-                          {t(`admin.statuses.${status}`)}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
+                  </p>
+                </div>
+                <div className="mt-4 border-t border-border pt-3">
+                  <label className="mb-1.5 block text-xs text-secondary">
+                    {t("admin.status")}
+                  </label>
+                  {statusSelect(order)}
+                </div>
+              </article>
+            ))}
+          </div>
+
+          {/* Desktop table */}
+          <div className="mt-8 hidden overflow-x-auto rounded-2xl border border-border bg-card md:block">
+            <table className="min-w-full text-left text-sm">
+              <thead className="border-b border-border text-xs uppercase tracking-[0.2em] text-secondary">
+                <tr>
+                  <th className="px-4 py-3 font-medium">#</th>
+                  <th className="px-4 py-3 font-medium">
+                    {t("admin.customer")}
+                  </th>
+                  <th className="px-4 py-3 font-medium">
+                    {t("admin.placedAt")}
+                  </th>
+                  <th className="px-4 py-3 font-medium">{t("admin.total")}</th>
+                  <th className="px-4 py-3 font-medium">{t("admin.status")}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {orders.map((order) => (
+                  <tr key={order.orderNumber}>
+                    <td className="px-4 py-3 font-medium">
+                      {order.orderNumber}
+                    </td>
+                    <td className="px-4 py-3">
+                      <p>{order.contact.email}</p>
+                      <p className="text-xs text-secondary">
+                        {order.lineItems.length}{" "}
+                        {order.lineItems.length === 1
+                          ? t("common.item")
+                          : t("common.items")}
+                      </p>
+                    </td>
+                    <td className="px-4 py-3">
+                      {new Date(order.placedAt).toLocaleString()}
+                    </td>
+                    <td className="px-4 py-3">
+                      <Price amountUsd={order.totalUsd} />
+                    </td>
+                    <td className="px-4 py-3">{statusSelect(order)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   );

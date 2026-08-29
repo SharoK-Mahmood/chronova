@@ -1,3 +1,4 @@
+import type { CurrencyCode } from "@/features/currency/constants/currency";
 import type { RegionalAddress } from "@/shared/lib/address/regional-address";
 
 export type LanguageCode = "en" | "ar" | "ku";
@@ -22,6 +23,7 @@ export type AccountSettings = {
   billingSameAsShipping: boolean;
   notifications: NotificationPreferences;
   language: LanguageCode;
+  currency: CurrencyCode;
 };
 
 export type SettingsSectionId =

@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { getProduct } from "@/features/products";
 import { ProductActions } from "@/features/products/components/ProductActions";
+import { ProductDetailsPanel } from "@/features/products/components/ProductDetailsPanel";
+import { ProductImageGallery } from "@/features/products/components/ProductImageGallery";
 import { ProductPrice } from "@/features/products/components/ProductPrice";
 import { ApiClientError } from "@/shared/lib/api/client";
 import { Container } from "@/shared/components/ui/Container";
-import { cn } from "@/shared/lib/utils/cn";
-import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
@@ -67,27 +66,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
   return (
     <Container className="py-12 sm:py-16">
       <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
-        <div
-          className={cn(
-            "relative flex aspect-square items-center justify-center overflow-hidden rounded-3xl",
-            hasProductPhoto(product.imageUrl)
-              ? "bg-white"
-              : "border border-border bg-background",
-          )}
-        >
-          {hasProductPhoto(product.imageUrl) ? (
-            <Image
-              src={product.imageUrl}
-              alt={imageAlt}
-              fill
-              priority
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              className="object-contain p-8"
-            />
-          ) : (
-            <div className="h-40 w-40 rounded-full border border-border bg-card shadow-sm" />
-          )}
-        </div>
+        <ProductImageGallery
+          imageUrl={product.imageUrl}
+          imageUrls={product.imageUrls}
+          alt={imageAlt}
+        />
 
         <div className="flex flex-col gap-6">
           <div>
@@ -115,6 +98,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <ProductActions slug={product.slug} name={product.name} />
         </div>
       </div>
+
+      <ProductDetailsPanel details={product.details} brand={product.brand} />
     </Container>
   );
 }
