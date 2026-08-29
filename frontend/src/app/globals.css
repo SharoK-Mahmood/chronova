@@ -261,4 +261,72 @@ body {
     background-size: 128px 128px;
     mix-blend-mode: overlay;
   }
+
+  .animate-featured-progress {
+    animation-name: featured-progress;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+
+  .animate-featured-ken {
+    animation: featured-ken 5.5s ease-out forwards;
+  }
+
+  .animate-featured-copy {
+    animation: featured-copy 0.7s ease-out both;
+  }
+
+  .featured-marquee {
+    animation-name: featured-marquee;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    will-change: transform;
+  }
+}
+
+@keyframes featured-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes featured-ken {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes featured-copy {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes featured-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-featured-progress,
+  .animate-featured-ken,
+  .animate-featured-copy,
+  .featured-marquee {
+    animation: none !important;
+  }
 }

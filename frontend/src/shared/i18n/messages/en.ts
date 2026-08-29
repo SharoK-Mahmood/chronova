@@ -481,10 +481,16 @@ export const messages = {
       newDesc: "The latest from the world's finest maisons.",
     },
     featured: {
-      eyebrow: "Curated selection",
-      title: "Featured watches",
+      eyebrow: "In motion",
+      title: "Watches in the current",
       subtitle:
-        "Handpicked from our collection — exceptional pieces that define modern luxury horology.",
+        "A shifting stream from the full collection — including new arrivals — drifting across the room.",
+      pieceOf: "Piece {current} of {total}",
+      reference: "Reference {ref}",
+      discover: "Discover piece",
+      empty: "Featured pieces will appear here soon.",
+      dragHint: "Scroll or drag to explore",
+      swipeHint: "Swipe to browse",
     },
     cta: {
       eyebrow: "The Chronova experience",

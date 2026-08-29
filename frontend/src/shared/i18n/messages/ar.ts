@@ -478,9 +478,16 @@ export const messages: Messages = {
       newDesc: "الأحدث من أ finest maisons.",
     },
     featured: {
-      eyebrow: "اختيار منسّق",
-      title: "ساعات مميزة",
-      subtitle: "مختارة بعناية — قطع تعرّف الفخامة العصرية.",
+      eyebrow: "في حركة",
+      title: "ساعات في التيار",
+      subtitle:
+        "تيار متغيّر من المجموعة كاملة — بما فيها الوصول الجديد — يعبر أمامك.",
+      pieceOf: "القطعة {current} من {total}",
+      reference: "المرجع {ref}",
+      discover: "اكتشف القطعة",
+      empty: "ستظهر القطع المميزة هنا قريباً.",
+      dragHint: "مرّر أو اسحب للاستكشاف",
+      swipeHint: "مرّر للتصفح",
     },
     cta: {
       eyebrow: "تجربة كرونova",
