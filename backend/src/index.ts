@@ -41,6 +41,6 @@ app.use("/api/uploads", uploadsRouter);
 
 app.use(errorHandler);
 
-app.listen(env.port, () => {
-  console.log(`Chronova API listening on http://localhost:${env.port}`);
+app.listen(env.port, "0.0.0.0", () => {
+  console.log(`Chronova API listening on port ${env.port}`);
 });
