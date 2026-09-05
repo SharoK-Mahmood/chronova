@@ -7,6 +7,7 @@ import {
   updateOrderStatus,
 } from "@/features/checkout/services/orders.service";
 import type { PlacedOrder } from "@/features/checkout/types/checkout.types";
+import { notifyNotificationsChanged } from "@/features/notifications/context/NotificationsProvider";
 import { Price } from "@/features/currency";
 import { useTranslation } from "@/shared/i18n";
 import { type as typography } from "@/shared/lib/typography";
@@ -49,6 +50,7 @@ export function AdminOrdersContent() {
           order.orderNumber === orderNumber ? updated : order,
         ),
       );
+      notifyNotificationsChanged();
     } catch {
       setError(t("admin.loadError"));
     } finally {

@@ -7,6 +7,7 @@ import { BACKEND_ROOT, ensureProductUploadsDir } from "./lib/uploads.js";
 import { errorHandler } from "./middleware/error.js";
 import { adminRouter, ordersRouter } from "./routes/orders.js";
 import { authRouter } from "./routes/auth.js";
+import { notificationsRouter } from "./routes/notifications.js";
 import { productsRouter } from "./routes/products.js";
 import { uploadsRouter } from "./routes/uploads.js";
 
@@ -63,6 +64,7 @@ app.get("/api/health", (_req, res) => {
 app.use("/api/auth", authRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/orders", ordersRouter);
+app.use("/api/notifications", notificationsRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/uploads", uploadsRouter);
 

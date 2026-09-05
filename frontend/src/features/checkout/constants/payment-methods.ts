@@ -3,7 +3,6 @@ import type {
   PaymentMethodId,
   PlacedOrder,
 } from "@/features/checkout/types/checkout.types";
-import { isCardDetailsComplete } from "@/features/checkout/lib/card-format";
 
 export type PaymentMethodDefinition = {
   id: PaymentMethodId;
@@ -18,36 +17,12 @@ export type PaymentMethodDefinition = {
 
 export const PAYMENT_METHODS: PaymentMethodDefinition[] = [
   {
-    id: "card",
-    labelKey: "checkout.paymentMethods.card",
-    descriptionKey: "checkout.paymentMethods.cardDesc",
+    id: "cod",
+    labelKey: "checkout.paymentMethods.cod",
+    descriptionKey: "checkout.paymentMethods.codDesc",
     submitLabelKey: "checkout.placeOrder",
     orderStatus: "confirmed",
-    validate: (form) =>
-      isCardDetailsComplete(form.cardDetails) ? null : "checkout.cardError",
-    formatPaymentLabel: (_form, label) => label,
-  },
-  {
-    id: "paypal",
-    labelKey: "checkout.paymentMethods.paypal",
-    descriptionKey: "checkout.paymentMethods.paypalDesc",
-    submitLabelKey: "checkout.continuePayPal",
-    orderStatus: "confirmed",
-    validate: (form) =>
-      form.paypalEmail.trim() ? null : "checkout.paypalError",
-    formatPaymentLabel: (form, label) =>
-      form.paypalEmail.trim()
-        ? `${label} (${form.paypalEmail.trim()})`
-        : label,
-  },
-  {
-    id: "bank-transfer",
-    labelKey: "checkout.paymentMethods.bank",
-    descriptionKey: "checkout.paymentMethods.bankDesc",
-    submitLabelKey: "checkout.confirmBankOrder",
-    orderStatus: "processing",
-    validate: (form) =>
-      form.bankAcknowledged ? null : "checkout.bankError",
+    validate: () => null,
     formatPaymentLabel: (_form, label) => label,
   },
 ];

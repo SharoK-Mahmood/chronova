@@ -8,6 +8,7 @@ import { AccountSettingsProvider } from "@/features/account";
 import { AuthProvider } from "@/features/auth/context/AuthProvider";
 import { CartDrawer, CartProvider } from "@/features/cart";
 import { CurrencyProvider } from "@/features/currency";
+import { NotificationsProvider } from "@/features/notifications";
 import { ProductCatalogProvider } from "@/features/products/context/ProductCatalogProvider";
 import { WishlistProvider } from "@/features/wishlist";
 
@@ -18,18 +19,20 @@ type ProvidersProps = {
 function AppProviders({ children }: ProvidersProps) {
   return (
     <AuthProvider>
-      <CurrencyProvider>
-        <AccountSettingsProvider>
-          <ProductCatalogProvider>
-            <CartProvider>
-              <WishlistProvider>
-                {children}
-                <CartDrawer />
-              </WishlistProvider>
-            </CartProvider>
-          </ProductCatalogProvider>
-        </AccountSettingsProvider>
-      </CurrencyProvider>
+      <NotificationsProvider>
+        <CurrencyProvider>
+          <AccountSettingsProvider>
+            <ProductCatalogProvider>
+              <CartProvider>
+                <WishlistProvider>
+                  {children}
+                  <CartDrawer />
+                </WishlistProvider>
+              </CartProvider>
+            </ProductCatalogProvider>
+          </AccountSettingsProvider>
+        </CurrencyProvider>
+      </NotificationsProvider>
     </AuthProvider>
   );
 }

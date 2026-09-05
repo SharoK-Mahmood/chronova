@@ -8,6 +8,7 @@ import {
   ORDER_STATUSES,
   type OrderStatus,
 } from "../lib/commerce.js";
+import { createOrderStatusNotification } from "./notifications.service.js";
 import { badRequest, forbidden, notFound } from "../lib/http-error.js";
 import { prisma } from "../lib/prisma.js";
 import type { AuthUser } from "../middleware/auth.js";
@@ -31,9 +32,8 @@ const createOrderSchema = z.object({
   }),
   shippingAddress: addressSchema,
   deliveryMethodId: z.enum(["standard", "express", "white-glove"]),
-  paymentMethodId: z.enum(["card", "paypal", "bank-transfer"]),
+  paymentMethodId: z.enum(["cod"]),
   paymentLabel: z.string().trim().min(1).optional(),
-  paypalEmail: z.string().trim().email().optional(),
   items: z
     .array(
       z.object({
@@ -59,7 +59,7 @@ export type PlacedOrderResponse = {
   shippingAddress: z.infer<typeof addressSchema>;
   deliveryMethodId: "standard" | "express" | "white-glove";
   deliveryLabel: string;
-  paymentMethodId: "card" | "paypal" | "bank-transfer";
+  paymentMethodId: "cod" | "card" | "paypal" | "bank-transfer";
   paymentLabel: string;
   lineItems: Array<{
     slug: string;
@@ -168,10 +168,7 @@ export async function createOrder(user: AuthUser, input: unknown) {
   const shippingUsd = delivery.shippingUsd;
   const totalUsd = subtotalUsd + shippingUsd;
 
-  let paymentLabel = data.paymentLabel ?? payment.label;
-  if (data.paymentMethodId === "paypal" && data.paypalEmail) {
-    paymentLabel = `${payment.label} (${data.paypalEmail})`;
-  }
+  const paymentLabel = data.paymentLabel ?? payment.label;
 
   const order = await prisma.order.create({
     data: {
@@ -238,6 +235,14 @@ export async function updateOrderStatus(orderNumber: string, input: unknown) {
     where: { orderNumber },
     data: { status },
   });
+
+  if (existing.status !== status) {
+    await createOrderStatusNotification({
+      userId: order.userId,
+      orderNumber: order.orderNumber,
+      status,
+    });
+  }
 
   return toOrderResponse(order);
 }

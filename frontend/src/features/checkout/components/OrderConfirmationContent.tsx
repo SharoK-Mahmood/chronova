@@ -106,6 +106,11 @@ export function OrderConfirmationContent({
             <p className="mt-4 text-background/70">
               {t("checkout.confirmation.sentTo", { email: order.contact.email })}
             </p>
+            {order.paymentMethodId === "cod" ? (
+              <p className="mt-3 text-sm text-background/60">
+                {t("checkout.confirmation.codNext")}
+              </p>
+            ) : null}
             <p className="mt-6 inline-flex rounded-full border border-accent/30 bg-accent/10 px-4 py-2 text-sm font-medium text-accent">
               {t("checkout.confirmation.order", { number: order.orderNumber })}
             </p>

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useCart } from "@/features/cart";
 import { useWishlist } from "@/features/wishlist";
 import { AccountMenuDropdown } from "@/features/account/components/AccountMenuDropdown";
+import { NotificationBell } from "@/features/notifications";
 import { BrandsNavLink } from "@/shared/components/layout/BrandsNavMenu";
 import { NavIcon } from "@/shared/components/layout/NavIcon";
 import {
@@ -100,6 +101,7 @@ export function UtilityNavLinks() {
 
   return (
     <>
+      <NotificationBell />
       {UTILITY_NAV_LINKS.map((link) => {
         const isActive = isNavLinkActive(pathname, link.href);
         const label = t(link.labelKey);

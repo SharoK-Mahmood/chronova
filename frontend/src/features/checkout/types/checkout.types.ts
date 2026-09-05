@@ -9,23 +9,20 @@ export type ShippingAddress = RegionalAddress;
 
 export type DeliveryMethodId = "standard" | "express" | "white-glove";
 
-export type PaymentMethodId = "card" | "paypal" | "bank-transfer";
+export type PaymentMethodId = "cod";
 
-export type CardDetails = {
-  nameOnCard: string;
-  cardNumber: string;
-  expiry: string;
-  cvv: string;
-};
+/** Payment method ids that may appear on stored orders (including legacy). */
+export type StoredPaymentMethodId =
+  | PaymentMethodId
+  | "card"
+  | "paypal"
+  | "bank-transfer";
 
 export type CheckoutFormData = {
   contact: ContactInformation;
   shippingAddress: ShippingAddress;
   deliveryMethodId: DeliveryMethodId;
   paymentMethodId: PaymentMethodId;
-  cardDetails: CardDetails;
-  paypalEmail: string;
-  bankAcknowledged: boolean;
 };
 
 export type OrderLineItem = {
@@ -45,7 +42,7 @@ export type PlacedOrder = {
   shippingAddress: ShippingAddress;
   deliveryMethodId: DeliveryMethodId;
   deliveryLabel: string;
-  paymentMethodId: PaymentMethodId;
+  paymentMethodId: StoredPaymentMethodId;
   paymentLabel: string;
   lineItems: OrderLineItem[];
   subtotalUsd: number;

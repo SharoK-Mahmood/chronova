@@ -1,13 +1,15 @@
-import type { PlacedOrder } from "@/features/checkout/types/checkout.types";
+import type {
+  PaymentMethodId,
+  PlacedOrder,
+} from "@/features/checkout/types/checkout.types";
 import { apiClient } from "@/shared/lib/api/client";
 
 export type CreateOrderInput = {
   contact: PlacedOrder["contact"];
   shippingAddress: PlacedOrder["shippingAddress"];
   deliveryMethodId: PlacedOrder["deliveryMethodId"];
-  paymentMethodId: PlacedOrder["paymentMethodId"];
+  paymentMethodId: PaymentMethodId;
   paymentLabel?: string;
-  paypalEmail?: string;
   items: Array<{ slug: string; quantity: number }>;
   currency: PlacedOrder["currency"];
 };

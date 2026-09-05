@@ -8,13 +8,5 @@ export const DEFAULT_CHECKOUT_FORM: CheckoutFormData = {
   },
   shippingAddress: { ...EMPTY_REGIONAL_ADDRESS },
   deliveryMethodId: "standard",
-  paymentMethodId: "card",
-  cardDetails: {
-    nameOnCard: "",
-    cardNumber: "",
-    expiry: "",
-    cvv: "",
-  },
-  paypalEmail: "",
-  bankAcknowledged: false,
+  paymentMethodId: "cod",
 };

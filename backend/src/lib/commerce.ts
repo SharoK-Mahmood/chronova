@@ -24,19 +24,9 @@ export const DELIVERY_METHODS = [
 
 export const PAYMENT_METHODS = [
   {
-    id: "card",
-    label: "Card",
+    id: "cod",
+    label: "Cash on delivery",
     orderStatus: "confirmed",
-  },
-  {
-    id: "paypal",
-    label: "PayPal",
-    orderStatus: "confirmed",
-  },
-  {
-    id: "bank-transfer",
-    label: "Bank transfer",
-    orderStatus: "processing",
   },
 ] as const;
 

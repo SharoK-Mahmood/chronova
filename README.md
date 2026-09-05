@@ -46,7 +46,7 @@ Open [http://localhost:3000](http://localhost:3000). Admin is at [http://localho
 | | |
 |---|---|
 | Email | `admin@chronova.local` |
-| Password | `ChronovaAdmin123!` |
+| Password | `admin123` |
 
 Customers register at `/register` or sign in with Google. Only users with `role === "admin"` can open `/admin`.
 

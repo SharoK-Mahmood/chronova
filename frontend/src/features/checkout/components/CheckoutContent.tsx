@@ -104,7 +104,6 @@ export function CheckoutContent() {
         shippingAddress: form.shippingAddress,
         deliveryMethodId: form.deliveryMethodId,
         paymentMethodId: form.paymentMethodId,
-        paypalEmail: form.paypalEmail.trim() || undefined,
         items: lineItems.map((item) => ({
           slug: item.slug,
           quantity: item.quantity,
@@ -230,7 +229,7 @@ export function CheckoutContent() {
                     step={3}
                     title={t("checkout.steps.payment")}
                   >
-                    <PaymentMethodSection form={form} onChange={patchForm} />
+                    <PaymentMethodSection />
                   </CheckoutPanel>
                 </div>
               </div>

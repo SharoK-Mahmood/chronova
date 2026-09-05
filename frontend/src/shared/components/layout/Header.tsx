@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCallback, useState } from "react";
 
 import { useCart } from "@/features/cart";
+import { NotificationBell } from "@/features/notifications";
 import { HeaderSearch } from "@/features/search";
 import { CurrencySelector } from "@/features/currency";
 import {
@@ -101,7 +102,10 @@ export function Header() {
               />
             </Link>
 
-            <MobileCartButton />
+            <div className="flex items-center gap-0.5">
+              <NotificationBell />
+              <MobileCartButton />
+            </div>
           </div>
 
           <HeaderSearch variant="mobile" className="pb-3" />

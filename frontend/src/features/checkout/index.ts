@@ -26,4 +26,5 @@ export type {
   PaymentMethodId,
   PlacedOrder,
   ShippingAddress,
+  StoredPaymentMethodId,
 } from "@/features/checkout/types/checkout.types";

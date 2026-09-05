@@ -31,7 +31,7 @@ const nextConfig: NextConfig = {
   // Allow Cloudflare quick tunnels (and similar) to load Next.js dev assets.
   allowedDevOrigins: [
     "*.trycloudflare.com",
-    "glucose-alice-amino-candy.trycloudflare.com",
+    "implemented-themes-examinations-video.trycloudflare.com",
   ],
   // Hide the Next.js DevTools "N" badge during local development.
   // Error overlays still appear if something breaks.
