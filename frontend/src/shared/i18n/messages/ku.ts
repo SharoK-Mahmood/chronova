@@ -438,8 +438,9 @@ export const messages: Messages = {
     heroTitle: "لەوێ کە وردبینی",
     heroTitleAccent: "لەگەڵ جوانی هەمیشەیی دەگات",
     heroSubtitle:
-      "کاتژمێری لوکس بۆ هەر ساتێک. کاتژمێری نایاب لە باشترین ماisonەکان — هەڵبژێردراو بۆ ئەوانەی تایبەتن.",
+      "کاتژمێری نایاب لە باشترین ماisonەکان — هەڵبژێردراو بۆ ئەوانەی ڕەچە و پیشەسازی بەرز دەنرخێنن.",
     shopCollection: "کۆمەڵە بکڕە",
+    exploreMaisons: "ماisonەکان بگەڕێ",
     viewBestseller: "زۆرترین فرۆش ببینە",
     maisons: "ماisonەکان",
     timepieces: "کاتژمێرەکان",

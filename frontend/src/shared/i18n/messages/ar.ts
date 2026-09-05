@@ -438,8 +438,9 @@ export const messages: Messages = {
     heroTitle: "حيث تلتقي الدقة",
     heroTitleAccent: "بالأناقة الخالدة",
     heroSubtitle:
-      "ساعات فاخرة لكل لحظة. اكتشف ساعات استثنائية من أعرق دور الساعات — مختارة للهواة المميزين.",
+      "ساعات استثنائية من أعرق الدور — مختارة لمن يقدّر الحرفية والأصالة.",
     shopCollection: "تسوق المجموعة",
+    exploreMaisons: "استكشف الدور",
     viewBestseller: "عرض الأكثر مبيعاً",
     maisons: "الدور",
     timepieces: "الساعات",

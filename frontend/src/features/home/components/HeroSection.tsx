@@ -1,127 +1,170 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 
+import { useProductCatalog } from "@/features/products";
 import { Button } from "@/shared/components/ui/Button";
-import { Container } from "@/shared/components/ui/Container";
+import { SITE } from "@/shared/constants/site";
 import { useTranslation } from "@/shared/i18n";
-import { cn } from "@/shared/lib/utils/cn";
 import { type as typography } from "@/shared/lib/typography";
+import { hasProductPhoto } from "@/shared/lib/utils/product-image";
+import { cn } from "@/shared/lib/utils/cn";
+
+const ROTATE_MS = 5500;
+const MAX_HERO_VISUALS = 5;
 
 export function HeroSection() {
   const { t } = useTranslation();
+  const { products, isLoading } = useProductCatalog();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [entered, setEntered] = useState(false);
+
+  const visuals = useMemo(() => {
+    const withPhotos = products.filter((product) =>
+      hasProductPhoto(product.imageUrl),
+    );
+
+    // Prefer live upload library images over legacy /products/* assets.
+    const preferred = withPhotos.filter((product) =>
+      product.imageUrl.startsWith("/uploads/"),
+    );
+    const pool = preferred.length > 0 ? preferred : withPhotos;
+
+    return pool.slice(0, MAX_HERO_VISUALS).map((product) => ({
+      src: product.imageUrl,
+      alt: `${product.brand} ${product.name}`,
+      slug: product.slug,
+    }));
+  }, [products]);
+
+  const count = visuals.length;
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setEntered(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [count]);
+
+  useEffect(() => {
+    if (count < 2) {
+      return;
+    }
+
+    const id = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % count);
+    }, ROTATE_MS);
+
+    return () => window.clearInterval(id);
+  }, [count]);
 
   return (
-    <section className="relative min-h-[92vh] overflow-hidden bg-primary text-background">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_40%,rgba(25,40,65,0.45),transparent_65%)]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(90,120,160,0.12),transparent_50%)]"
-      />
-      <div
-        aria-hidden
-        className="home-grain pointer-events-none absolute inset-0 opacity-[0.35]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent"
-      />
+    <section className="relative isolate overflow-hidden border-b border-border bg-background">
+      <div className="grid min-h-[min(88vh,52rem)] lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+        <div className="relative z-10 order-2 flex flex-col justify-center px-6 py-14 sm:px-10 sm:py-16 lg:order-1 lg:px-14 xl:px-20">
+          <div
+            className={cn(
+              "home-hero-copy max-w-xl",
+              entered && "home-hero-copy-entered",
+            )}
+          >
+            <p className="text-[11px] font-medium uppercase tracking-[0.42em] text-accent">
+              {t("site.tagline")}
+            </p>
 
-      <Container className="relative flex min-h-[92vh] flex-col items-center justify-center py-20 lg:py-28">
-        <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
-          <p className="inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[0.4em] text-[#9aafc5]">
-            <span className="h-px w-8 bg-[#9aafc5]/60" aria-hidden />
-            {t("site.tagline")}
-            <span className="h-px w-8 bg-[#9aafc5]/60" aria-hidden />
-          </p>
-          <h1 className={cn("mt-6", typography.hero)}>
-            {t("home.heroTitle")}
-            <span className="mt-1 block bg-gradient-to-r from-[#7a92b0] via-[#c5d0de] to-[#7a92b0] bg-clip-text text-transparent">
-              {t("home.heroTitleAccent")}
-            </span>
-          </h1>
-          <p className={cn("mx-auto mt-6 max-w-xl leading-relaxed text-background/65", typography.body)}>
-            {t("home.heroSubtitle")}
-          </p>
-          <div className="mt-10 flex w-full flex-col items-center justify-center gap-4 sm:flex-row [perspective:1200px]">
-            <Button href="/products" effect="luxury" className="px-8 py-3.5 text-base">
-              {t("home.shopCollection")}
-            </Button>
-            <Button
-              href="/products/land-dweller-40"
-              variant="secondary"
-              effect="luxury"
-              className="border-background/25 px-8 py-3.5 text-base text-background hover:border-accent/50 hover:bg-background/10"
+            <p
+              className={cn(
+                "mt-6 text-foreground",
+                typography.hero,
+                "text-[clamp(2.75rem,8vw,5.5rem)] leading-[0.92] tracking-[-0.03em]",
+              )}
             >
-              {t("home.viewBestseller")}
-            </Button>
+              {SITE.name}
+            </p>
+
+            <h1
+              className={cn(
+                "mt-6 max-w-md text-foreground/90",
+                typography.section,
+                "font-serif font-medium tracking-[-0.01em]",
+              )}
+            >
+              {t("home.heroTitle")}{" "}
+              <span className="text-accent">{t("home.heroTitleAccent")}</span>
+            </h1>
+
+            <p
+              className={cn(
+                "mt-5 max-w-sm text-secondary",
+                typography.body,
+                "leading-relaxed",
+              )}
+            >
+              {t("home.heroSubtitle")}
+            </p>
+
+            <div className="mt-10 flex flex-wrap items-center gap-3 sm:gap-4">
+              <Button href="/products" effect="luxury" className="px-7 py-3.5">
+                {t("home.shopCollection")}
+              </Button>
+              <Button
+                href="/brands"
+                variant="secondary"
+                effect="luxury"
+                className="px-7 py-3.5"
+              >
+                {t("home.exploreMaisons")}
+              </Button>
+            </div>
           </div>
 
-          <div className="relative mx-auto mt-14 w-full max-w-md sm:max-w-lg">
-            <div
-              aria-hidden
-              className="absolute inset-[10%] rounded-full bg-accent/20 blur-3xl"
-            />
-            <Link
-              href="/products/land-dweller-40"
-              className="group relative block"
-              aria-label="View Land-Dweller 40"
-            >
-              <div className="relative aspect-square overflow-hidden rounded-[2rem] border border-background/10 bg-gradient-to-b from-white/10 to-transparent p-8 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.6)] backdrop-blur-sm sm:rounded-[2.5rem] sm:p-12">
-                <Image
-                  src="/products/land-dweller-40.png"
-                  alt="Rolex Land-Dweller 40"
-                  fill
-                  priority
-                  loading="eager"
-                  fetchPriority="high"
-                  sizes="(min-width: 768px) 32rem, 90vw"
-                  className="object-contain p-6 transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-              </div>
-              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-accent/30 bg-primary/90 px-5 py-2 text-xs uppercase tracking-[0.3em] text-accent backdrop-blur-sm">
-                Land-Dweller 40
-              </div>
-            </Link>
-          </div>
-
-          <dl className="mt-16 grid w-full max-w-lg grid-cols-3 gap-6 border-t border-background/10 pt-8">
-            <div>
-              <dt className="text-[10px] uppercase tracking-[0.25em] text-background/45">
-                {t("home.maisons")}
-              </dt>
-              <dd className="mt-1 text-2xl font-semibold text-accent">10+</dd>
-            </div>
-            <div>
-              <dt className="text-[10px] uppercase tracking-[0.25em] text-background/45">
-                {t("home.timepieces")}
-              </dt>
-              <dd className="mt-1 text-2xl font-semibold text-accent">50+</dd>
-            </div>
-            <div>
-              <dt className="text-[10px] uppercase tracking-[0.25em] text-background/45">
-                {t("home.service")}
-              </dt>
-              <dd className="mt-1 text-2xl font-semibold text-accent">24/7</dd>
-            </div>
-          </dl>
         </div>
 
-        <div className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-background/40 lg:flex">
-          <span className="text-[10px] uppercase tracking-[0.35em]">
-            {t("home.scroll")}
-          </span>
-          <span className="h-10 w-px bg-gradient-to-b from-accent/60 to-transparent" />
+        <div className="relative order-1 min-h-[48vh] border-t border-border bg-[#0c121c] lg:order-2 lg:min-h-0 lg:border-l lg:border-t-0 lg:border-border">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_55%_45%,rgba(25,40,65,0.55),transparent_70%)]"
+          />
+          <div
+            aria-hidden
+            className="home-grain pointer-events-none absolute inset-0 opacity-30"
+          />
+
+          {isLoading ? (
+            <div className="absolute inset-0 animate-pulse bg-[#121a28]" />
+          ) : count === 0 ? null : (
+            visuals.map((visual, index) => {
+              const isActive = index === activeIndex % count;
+
+              return (
+                <div
+                  key={visual.slug}
+                  className={cn(
+                    "absolute inset-0 transition-opacity duration-[1400ms] ease-out",
+                    isActive ? "opacity-100" : "opacity-0",
+                  )}
+                  aria-hidden={!isActive}
+                >
+                  <Image
+                    src={visual.src}
+                    alt={visual.alt}
+                    fill
+                    priority={index === 0}
+                    sizes="(min-width: 1024px) 55vw, 100vw"
+                    className={cn(
+                      "object-contain object-center p-10 sm:p-14 lg:p-16 xl:p-20",
+                      isActive && "home-hero-ken",
+                    )}
+                  />
+                </div>
+              );
+            })
+          )}
         </div>
-      </Container>
+      </div>
     </section>
   );
 }

@@ -436,8 +436,9 @@ export const messages = {
     heroTitle: "Where precision",
     heroTitleAccent: "meets timeless elegance",
     heroSubtitle:
-      "Premium watches and timepieces for every moment. Discover exceptional watches from the world's most revered maisons — curated for the discerning collector.",
+      "Exceptional watches from the world's most revered maisons — curated for collectors who value provenance and craft.",
     shopCollection: "Shop collection",
+    exploreMaisons: "Explore maisons",
     viewBestseller: "View bestseller",
     maisons: "Maisons",
     timepieces: "Timepieces",

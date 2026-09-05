@@ -282,6 +282,23 @@ body {
     animation-iteration-count: infinite;
     will-change: transform;
   }
+
+  .home-hero-copy {
+    opacity: 0;
+    transform: translateY(1.25rem);
+    transition:
+      opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .home-hero-copy-entered {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .home-hero-ken {
+    animation: home-hero-ken 5.5s ease-out forwards;
+  }
 }
 
 @keyframes featured-progress {
@@ -322,11 +339,27 @@ body {
   }
 }
 
+@keyframes home-hero-ken {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-featured-progress,
   .animate-featured-ken,
   .animate-featured-copy,
-  .featured-marquee {
+  .featured-marquee,
+  .home-hero-ken {
     animation: none !important;
+  }
+
+  .home-hero-copy {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }

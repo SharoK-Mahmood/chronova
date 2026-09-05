@@ -13,7 +13,7 @@ import {
 import { listProducts } from "@/features/products/services/products.service";
 import type { Product, ProductSummary } from "@/features/products/types/product.types";
 
-const FEATURED_SLUGS = ["land-dweller-40", "day-date-40", "sky-dweller"];
+const FEATURED_SLUGS = ["land-dweller-40", "day-date-40", "santos-de-cartier-watch"];
 
 function toSummary(product: Product): ProductSummary {
   return {
