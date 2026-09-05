@@ -1,8 +1,31 @@
 import type { NextConfig } from "next";
 
-const apiOrigin = (
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001/api"
-).replace(/\/api\/?$/, "");
+const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001/api";
+const apiOrigin = apiUrl.replace(/\/api\/?$/, "");
+
+function apiRemotePattern():
+  | {
+      protocol: "http" | "https";
+      hostname: string;
+      port?: string;
+      pathname: string;
+    }
+  | null {
+  try {
+    const url = new URL(apiOrigin);
+    const protocol = url.protocol === "https:" ? "https" : "http";
+    return {
+      protocol,
+      hostname: url.hostname,
+      ...(url.port ? { port: url.port } : {}),
+      pathname: "/uploads/**",
+    };
+  } catch {
+    return null;
+  }
+}
+
+const apiPattern = apiRemotePattern();
 
 const nextConfig: NextConfig = {
   // Hide the Next.js DevTools "N" badge during local development.
@@ -15,12 +38,7 @@ const nextConfig: NextConfig = {
         hostname: "images.unsplash.com",
         pathname: "/**",
       },
-      {
-        protocol: "http",
-        hostname: "localhost",
-        port: "3001",
-        pathname: "/uploads/**",
-      },
+      ...(apiPattern ? [apiPattern] : []),
     ],
     localPatterns: [
       {

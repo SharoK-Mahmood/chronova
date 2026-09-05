@@ -24,6 +24,17 @@ async function seed() {
   });
 
   for (const product of SEED_PRODUCTS) {
+    const imageUrls =
+      product.imageUrls?.length ? product.imageUrls : [product.imageUrl];
+    const imageUrl = imageUrls[0] ?? product.imageUrl;
+    const imageUrlsJson = JSON.stringify(imageUrls);
+    const category =
+      product.category === "women"
+        ? "women"
+        : product.category === "unisex"
+          ? "unisex"
+          : "men";
+
     await prisma.product.upsert({
       where: { slug: product.slug },
       update: {
@@ -31,14 +42,9 @@ async function seed() {
         description: product.description,
         price: product.price,
         currency: product.currency,
-        imageUrl: product.imageUrl,
-        imageUrlsJson: JSON.stringify([product.imageUrl]),
-        category:
-          product.category === "women"
-            ? "women"
-            : product.category === "unisex"
-              ? "unisex"
-              : "men",
+        imageUrl,
+        imageUrlsJson,
+        category,
         inStock: product.inStock,
         brand: product.brand,
         reference: product.reference ?? null,
@@ -52,14 +58,9 @@ async function seed() {
         description: product.description,
         price: product.price,
         currency: product.currency,
-        imageUrl: product.imageUrl,
-        imageUrlsJson: JSON.stringify([product.imageUrl]),
-        category:
-          product.category === "women"
-            ? "women"
-            : product.category === "unisex"
-              ? "unisex"
-              : "men",
+        imageUrl,
+        imageUrlsJson,
+        category,
         inStock: product.inStock,
         brand: product.brand,
         reference: product.reference ?? null,

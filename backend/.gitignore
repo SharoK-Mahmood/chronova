@@ -3,8 +3,7 @@ dist
 .env
 *.db
 *.db-journal
-prisma/dev.db
-prisma/dev.db-journal
-uploads/products/**
-!uploads/products/README.md
-!uploads/products/.gitkeep
+# Keep seed product images in git (needed for Render deploys).
+# Ignore only local scratch folders under uploads.
+uploads/products/unsorted/**
+uploads/products/**/.DS_Store

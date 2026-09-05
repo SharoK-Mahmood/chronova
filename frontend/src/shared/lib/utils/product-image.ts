@@ -1,4 +1,4 @@
-const IMAGE_EXTENSION_PATTERN = /\.(png|jpe?g|webp|avif)$/i;
+const IMAGE_EXTENSION_PATTERN = /\.(png|jpe?g|webp|avif|gif)$/i;
 
 const REMOTE_IMAGE_HOSTS = ["images.unsplash.com"];
 

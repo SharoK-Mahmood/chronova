@@ -6,6 +6,8 @@ export type SeedProduct = {
   price: number;
   currency: string;
   imageUrl: string;
+  /** Full gallery; defaults to `[imageUrl]` when omitted. */
+  imageUrls?: string[];
   category: string;
   inStock: boolean;
   brand: string;
@@ -29,6 +31,9 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     price: 16450,
     currency: "USD",
     imageUrl: "/uploads/products/land-dweller-40/land-dweller-40.png",
+    imageUrls: [
+      "/uploads/products/land-dweller-40/land-dweller-40.png",
+    ],
     category: "men",
     inStock: true,
   },
@@ -44,6 +49,12 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     price: 68800,
     currency: "USD",
     imageUrl: "/uploads/products/day-date-40/day-date-40.png",
+    imageUrls: [
+      "/uploads/products/day-date-40/day-date-40.png",
+      "/uploads/products/day-date-40/day-date-40-2.png",
+      "/uploads/products/day-date-40/day-date-40-3.png",
+      "/uploads/products/day-date-40/day-date-40-4.png",
+    ],
     category: "men",
     inStock: true,
   },
@@ -59,7 +70,51 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     price: 64900,
     currency: "USD",
     imageUrl: "/uploads/products/sky-dweller/sky-dweller.png",
+    imageUrls: ["/uploads/products/sky-dweller/sky-dweller.png"],
     category: "men",
+    inStock: true,
+  },
+  {
+    id: "cartier-santos",
+    name: "Santos de Cartier",
+    slug: "santos-de-cartier-watch",
+    brand: "Cartier",
+    subtitle: "Large model, steel, automatic",
+    reference: "WSSA0062",
+    description:
+      "The Santos de Cartier in steel with a sunray dial and interchangeable steel bracelet. An aviation icon reinvented — bold geometry, exposed screws, and Cartier's unmistakable Parisian proportions.",
+    price: 8200,
+    currency: "USD",
+    imageUrl:
+      "/uploads/products/santos-de-cartier-watch/santos-de-cartier-watch.avif",
+    imageUrls: [
+      "/uploads/products/santos-de-cartier-watch/santos-de-cartier-watch.avif",
+      "/uploads/products/santos-de-cartier-watch/santos-de-cartier-watch-2.avif",
+      "/uploads/products/santos-de-cartier-watch/santos-de-cartier-watch-3.avif",
+      "/uploads/products/santos-de-cartier-watch/santos-de-cartier-watch-4.avif",
+    ],
+    category: "men",
+    inStock: true,
+  },
+  {
+    id: "cartier-tank-must",
+    name: "Tank Must de Cartier",
+    slug: "tank-must-de-cartier-watch",
+    brand: "Cartier",
+    subtitle: "Large model, steel, quartz",
+    reference: "WSTA0041",
+    description:
+      "The Tank Must de Cartier in steel with a silvered dial and blue steel sword-shaped hands. Cartier's legendary rectangular silhouette — refined, architectural, and instantly recognizable.",
+    price: 3450,
+    currency: "USD",
+    imageUrl:
+      "/uploads/products/tank-must-de-cartier-watch/tank-must-de-cartier-watch.avif",
+    imageUrls: [
+      "/uploads/products/tank-must-de-cartier-watch/tank-must-de-cartier-watch.avif",
+      "/uploads/products/tank-must-de-cartier-watch/tank-must-de-cartier-watch-2.avif",
+      "/uploads/products/tank-must-de-cartier-watch/tank-must-de-cartier-watch-3.avif",
+    ],
+    category: "unisex",
     inStock: true,
   },
   {
@@ -209,7 +264,8 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     slug: "chronova-classic",
     price: 249,
     currency: "USD",
-    imageUrl: "/products/classic.svg",
+    imageUrl:
+      "https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=1200&q=80",
     brand: "Chronova",
     description: CHRONOVA_DESCRIPTION,
     category: "men",
@@ -221,7 +277,8 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     slug: "chronova-sport",
     price: 329,
     currency: "USD",
-    imageUrl: "/products/sport.svg",
+    imageUrl:
+      "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=1200&q=80",
     brand: "Chronova",
     description: CHRONOVA_DESCRIPTION,
     category: "men",
@@ -233,7 +290,8 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     slug: "chronova-elite",
     price: 499,
     currency: "USD",
-    imageUrl: "/products/elite.svg",
+    imageUrl:
+      "https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1200&q=80",
     brand: "Chronova",
     description: CHRONOVA_DESCRIPTION,
     category: "men",
@@ -245,7 +303,8 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     slug: "chronova-minimal",
     price: 199,
     currency: "USD",
-    imageUrl: "/products/minimal.svg",
+    imageUrl:
+      "https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?auto=format&fit=crop&w=1200&q=80",
     brand: "Chronova",
     description: CHRONOVA_DESCRIPTION,
     category: "men",
@@ -257,7 +316,8 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     slug: "chronova-heritage",
     price: 599,
     currency: "USD",
-    imageUrl: "/products/heritage.svg",
+    imageUrl:
+      "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=1200&q=80",
     brand: "Chronova",
     description: CHRONOVA_DESCRIPTION,
     category: "men",
@@ -269,7 +329,8 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     slug: "chronova-voyager",
     price: 379,
     currency: "USD",
-    imageUrl: "/products/voyager.svg",
+    imageUrl:
+      "https://images.unsplash.com/photo-1539874754764-5a96559165b0?auto=format&fit=crop&w=1200&q=80",
     brand: "Chronova",
     description: CHRONOVA_DESCRIPTION,
     category: "men",

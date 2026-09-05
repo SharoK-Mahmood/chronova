@@ -4,7 +4,21 @@ Luxury watch storefront and admin, backed by a single REST API.
 
 ## Local development
 
-You need **two terminals**.
+You need **PostgreSQL** and **two terminals**.
+
+### 0. Database
+
+With Docker:
+
+```bash
+docker compose up -d
+```
+
+Or point `DATABASE_URL` in `backend/.env` at any Postgres instance. Default:
+
+```text
+postgresql://postgres:postgres@localhost:5432/chronova?schema=public
+```
 
 ### 1. Backend (port 3001)
 
@@ -77,6 +91,8 @@ backend/uploads/products/{product-slug}/your-image.avif
 - You can also drop files there manually, then paste the URL in admin:
   `/uploads/products/{slug}/filename.avif`
 - The database only stores those URL strings
+- Seed model folders (Rolex + Cartier) are committed so Render can serve them after deploy
+- On Render, add a **persistent disk** mounted at `backend/uploads` if you want admin uploads to survive redeploys
 
 Migrate older flat uploads / public images:
 
@@ -88,6 +104,6 @@ npm run db:seed
 
 ## Layout
 
-- `backend/` — Express + Prisma (SQLite locally)
+- `backend/` — Express + Prisma (PostgreSQL)
 - `backend/uploads/products/` — product image library (by model slug)
 - `frontend/` — Next.js storefront and admin

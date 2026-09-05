@@ -24,7 +24,7 @@ uploads/products/
 
 ## Notes
 
-- Do not put image binaries in SQLite
+- Do not put image binaries in the database
 - Keep folder names lowercase kebab-case (same as product slug)
 - Removing an image in admin deletes the file from this folder and updates the DB URLs
 - Deleting a product removes its DB record and the entire `{model-slug}/` folder
