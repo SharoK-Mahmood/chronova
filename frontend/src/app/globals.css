@@ -284,20 +284,38 @@ body {
   }
 
   .home-hero-copy {
-    opacity: 0;
-    transform: translateY(1.25rem);
-    transition:
-      opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .home-hero-copy-entered {
     opacity: 1;
     transform: translateY(0);
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    .home-hero-copy {
+      opacity: 0;
+      transform: translateY(1.25rem);
+      transition:
+        opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .home-hero-copy-entered {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .home-hero-ken {
     animation: home-hero-ken 5.5s ease-out forwards;
+  }
+
+  .home-hero-rail {
+    animation: home-hero-rail 48s linear infinite;
+    will-change: transform;
+  }
+
+  @media (hover: hover) {
+    .home-hero-rail:hover {
+      animation-play-state: paused;
+    }
   }
 }
 
@@ -348,12 +366,22 @@ body {
   }
 }
 
+@keyframes home-hero-rail {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-featured-progress,
   .animate-featured-ken,
   .animate-featured-copy,
   .featured-marquee,
-  .home-hero-ken {
+  .home-hero-ken,
+  .home-hero-rail {
     animation: none !important;
   }
 

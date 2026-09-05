@@ -1,7 +1,6 @@
 "use client";
 
 import type { ReactNode } from "react";
-import Image from "next/image";
 
 import type {
   DeliveryMethodId,
@@ -10,8 +9,9 @@ import type {
 import { calculateSubtotalUsd } from "@/features/checkout/lib/build-order-line-items";
 import { getLocalizedDeliveryMethod } from "@/features/checkout/lib/localized-checkout";
 import { Price, useCurrency } from "@/features/currency";
+import { ProductImage } from "@/shared/components/ui/ProductImage";
 import { useTranslation } from "@/shared/i18n";
-import { hasProductPhoto } from "@/shared/lib/utils/product-image";
+import { hasProductPhoto, resolveMediaUrl } from "@/shared/lib/utils/product-image";
 import { cn } from "@/shared/lib/utils/cn";
 
 type CheckoutOrderSummaryProps = {
@@ -63,8 +63,8 @@ export function CheckoutOrderSummary({
               )}
             >
               {hasProductPhoto(item.imageUrl) ? (
-                <Image
-                  src={item.imageUrl}
+                <ProductImage
+                  src={resolveMediaUrl(item.imageUrl)}
                   alt={item.name}
                   fill
                   sizes="64px"

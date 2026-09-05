@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 
 import { AddToCartButton } from "@/features/cart";
@@ -8,6 +7,7 @@ import { Price } from "@/features/currency";
 import { useProductCatalog } from "@/features/products";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { ProductImage } from "@/shared/components/ui/ProductImage";
 import { useTranslation } from "@/shared/i18n";
 
 export function HomeSpotlight() {
@@ -51,7 +51,7 @@ export function HomeSpotlight() {
             className="group relative order-2 lg:order-1"
           >
             <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-border bg-white shadow-[0_24px_64px_-24px_rgba(17,17,17,0.2)]">
-              <Image
+              <ProductImage
                 src={product.imageUrl}
                 alt={`${product.brand} ${product.name}`}
                 fill

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 
 import { useCart } from "@/features/cart/context/CartProvider";
@@ -8,6 +7,7 @@ import type { StoredCartEntry } from "@/features/cart/types/cart.types";
 import { Price } from "@/features/currency";
 import { useProductCatalog } from "@/features/products";
 import { Button } from "@/shared/components/ui/Button";
+import { ProductImage } from "@/shared/components/ui/ProductImage";
 import { subtleControlButtonClasses, textLinkButtonClasses } from "@/shared/lib/utils/button-interaction";
 import { cn } from "@/shared/lib/utils/cn";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
@@ -41,7 +41,7 @@ export function CartLineRow({ entry }: CartLineRowProps) {
         )}
       >
         {hasProductPhoto(product.imageUrl) ? (
-          <Image
+          <ProductImage
             src={product.imageUrl}
             alt={imageAlt}
             fill

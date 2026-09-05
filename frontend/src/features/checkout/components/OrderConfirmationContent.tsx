@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { getOrderByNumber } from "@/features/checkout/services/orders.service";
@@ -8,12 +7,13 @@ import type { PlacedOrder } from "@/features/checkout/types/checkout.types";
 import { Price } from "@/features/currency";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { ProductImage } from "@/shared/components/ui/ProductImage";
 import { useTranslation } from "@/shared/i18n";
 import {
   formatRegionalAddress,
   migrateToRegionalAddress,
 } from "@/shared/lib/address/regional-address";
-import { hasProductPhoto } from "@/shared/lib/utils/product-image";
+import { hasProductPhoto, resolveMediaUrl } from "@/shared/lib/utils/product-image";
 import { cn } from "@/shared/lib/utils/cn";
 
 type OrderConfirmationContentProps = {
@@ -130,8 +130,8 @@ export function OrderConfirmationContent({
                       )}
                     >
                       {hasProductPhoto(item.imageUrl) ? (
-                        <Image
-                          src={item.imageUrl}
+                        <ProductImage
+                          src={resolveMediaUrl(item.imageUrl)}
                           alt={item.name}
                           fill
                           sizes="80px"

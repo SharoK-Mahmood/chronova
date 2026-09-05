@@ -16,7 +16,34 @@ const app = express();
 
 app.use(
   cors({
-    origin: env.corsOrigin.split(",").map((origin) => origin.trim()),
+    origin(origin, callback) {
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      const allowed = env.corsOrigin
+        .split(",")
+        .map((value) => value.trim())
+        .filter(Boolean);
+
+      if (allowed.includes("*") || allowed.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      try {
+        const { hostname } = new URL(origin);
+        if (hostname.endsWith(".trycloudflare.com")) {
+          callback(null, true);
+          return;
+        }
+      } catch {
+        // Invalid Origin header.
+      }
+
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
   }),
 );
 app.use(express.json({ limit: "1mb" }));

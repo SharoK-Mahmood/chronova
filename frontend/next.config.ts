@@ -28,6 +28,11 @@ function apiRemotePattern():
 const apiPattern = apiRemotePattern();
 
 const nextConfig: NextConfig = {
+  // Allow Cloudflare quick tunnels (and similar) to load Next.js dev assets.
+  allowedDevOrigins: [
+    "*.trycloudflare.com",
+    "glucose-alice-amino-candy.trycloudflare.com",
+  ],
   // Hide the Next.js DevTools "N" badge during local development.
   // Error overlays still appear if something breaks.
   devIndicators: false,
@@ -37,6 +42,23 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
         pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "3001",
+        pathname: "/uploads/**",
+      },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+        port: "3001",
+        pathname: "/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.trycloudflare.com",
+        pathname: "/uploads/**",
       },
       ...(apiPattern ? [apiPattern] : []),
     ],

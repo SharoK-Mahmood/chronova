@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 
 import { AddToCartButton } from "@/features/cart";
@@ -8,6 +7,7 @@ import { Price } from "@/features/currency";
 import type { SaleSpotlight } from "@/features/sale/types/sale.types";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { ProductImage } from "@/shared/components/ui/ProductImage";
 import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
 import { type as typography } from "@/shared/lib/typography";
@@ -49,7 +49,7 @@ export function SaleSpotlightSection({ item }: SaleSpotlightSectionProps) {
           >
             <div className="relative aspect-square">
               {hasProductPhoto(product.imageUrl) ? (
-                <Image
+                <ProductImage
                   src={product.imageUrl}
                   alt={imageAlt}
                   fill

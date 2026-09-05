@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import {
   useCallback,
   useEffect,
@@ -9,6 +8,7 @@ import {
   useState,
 } from "react";
 
+import { ProductImage } from "@/shared/components/ui/ProductImage";
 import { cn } from "@/shared/lib/utils/cn";
 import {
   getProductImageUrls,
@@ -126,7 +126,7 @@ export function ProductImageGallery({
               style={{ transitionDuration: `${FADE_MS}ms` }}
               aria-hidden={!isActive}
             >
-              <Image
+              <ProductImage
                 src={url}
                 alt={isActive ? alt : ""}
                 fill
@@ -185,7 +185,7 @@ export function ProductImageGallery({
                       : "border-border hover:border-accent/40",
                   )}
                 >
-                  <Image
+                  <ProductImage
                     src={url}
                     alt=""
                     fill

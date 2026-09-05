@@ -12,8 +12,22 @@ import {
 
 import { listProducts } from "@/features/products/services/products.service";
 import type { Product, ProductSummary } from "@/features/products/types/product.types";
+import { resolveMediaUrl } from "@/shared/lib/utils/product-image";
 
 const FEATURED_SLUGS = ["land-dweller-40", "day-date-40", "santos-de-cartier-watch"];
+
+function withResolvedMedia(product: Product): Product {
+  return {
+    ...product,
+    imageUrl: resolveMediaUrl(product.imageUrl),
+    imageUrls: (product.imageUrls?.length
+      ? product.imageUrls
+      : product.imageUrl
+        ? [product.imageUrl]
+        : []
+    ).map(resolveMediaUrl),
+  };
+}
 
 function toSummary(product: Product): ProductSummary {
   return {
@@ -59,7 +73,7 @@ export function ProductCatalogProvider({ children }: ProductCatalogProviderProps
   const refresh = useCallback(async () => {
     try {
       const next = await listProducts();
-      setProducts(next);
+      setProducts(next.map(withResolvedMedia));
     } catch {
       setProducts([]);
     } finally {

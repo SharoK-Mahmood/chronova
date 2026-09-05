@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import {
   useCallback,
@@ -16,6 +15,7 @@ import { useProductCatalog } from "@/features/products";
 import type { Product, ProductSummary } from "@/features/products";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { ProductImage } from "@/shared/components/ui/ProductImage";
 import { useTranslation } from "@/shared/i18n";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 import { cn } from "@/shared/lib/utils/cn";
@@ -522,7 +522,7 @@ function WatchCard({
         )}
       >
         {hasProductPhoto(product.imageUrl) ? (
-          <Image
+          <ProductImage
             src={product.imageUrl}
             alt={decorative ? "" : imageAlt}
             fill

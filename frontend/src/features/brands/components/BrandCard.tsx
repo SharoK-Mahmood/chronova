@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import type { BrandSummary } from "@/features/brands/types/brand.types";
+import { ProductImage } from "@/shared/components/ui/ProductImage";
 import { cn } from "@/shared/lib/utils/cn";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 
@@ -28,7 +28,7 @@ export function BrandCard({ brand, className }: BrandCardProps) {
           )}
         >
           {hasImage ? (
-            <Image
+            <ProductImage
               src={brand.imageUrl!}
               alt={`${brand.name} watch`}
               fill

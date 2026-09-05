@@ -1,21 +1,19 @@
 import type { Product } from "@/features/products/types/product.types";
 import type { SaleItem, SaleSpotlight } from "@/features/sale/types/sale.types";
 
-const SPOTLIGHT_SLUG = "chronova-heritage";
+const SPOTLIGHT_SLUG = "santos-de-cartier-watch";
 
 const SALE_ENTRIES: Array<{
   slug: string;
   salePrice: number;
 }> = [
-  { slug: "chronova-minimal", salePrice: 149 },
-  { slug: "chronova-classic", salePrice: 199 },
-  { slug: "chronova-sport", salePrice: 249 },
-  { slug: "chronova-voyager", salePrice: 299 },
-  { slug: "chronova-elite", salePrice: 399 },
-  { slug: "chronova-heritage", salePrice: 449 },
-  { slug: "chronova-pearl", salePrice: 336 },
-  { slug: "chronova-grace", salePrice: 439 },
-  { slug: "chronova-lumen-28", salePrice: 512 },
+  { slug: "tank-must-de-cartier-watch", salePrice: 2890 },
+  { slug: "santos-de-cartier-watch", salePrice: 6990 },
+  { slug: "land-dweller-40", salePrice: 14250 },
+  { slug: "day-date-40", salePrice: 59800 },
+  { slug: "sky-dweller", salePrice: 55900 },
+  { slug: "lady-datejust-28", salePrice: 36900 },
+  { slug: "datejust-31", salePrice: 12950 },
   { slug: "oyster-perpetual-31", salePrice: 5490 },
 ];
 
@@ -47,7 +45,7 @@ export function getSaleSpotlight(products: Product[]): SaleSpotlight | undefined
   const item = buildSaleItem(
     SALE_ENTRIES.find((entry) => entry.slug === SPOTLIGHT_SLUG) ?? {
       slug: SPOTLIGHT_SLUG,
-      salePrice: 449,
+      salePrice: 6990,
     },
     products,
   );

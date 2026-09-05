@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 
 import { useProductCatalog } from "@/features/products";
 import { Button } from "@/shared/components/ui/Button";
+import { ProductImage } from "@/shared/components/ui/ProductImage";
 import { SITE } from "@/shared/constants/site";
 import { useTranslation } from "@/shared/i18n";
 import { type as typography } from "@/shared/lib/typography";
@@ -25,9 +25,10 @@ export function HeroSection() {
       hasProductPhoto(product.imageUrl),
     );
 
-    // Prefer live upload library images over legacy /products/* assets.
-    const preferred = withPhotos.filter((product) =>
-      product.imageUrl.startsWith("/uploads/"),
+    const preferred = withPhotos.filter(
+      (product) =>
+        product.imageUrl.startsWith("/uploads/") ||
+        product.imageUrl.includes("/uploads/"),
     );
     const pool = preferred.length > 0 ? preferred : withPhotos;
 
@@ -120,7 +121,6 @@ export function HeroSection() {
               </Button>
             </div>
           </div>
-
         </div>
 
         <div className="relative order-1 min-h-[48vh] border-t border-border bg-[#0c121c] lg:order-2 lg:min-h-0 lg:border-l lg:border-t-0 lg:border-border">
@@ -148,14 +148,14 @@ export function HeroSection() {
                   )}
                   aria-hidden={!isActive}
                 >
-                  <Image
+                  <ProductImage
                     src={visual.src}
                     alt={visual.alt}
                     fill
                     priority={index === 0}
                     sizes="(min-width: 1024px) 55vw, 100vw"
                     className={cn(
-                      "object-contain object-center p-10 sm:p-14 lg:p-16 xl:p-20",
+                      "object-contain object-center p-8 sm:p-12 lg:p-14 xl:p-16",
                       isActive && "home-hero-ken",
                     )}
                   />

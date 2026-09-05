@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 
 import { AddToCartButton } from "@/features/cart";
@@ -8,6 +7,7 @@ import { Price } from "@/features/currency";
 import type { NewArrivalSpotlight } from "@/features/new-arrivals/types/new-arrival.types";
 import { Button } from "@/shared/components/ui/Button";
 import { Container } from "@/shared/components/ui/Container";
+import { ProductImage } from "@/shared/components/ui/ProductImage";
 import { useTranslation } from "@/shared/i18n";
 import { hasProductPhoto } from "@/shared/lib/utils/product-image";
 
@@ -46,7 +46,7 @@ export function SpotlightArrival({ arrival }: SpotlightArrivalProps) {
           >
             <div className="relative aspect-square">
               {hasProductPhoto(product.imageUrl) ? (
-                <Image
+                <ProductImage
                   src={product.imageUrl}
                   alt={imageAlt}
                   fill

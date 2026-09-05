@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import {
   useCallback,
@@ -10,6 +9,7 @@ import {
   useState,
 } from "react";
 
+import { ProductImage } from "@/shared/components/ui/ProductImage";
 import {
   getProductImageUrls,
   hasProductPhoto,
@@ -118,7 +118,7 @@ export function ProductMediaCarousel({
               style={{ transitionDuration: `${FADE_MS}ms` }}
               aria-hidden={!isActive}
             >
-              <Image
+              <ProductImage
                 src={url}
                 alt={isActive ? alt : ""}
                 fill

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 
 import { useCart } from "@/features/cart/context/CartProvider";
@@ -8,6 +7,7 @@ import type { StoredCartEntry } from "@/features/cart/types/cart.types";
 import { Price } from "@/features/currency";
 import { useProductCatalog } from "@/features/products";
 import { useTranslation } from "@/shared/i18n";
+import { ProductImage } from "@/shared/components/ui/ProductImage";
 import {
   subtleControlButtonClasses,
   textLinkButtonClasses,
@@ -47,7 +47,7 @@ export function CartDrawerItem({ entry, onNavigate }: CartDrawerItemProps) {
         )}
       >
         {hasProductPhoto(product.imageUrl) ? (
-          <Image
+          <ProductImage
             src={product.imageUrl}
             alt={imageAlt}
             fill

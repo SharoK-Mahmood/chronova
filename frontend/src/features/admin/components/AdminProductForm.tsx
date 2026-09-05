@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent, type ReactNode } from "react";
 
@@ -14,6 +13,7 @@ import {
   uploadProductImages,
 } from "@/features/products/services/uploads.service";
 import type { Product } from "@/features/products/types/product.types";
+import { ProductImage } from "@/shared/components/ui/ProductImage";
 import {
   CASE_SPEC_FIELDS,
   EMPTY_PRODUCT_DETAILS,
@@ -408,11 +408,10 @@ export function AdminProductForm({ product }: AdminProductFormProps) {
                   className="overflow-hidden rounded-xl border border-border bg-card"
                 >
                   <div className="relative aspect-square bg-white">
-                    <Image
+                    <ProductImage
                       src={url}
                       alt=""
                       fill
-                      unoptimized={url.startsWith("/uploads/")}
                       className="object-contain p-3"
                       sizes="240px"
                     />
