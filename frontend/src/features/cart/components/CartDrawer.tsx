@@ -18,20 +18,25 @@ export function CartDrawer() {
   const { entries, itemCount, isHydrated, isDrawerOpen, closeDrawer } =
     useCart();
   const { currency } = useCurrency();
-  const { getProductBySlug } = useProductCatalog();
+  const { getProductBySlug, isLoading: isCatalogLoading } = useProductCatalog();
   const drawerRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const currencyLabel =
     currency === "USD" ? t("common.usd") : t("common.iqd");
 
+  const visibleEntries = useMemo(
+    () => entries.filter((entry) => Boolean(getProductBySlug(entry.slug))),
+    [entries, getProductBySlug],
+  );
+
   const subtotalUsd = useMemo(() => {
-    return entries.reduce((total, entry) => {
+    return visibleEntries.reduce((total, entry) => {
       const product = getProductBySlug(entry.slug);
       if (!product) return total;
       const unitPrice = entry.unitPriceUsd ?? product.price;
       return total + unitPrice * entry.quantity;
     }, 0);
-  }, [entries, getProductBySlug]);
+  }, [visibleEntries, getProductBySlug]);
 
   useEffect(() => {
     if (isDrawerOpen) {
@@ -124,7 +129,11 @@ export function CartDrawer() {
           </div>
         </header>
 
-        {itemCount === 0 ? (
+        {isCatalogLoading ? (
+          <div className="flex min-h-0 flex-1 items-center justify-center px-5">
+            <p className="text-sm text-secondary">{t("cart.loading")}</p>
+          </div>
+        ) : visibleEntries.length === 0 ? (
           <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-5 text-center">
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-accent/10">
               <svg
@@ -159,7 +168,7 @@ export function CartDrawer() {
           <>
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-4">
               <ul className="space-y-3">
-                {entries.map((entry) => (
+                {visibleEntries.map((entry) => (
                   <li key={entry.slug}>
                     <CartDrawerItem
                       entry={entry}

@@ -1,11 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 
+import { useAccountSettings } from "@/features/account";
 import { useCart } from "@/features/cart";
 import { useAuth } from "@/features/auth/context/AuthProvider";
-import { ContactInformationSection } from "@/features/checkout/components/ContactInformationSection";
 import {
   CheckoutOrderSummary,
 } from "@/features/checkout/components/CheckoutOrderSummary";
@@ -13,8 +13,10 @@ import { CheckoutPanel } from "@/features/checkout/components/CheckoutPanel";
 import { DeliveryMethodSection } from "@/features/checkout/components/DeliveryMethodSection";
 import { PaymentMethodSection } from "@/features/checkout/components/PaymentMethodSection";
 import { ShippingAddressSection } from "@/features/checkout/components/ShippingAddressSection";
-import { DEFAULT_CHECKOUT_FORM } from "@/features/checkout/constants/default-checkout-form";
+import { createCheckoutFormFromAccount } from "@/features/checkout/lib/create-checkout-form-from-account";
 import { getPaymentSubmitLabelKey } from "@/features/checkout/lib/build-placed-order";
+import { getPaymentMethod } from "@/features/checkout/constants/payment-methods";
+import { getLocalizedPaymentMethod } from "@/features/checkout/lib/localized-checkout";
 import { createOrder } from "@/features/checkout/services/orders.service";
 import { buildOrderLineItems } from "@/features/checkout/lib/build-order-line-items";
 import { validateCheckout } from "@/features/checkout/lib/validate-checkout";
@@ -34,10 +36,18 @@ export function CheckoutContent() {
   const { entries, isHydrated, itemCount, clearCart } = useCart();
   const { currency } = useCurrency();
   const { getProductBySlug } = useProductCatalog();
-  const { isAuthenticated, isHydrated: isAuthHydrated } = useAuth();
-  const [form, setForm] = useState<CheckoutFormData>(DEFAULT_CHECKOUT_FORM);
+  const { user, isAuthenticated, isHydrated: isAuthHydrated } = useAuth();
+  const { settings, isHydrated: isSettingsHydrated } = useAccountSettings();
+  const [form, setForm] = useState<CheckoutFormData | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isSettingsHydrated || !user || form !== null) {
+      return;
+    }
+    setForm(createCheckoutFormFromAccount(settings, user));
+  }, [form, isSettingsHydrated, settings, user]);
 
   const lineItems = useMemo(
     () => buildOrderLineItems(entries, getProductBySlug),
@@ -45,10 +55,10 @@ export function CheckoutContent() {
   );
 
   function patchForm(patch: Partial<CheckoutFormData>) {
-    setForm((current) => ({ ...current, ...patch }));
+    setForm((current) => (current ? { ...current, ...patch } : current));
   }
 
-  if (!isHydrated || !isAuthHydrated) {
+  if (!isHydrated || !isAuthHydrated || !isSettingsHydrated) {
     return (
       <Container className="py-12">
         <p className="text-secondary">{t("checkout.preparing")}</p>
@@ -56,7 +66,7 @@ export function CheckoutContent() {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !user) {
     return (
       <Container className="py-12 text-center">
         <h1 className={cn(typography.page)}>{t("auth.signInToCheckout")}</h1>
@@ -64,6 +74,14 @@ export function CheckoutContent() {
         <Button href="/login?next=/checkout" variant="accent" className="mt-8">
           {t("auth.logIn")}
         </Button>
+      </Container>
+    );
+  }
+
+  if (!form) {
+    return (
+      <Container className="py-12">
+        <p className="text-secondary">{t("checkout.preparing")}</p>
       </Container>
     );
   }
@@ -82,6 +100,10 @@ export function CheckoutContent() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!form || !user) {
+      return;
+    }
+
     setError(null);
 
     const result = validateCheckout(form);
@@ -99,11 +121,21 @@ export function CheckoutContent() {
     setIsSubmitting(true);
 
     try {
+      const paymentDef = getPaymentMethod(form.paymentMethodId);
+      const paymentLabel = paymentDef.formatPaymentLabel(
+        form,
+        getLocalizedPaymentMethod(form.paymentMethodId, t).label,
+      );
+
       const order = await createOrder({
-        contact: form.contact,
+        contact: {
+          email: user.email,
+          phone: form.shippingAddress.phone.trim(),
+        },
         shippingAddress: form.shippingAddress,
         deliveryMethodId: form.deliveryMethodId,
         paymentMethodId: form.paymentMethodId,
+        paymentLabel,
         items: lineItems.map((item) => ({
           slug: item.slug,
           quantity: item.quantity,
@@ -196,18 +228,13 @@ export function CheckoutContent() {
                   title={t("checkout.steps.information")}
                   className="space-y-5 md:self-stretch"
                 >
-                  <ContactInformationSection
-                    value={form.contact}
-                    onChange={(contact) => patchForm({ contact })}
+                  <ShippingAddressSection
+                    value={form.shippingAddress}
+                    onChange={(shippingAddress) =>
+                      patchForm({ shippingAddress })
+                    }
+                    accountEmail={user.email}
                   />
-                  <div className="border-t border-border pt-5">
-                    <ShippingAddressSection
-                      value={form.shippingAddress}
-                      onChange={(shippingAddress) =>
-                        patchForm({ shippingAddress })
-                      }
-                    />
-                  </div>
                 </CheckoutPanel>
 
                 <div className="flex min-w-0 flex-col gap-4">
@@ -229,7 +256,16 @@ export function CheckoutContent() {
                     step={3}
                     title={t("checkout.steps.payment")}
                   >
-                    <PaymentMethodSection />
+                    <PaymentMethodSection
+                      value={form.paymentMethodId}
+                      onChange={(paymentMethodId) =>
+                        patchForm({ paymentMethodId })
+                      }
+                      cardPayment={form.cardPayment}
+                      onCardPaymentChange={(cardPayment) =>
+                        patchForm({ cardPayment })
+                      }
+                    />
                   </CheckoutPanel>
                 </div>
               </div>

@@ -50,9 +50,38 @@ function CategoriesIcon({ className }: { className?: string }) {
   );
 }
 
-function isActivePath(pathname: string, href: string): boolean {
-  if (href === "/") {
+const CATEGORY_PATHS = [
+  "/products",
+  "/men",
+  "/women",
+  "/brands",
+  "/new-arrivals",
+  "/sale",
+  "/search",
+] as const;
+
+function isBottomNavActive(
+  pathname: string,
+  id: string,
+  href: string,
+  options?: { cartOpen?: boolean },
+): boolean {
+  if (id === "home") {
     return pathname === "/";
+  }
+
+  if (id === "categories") {
+    return CATEGORY_PATHS.some(
+      (path) => pathname === path || pathname.startsWith(`${path}/`),
+    );
+  }
+
+  if (id === "cart") {
+    return Boolean(options?.cartOpen) || pathname === "/cart" || pathname.startsWith("/cart/");
+  }
+
+  if (id === "account") {
+    return pathname === "/account" || pathname.startsWith("/account/");
   }
 
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -62,8 +91,12 @@ export function MobileBottomNav() {
   const pathname = usePathname();
   const { t } = useTranslation();
   const { count: wishlistCount, isHydrated: wishlistHydrated } = useWishlist();
-  const { itemCount: cartCount, isHydrated: cartHydrated, openDrawer } =
-    useCart();
+  const {
+    itemCount: cartCount,
+    isHydrated: cartHydrated,
+    openDrawer,
+    isDrawerOpen,
+  } = useCart();
 
   const items = [
     {
@@ -104,16 +137,46 @@ export function MobileBottomNav() {
   return (
     <nav
       aria-label={t("nav.bottomNav")}
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md supports-[backdrop-filter]:bg-card/90 md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md supports-[backdrop-filter]:bg-card/90 select-none md:hidden"
     >
       <ul className="mx-auto flex h-16 max-w-lg items-stretch justify-around px-1">
         {items.map((item) => {
-          const isActive = isActivePath(pathname, item.href);
+          const isActive = isBottomNavActive(pathname, item.id, item.href, {
+            cartOpen: isDrawerOpen,
+          });
           const badge = "badge" in item ? item.badge : 0;
           const className = cn(
-            "relative flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 px-1 tracking-wide transition-colors",
+            "relative flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 px-1 tracking-wide transition-[color,opacity,transform] duration-150",
             typography.nav,
-            isActive ? "text-accent" : "text-secondary",
+            isActive
+              ? "font-semibold text-accent"
+              : "font-normal text-secondary",
+            "active:scale-[0.96] active:opacity-100",
+          );
+
+          const content = (
+            <>
+              {isActive ? (
+                <span
+                  aria-hidden
+                  className="absolute inset-x-3 top-0 h-0.5 rounded-full bg-accent"
+                />
+              ) : null}
+              <span
+                className={cn(
+                  "relative flex h-8 w-8 items-center justify-center rounded-full transition-colors",
+                  isActive && "bg-accent/10",
+                )}
+              >
+                {item.icon}
+                {badge > 0 ? (
+                  <span className="absolute -end-1 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[9px] font-semibold text-background">
+                    {badge > 9 ? "9+" : badge}
+                  </span>
+                ) : null}
+              </span>
+              <span className="truncate">{item.label}</span>
+            </>
           );
 
           if ("isCart" in item && item.isCart) {
@@ -123,17 +186,10 @@ export function MobileBottomNav() {
                   type="button"
                   onClick={openDrawer}
                   aria-label={item.label}
+                  aria-current={isActive ? "true" : undefined}
                   className={className}
                 >
-                  <span className="relative">
-                    {item.icon}
-                    {badge > 0 ? (
-                      <span className="absolute -end-2 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[9px] font-semibold text-background">
-                        {badge > 9 ? "9+" : badge}
-                      </span>
-                    ) : null}
-                  </span>
-                  <span className="truncate">{item.label}</span>
+                  {content}
                 </button>
               </li>
             );
@@ -147,15 +203,7 @@ export function MobileBottomNav() {
                 aria-label={item.label}
                 className={className}
               >
-                <span className="relative">
-                  {item.icon}
-                  {badge > 0 ? (
-                    <span className="absolute -end-2 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[9px] font-semibold text-background">
-                      {badge > 9 ? "9+" : badge}
-                    </span>
-                  ) : null}
-                </span>
-                <span className="truncate">{item.label}</span>
+                {content}
               </Link>
             </li>
           );

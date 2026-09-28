@@ -17,6 +17,22 @@ function safeNextPath(value: string | null): string {
   return value;
 }
 
+function safeMobileReturnUri(value: string | null): string | null {
+  if (!value) {
+    return null;
+  }
+  try {
+    const parsed = new URL(value);
+    // chronova:// for builds; exp:// for Expo Go deep links
+    if (parsed.protocol === "chronova:" || parsed.protocol === "exp:") {
+      return value;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 type GoogleSignInButtonProps = {
   /** When true, redirects after success (login/register pages). */
   redirectOnSuccess?: boolean;
@@ -31,6 +47,7 @@ export function GoogleSignInButton({
   const { loginWithGoogle } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const mobileReturn = safeMobileReturnUri(searchParams.get("mobile_return"));
 
   if (!env.googleClientId) {
     return (
@@ -50,6 +67,13 @@ export function GoogleSignInButton({
     setIsSubmitting(true);
 
     try {
+      // Expo Go / native app bridge: hand the ID token back via deep link.
+      if (mobileReturn) {
+        const separator = mobileReturn.includes("?") ? "&" : "?";
+        window.location.href = `${mobileReturn}${separator}credential=${encodeURIComponent(response.credential)}`;
+        return;
+      }
+
       const session = await loginWithGoogle(response.credential);
 
       if (redirectOnSuccess) {

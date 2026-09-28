@@ -25,8 +25,6 @@ const MAX_MARQUEE_ITEMS = 18;
 /** Auto-drift speed on desktop (px / second). */
 const AUTO_SCROLL_PX_PER_SEC = 36;
 const DRAG_CLICK_THRESHOLD_PX = 6;
-/** Pause auto-drift after trackpad/wheel input (ms). */
-const WHEEL_PAUSE_MS = 1000;
 
 function toSummary(product: Product): ProductSummary {
   return {
@@ -91,28 +89,28 @@ export function FeaturedProducts() {
   }, [products]);
 
   return (
-    <section className="relative overflow-hidden border-y border-primary/20 bg-primary text-background">
+    <section className="relative overflow-hidden border-y border-border bg-primary text-on-primary">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_0%,rgba(90,120,160,0.2),transparent_60%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_0%,color-mix(in_oklab,var(--accent)_22%,transparent),transparent_60%)]"
       />
       <div
         aria-hidden
-        className="home-grain pointer-events-none absolute inset-0 opacity-[0.28]"
+        className="home-grain pointer-events-none absolute inset-0 opacity-[0.28] dark:opacity-[0.18]"
       />
 
       <Container className="relative py-14 sm:py-16 lg:py-24">
         <div className="mb-8 flex flex-col gap-6 sm:mb-10 lg:mb-12 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-xl">
-            <p className="text-xs uppercase tracking-[0.35em] text-[#9aafc5]">
+            <p className="text-xs uppercase tracking-[0.35em] text-accent">
               {t("home.featured.eyebrow")}
             </p>
-            <h2 className={cn("mt-3 text-background", typography.section)}>
+            <h2 className={cn("mt-3 text-on-primary", typography.section)}>
               {t("home.featured.title")}
             </h2>
             <p
               className={cn(
-                "mt-3 max-w-md text-background/60",
+                "mt-3 max-w-md text-on-primary/60",
                 typography.body,
               )}
             >
@@ -123,14 +121,14 @@ export function FeaturedProducts() {
             href="/products"
             variant="secondary"
             effect="luxury"
-            className="shrink-0 border-background/25 text-background hover:border-accent/50 hover:bg-background/10"
+            className="shrink-0 border-on-primary/25 text-on-primary hover:border-accent/50 hover:bg-on-primary/10"
           >
             {t("common.viewAll")}
           </Button>
         </div>
 
         {!isLoading && items.length > 0 ? (
-          <p className="text-[11px] uppercase tracking-[0.28em] text-background/40">
+          <p className="text-[11px] uppercase tracking-[0.28em] text-on-primary/40">
             {isDesktop
               ? t("home.featured.dragHint")
               : t("home.featured.swipeHint")}
@@ -140,11 +138,11 @@ export function FeaturedProducts() {
 
       {isLoading ? (
         <Container className="pb-16">
-          <p className="text-background/55">{t("common.loading")}</p>
+          <p className="text-on-primary/55">{t("common.loading")}</p>
         </Container>
       ) : items.length === 0 ? (
         <Container className="pb-16">
-          <p className="text-background/55">{t("home.featured.empty")}</p>
+          <p className="text-on-primary/55">{t("home.featured.empty")}</p>
         </Container>
       ) : isDesktop ? (
         <DesktopFeaturedRail items={items} />
@@ -172,7 +170,6 @@ function DesktopFeaturedRail({ items }: RailProps) {
   const lastPointerXRef = useRef(0);
   const lastPointerTimeRef = useRef(0);
   const velocityRef = useRef(0);
-  const wheelPauseUntilRef = useRef(0);
   const reduceMotionRef = useRef(false);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -238,33 +235,6 @@ function DesktopFeaturedRail({ items }: RailProps) {
   }, [items, applyTransform, measureLoop, wrapOffset]);
 
   useEffect(() => {
-    const viewport = viewportRef.current;
-    if (!viewport) {
-      return;
-    }
-
-    const onWheel = (event: WheelEvent) => {
-      const absX = Math.abs(event.deltaX);
-      const absY = Math.abs(event.deltaY);
-      if (absX < 0.5 && absY < 0.5) {
-        return;
-      }
-
-      // Trackpads send horizontal deltaX; vertical two-finger scroll also moves the rail.
-      const delta = absX >= absY ? event.deltaX : event.deltaY;
-      event.preventDefault();
-
-      offsetRef.current = wrapOffset(offsetRef.current - delta);
-      velocityRef.current = 0;
-      wheelPauseUntilRef.current = performance.now() + WHEEL_PAUSE_MS;
-      applyTransform();
-    };
-
-    viewport.addEventListener("wheel", onWheel, { passive: false });
-    return () => viewport.removeEventListener("wheel", onWheel);
-  }, [applyTransform, wrapOffset]);
-
-  useEffect(() => {
     let frame = 0;
     let last = performance.now();
 
@@ -282,10 +252,7 @@ function DesktopFeaturedRail({ items }: RailProps) {
             velocityRef.current = 0;
           }
           applyTransform();
-        } else if (
-          !reduceMotionRef.current &&
-          now >= wheelPauseUntilRef.current
-        ) {
+        } else if (!reduceMotionRef.current) {
           offsetRef.current = wrapOffset(
             offsetRef.current - AUTO_SCROLL_PX_PER_SEC * delta,
           );
@@ -517,7 +484,7 @@ function WatchCard({
     >
       <div
         className={cn(
-          "relative overflow-hidden bg-gradient-to-b from-white/10 to-white/[0.03]",
+          "relative overflow-hidden bg-gradient-to-b from-on-primary/10 to-on-primary/[0.03]",
           size === "desktop" ? "aspect-[4/5]" : "aspect-[3/4]",
         )}
       >
@@ -537,7 +504,7 @@ function WatchCard({
           />
         ) : (
           <div className="flex h-full items-center justify-center">
-            <div className="h-24 w-24 rounded-full border border-background/15 bg-background/5" />
+            <div className="h-24 w-24 rounded-full border border-on-primary/15 bg-on-primary/5" />
           </div>
         )}
         <div
@@ -547,19 +514,19 @@ function WatchCard({
       </div>
 
       <div className="mt-4 flex flex-col gap-1 px-1">
-        <p className="text-[10px] uppercase tracking-[0.28em] text-[#9aafc5]">
+        <p className="text-[10px] uppercase tracking-[0.28em] text-accent">
           {product.brand}
         </p>
         <h3
           className={cn(
-            "truncate font-medium tracking-tight text-background",
+            "truncate font-medium tracking-tight text-on-primary",
             size === "touch" ? "text-lg" : "text-base sm:text-lg",
           )}
         >
           {product.name}
         </h3>
         {product.subtitle && size === "touch" ? (
-          <p className="line-clamp-1 text-sm text-background/50">
+          <p className="line-clamp-1 text-sm text-on-primary/50">
             {product.subtitle}
           </p>
         ) : null}

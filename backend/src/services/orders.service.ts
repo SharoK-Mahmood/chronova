@@ -32,7 +32,7 @@ const createOrderSchema = z.object({
   }),
   shippingAddress: addressSchema,
   deliveryMethodId: z.enum(["standard", "express", "white-glove"]),
-  paymentMethodId: z.enum(["cod"]),
+  paymentMethodId: z.enum(["cod", "card"]),
   paymentLabel: z.string().trim().min(1).optional(),
   items: z
     .array(

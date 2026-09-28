@@ -3,7 +3,9 @@ import type {
   AccountSettings,
   LanguageCode,
   SavedAddress,
+  ThemeCode,
 } from "@/features/account/types/account-settings.types";
+import { normalizeTheme } from "@/features/account/lib/apply-document-theme";
 import type { CurrencyCode } from "@/features/currency/constants/currency";
 import {
   EMPTY_REGIONAL_ADDRESS,
@@ -48,6 +50,7 @@ export const DEFAULT_ACCOUNT_SETTINGS: AccountSettings = {
   },
   language: "en",
   currency: "USD",
+  theme: "light",
 };
 
 function storageKeyForUser(userId: string | null | undefined): string {
@@ -135,6 +138,7 @@ function parseStoredSettings(raw: string): AccountSettings {
     },
     language: normalizeLanguage(parsed.language),
     currency: normalizeCurrency(parsed.currency),
+    theme: normalizeTheme(parsed.theme),
   };
 }
 
@@ -195,4 +199,8 @@ export function writeLanguageToStorage(
 ): void {
   const settings = readAccountSettings(userId);
   writeAccountSettings({ ...settings, language }, userId);
+}
+
+export function readThemeFromStorage(userId?: string | null): ThemeCode {
+  return readAccountSettings(userId).theme;
 }

@@ -9,20 +9,27 @@ export type ShippingAddress = RegionalAddress;
 
 export type DeliveryMethodId = "standard" | "express" | "white-glove";
 
-export type PaymentMethodId = "cod";
+export type PaymentMethodId = "cod" | "card";
 
 /** Payment method ids that may appear on stored orders (including legacy). */
 export type StoredPaymentMethodId =
   | PaymentMethodId
-  | "card"
   | "paypal"
   | "bank-transfer";
 
+export type CardPaymentDetails = {
+  cardholderName: string;
+  cardNumber: string;
+  expiry: string;
+  cvc: string;
+};
+
+/** Editable checkout fields — contact comes from the signed-in account. */
 export type CheckoutFormData = {
-  contact: ContactInformation;
   shippingAddress: ShippingAddress;
   deliveryMethodId: DeliveryMethodId;
   paymentMethodId: PaymentMethodId;
+  cardPayment: CardPaymentDetails;
 };
 
 export type OrderLineItem = {

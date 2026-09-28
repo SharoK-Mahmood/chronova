@@ -12,28 +12,28 @@ const COLLECTIONS = [
     eyebrowKey: "home.collections.menEyebrow",
     titleKey: "home.collections.menTitle",
     descKey: "home.collections.menDesc",
-    accent: "from-primary/90 to-primary",
+    accent: "from-card/40 to-primary",
   },
   {
     href: "/women",
     eyebrowKey: "home.collections.womenEyebrow",
     titleKey: "home.collections.womenTitle",
     descKey: "home.collections.womenDesc",
-    accent: "from-[#2a2520] to-primary",
+    accent: "from-accent/20 to-primary",
   },
   {
     href: "/brands",
     eyebrowKey: "home.collections.brandsEyebrow",
     titleKey: "home.collections.brandsTitle",
     descKey: "home.collections.brandsDesc",
-    accent: "from-[#1a1814] to-[#111111]",
+    accent: "from-card to-primary",
   },
   {
     href: "/new-arrivals",
     eyebrowKey: "home.collections.newEyebrow",
     titleKey: "home.collections.newTitle",
     descKey: "home.collections.newDesc",
-    accent: "from-primary via-[#1c1912] to-primary",
+    accent: "from-primary via-card/50 to-primary",
   },
 ] as const;
 
@@ -41,7 +41,7 @@ export function CollectionsSection() {
   const { t } = useTranslation();
 
   return (
-    <section className="border-b border-border bg-primary py-20 text-background sm:py-24">
+    <section className="border-b border-border bg-primary py-20 text-on-primary sm:py-24">
       <Container>
         <div className="mb-12 max-w-xl">
           <p className="text-xs uppercase tracking-[0.35em] text-accent">
@@ -50,7 +50,7 @@ export function CollectionsSection() {
           <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
             {t("home.collections.title")}
           </h2>
-          <p className="mt-4 text-background/65">
+          <p className="mt-4 text-on-primary/65">
             {t("home.collections.subtitle")}
           </p>
         </div>
@@ -60,7 +60,7 @@ export function CollectionsSection() {
             <Link
               key={collection.href}
               href={collection.href}
-              className="group relative overflow-hidden rounded-2xl border border-background/10 p-8 transition-all duration-500 hover:border-accent/40 hover:shadow-[0_20px_60px_-20px_rgba(25,40,65,0.3)] sm:p-10"
+              className="group relative overflow-hidden rounded-2xl border border-on-primary/10 p-8 transition-all duration-500 hover:border-accent/40 hover:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.45)] sm:p-10"
             >
               <div
                 aria-hidden
@@ -71,7 +71,7 @@ export function CollectionsSection() {
               />
               <div
                 aria-hidden
-                className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(25,40,65,0.14),transparent_55%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_oklab,var(--accent)_18%,transparent),transparent_55%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
               />
               <div className="relative">
                 <p className="text-[10px] uppercase tracking-[0.35em] text-accent">
@@ -80,7 +80,7 @@ export function CollectionsSection() {
                 <h3 className="mt-3 text-2xl font-semibold tracking-tight transition-colors group-hover:text-accent sm:text-3xl">
                   {t(collection.titleKey)}
                 </h3>
-                <p className="mt-2 max-w-xs text-sm text-background/60">
+                <p className="mt-2 max-w-xs text-sm text-on-primary/60">
                   {t(collection.descKey)}
                 </p>
                 <span className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-accent">

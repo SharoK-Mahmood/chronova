@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { BrandLogo } from "@/shared/components/ui/BrandLogo";
 import { useTranslation } from "@/shared/i18n";
 
 type AuthShellProps = {
@@ -18,13 +18,11 @@ export function AuthShell({ children }: AuthShellProps) {
       <div className="w-full max-w-md">
         <div className="mb-8 flex flex-col items-center text-center">
           <Link href="/" aria-label={t("nav.homeAria")}>
-            <Image
-              src="/chronova-logo.png"
-              alt={t("site.name")}
+            <BrandLogo
               width={220}
               height={60}
               priority
-              className="h-10 w-auto sm:h-11"
+              className="h-10 sm:h-11"
             />
           </Link>
         </div>

@@ -12,18 +12,18 @@ import { type as typography } from "@/shared/lib/typography";
 
 const variants = {
   primary:
-    "bg-primary text-background shadow-sm hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 hover:ring-2 hover:ring-accent/20",
+    "bg-primary text-on-primary shadow-sm hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 hover:ring-2 hover:ring-accent/20",
   secondary:
     "border border-border bg-transparent hover:border-accent/50 hover:bg-accent/5 hover:shadow-md hover:ring-2 hover:ring-accent/15",
   ghost:
     "bg-transparent hover:bg-border/60 hover:shadow-sm hover:ring-2 hover:ring-accent/10",
   accent:
-    "bg-accent text-background shadow-sm hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/30 hover:ring-2 hover:ring-accent/40",
+    "bg-accent text-on-primary shadow-sm hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/30 hover:ring-2 hover:ring-accent/40",
 } as const;
 
 const luxuryVariants = {
   primary: cn(
-    "bg-primary text-background",
+    "bg-primary text-on-primary",
     luxuryPrimaryHoverClasses,
   ),
   secondary: cn(
@@ -32,7 +32,7 @@ const luxuryVariants = {
   ),
   ghost: variants.ghost,
   accent: cn(
-    "bg-accent text-background",
+    "bg-accent text-on-primary",
     luxuryPrimaryHoverClasses,
   ),
 } as const;

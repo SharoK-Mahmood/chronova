@@ -9,14 +9,13 @@ function isBlank(value: string): boolean {
   return !value.trim();
 }
 
-function validateInformation(
+function validateDeliveryAddress(
   form: CheckoutFormData,
 ): CheckoutValidationResult | null {
-  const { contact, shippingAddress: a } = form;
+  const a = form.shippingAddress;
 
+  // COD needs a reachable recipient: name, phone, and delivery address.
   const complete =
-    !isBlank(contact.email) &&
-    !isBlank(contact.phone) &&
     !isBlank(a.fullName) &&
     !isBlank(a.phone) &&
     Boolean(a.countryCode) &&
@@ -40,9 +39,9 @@ function validateInformation(
 export function validateCheckout(
   form: CheckoutFormData,
 ): CheckoutValidationResult {
-  const informationError = validateInformation(form);
-  if (informationError) {
-    return informationError;
+  const addressError = validateDeliveryAddress(form);
+  if (addressError) {
+    return addressError;
   }
 
   const paymentErrorKey = getPaymentMethod(form.paymentMethodId).validate(form);

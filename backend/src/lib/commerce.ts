@@ -28,6 +28,11 @@ export const PAYMENT_METHODS = [
     label: "Cash on delivery",
     orderStatus: "confirmed",
   },
+  {
+    id: "card",
+    label: "Card payment",
+    orderStatus: "confirmed",
+  },
 ] as const;
 
 export type DeliveryMethodId = (typeof DELIVERY_METHODS)[number]["id"];

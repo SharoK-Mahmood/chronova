@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 
+import { DevConnectionProbe } from "@/shared/components/debug/DevConnectionProbe";
 import { MainLayout } from "@/shared/components/layout/MainLayout";
 import { SITE } from "@/shared/constants/site";
 
@@ -31,12 +32,19 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const themeBootstrap = `(function(){try{var k="chronova.account-settings";var raw=localStorage.getItem(k);if(!raw){var keys=Object.keys(localStorage);for(var i=0;i<keys.length;i++){if(keys[i].indexOf(k+".")===0){raw=localStorage.getItem(keys[i]);if(raw)break;}}}if(!raw)return;var t=JSON.parse(raw).theme;if(t==="dark"){document.documentElement.classList.add("dark");document.documentElement.style.colorScheme="dark";}}catch(e){}})();`;
+
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${cormorant.variable} ${inter.variable} h-full antialiased`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
+      </head>
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground type-body">
+        <DevConnectionProbe />
         <MainLayout>{children}</MainLayout>
       </body>
     </html>

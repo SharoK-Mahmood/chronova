@@ -206,21 +206,23 @@ export function RegionalAddressForm({
         />
       </FormField>
 
-      <FormField
-        label={t("address.postalCode")}
-        htmlFor={`${prefix}-postal`}
-        className="sm:col-span-2 sm:max-w-xs"
-        labelClassName={labelClassName}
-      >
-        <Input
-          id={`${prefix}-postal`}
-          name="postalCode"
-          autoComplete="postal-code"
-          placeholder={t("address.placeholders.postalCode")}
-          value={value.postalCode}
-          onChange={(event) => updateField("postalCode", event.target.value)}
-        />
-      </FormField>
+      {variant === "account" ? (
+        <FormField
+          label={t("address.postalCode")}
+          htmlFor={`${prefix}-postal`}
+          className="sm:col-span-2 sm:max-w-xs"
+          labelClassName={labelClassName}
+        >
+          <Input
+            id={`${prefix}-postal`}
+            name="postalCode"
+            autoComplete="postal-code"
+            placeholder={t("address.placeholders.postalCode")}
+            value={value.postalCode}
+            onChange={(event) => updateField("postalCode", event.target.value)}
+          />
+        </FormField>
+      ) : null}
     </div>
   );
 }

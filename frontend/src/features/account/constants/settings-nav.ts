@@ -23,5 +23,17 @@ export const SETTINGS_NAV_ITEMS = [
   { id: "notifications", labelKey: "account.settingsNav.notifications" },
   { id: "language", labelKey: "account.settingsNav.language" },
   { id: "currency", labelKey: "account.settingsNav.currency" },
+  { id: "theme", labelKey: "account.settingsNav.theme" },
   { id: "privacy", labelKey: "account.settingsNav.privacy" },
 ] as const;
+
+export const THEME_OPTIONS = [
+  {
+    code: "light" as const,
+    labelKey: "account.themeSection.light",
+  },
+  {
+    code: "dark" as const,
+    labelKey: "account.themeSection.dark",
+  },
+];

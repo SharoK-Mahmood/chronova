@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 
@@ -19,6 +18,7 @@ import {
 import { MobileMenuDrawer } from "@/shared/components/layout/MobileMenuDrawer";
 import { TabletPrimaryNavLinks } from "@/shared/components/layout/TabletNav";
 import { NavIcon } from "@/shared/components/layout/NavIcon";
+import { BrandLogo } from "@/shared/components/ui/BrandLogo";
 import { Container } from "@/shared/components/ui/Container";
 import { useTranslation } from "@/shared/i18n";
 
@@ -73,7 +73,7 @@ export function Header() {
 
   return (
     <BrandsMenuProvider>
-      <header className="sticky top-0 z-40 border-b border-border bg-card/95 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-card/90">
+      <header className="sticky top-0 z-40 select-none border-b border-border bg-card/95 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-card/90">
         {/* Mobile: menu | logo | cart + search below */}
         <Container className="md:hidden">
           <div className="flex h-14 items-center justify-between gap-2">
@@ -92,13 +92,11 @@ export function Header() {
               className="flex min-w-0 flex-1 justify-center"
               aria-label={t("nav.homeAria")}
             >
-              <Image
-                src="/chronova-logo.png"
-                alt={t("site.name")}
+              <BrandLogo
                 width={220}
                 height={60}
                 priority
-                className="h-8 w-auto"
+                className="h-8"
               />
             </Link>
 
@@ -115,13 +113,11 @@ export function Header() {
         <Container className="hidden max-w-5xl md:block lg:hidden">
           <div className="flex h-16 items-center gap-3">
             <Link href="/" className="shrink-0" aria-label={t("nav.homeAria")}>
-              <Image
-                src="/chronova-logo.png"
-                alt={t("site.name")}
+              <BrandLogo
                 width={240}
                 height={64}
                 priority
-                className="h-9 w-auto"
+                className="h-9"
               />
             </Link>
 
@@ -151,13 +147,11 @@ export function Header() {
           <div className="flex h-[4.25rem] items-center justify-between gap-4">
             <div className="flex min-w-0 items-center gap-6 xl:gap-8">
               <Link href="/" className="shrink-0" aria-label={t("nav.homeAria")}>
-                <Image
-                  src="/chronova-logo.png"
-                  alt={t("site.name")}
+                <BrandLogo
                   width={260}
                   height={70}
                   priority
-                  className="h-10 w-auto"
+                  className="h-10"
                 />
               </Link>
 

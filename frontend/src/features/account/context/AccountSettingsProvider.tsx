@@ -16,6 +16,7 @@ import {
   readAccountSettings,
   writeAccountSettings,
 } from "@/features/account/lib/account-settings-storage";
+import { applyDocumentTheme } from "@/features/account/lib/apply-document-theme";
 import {
   accountSettingsToPreferences,
   fetchAccountPreferences,
@@ -51,6 +52,11 @@ function applyDocumentLanguage(language: LanguageCode) {
   document.documentElement.lang = language;
   document.documentElement.dir =
     language === "ar" || language === "ku" ? "rtl" : "ltr";
+}
+
+function applyDocumentPreferences(next: AccountSettings) {
+  applyDocumentLanguage(next.language);
+  applyDocumentTheme(next.theme);
 }
 
 function withProfileFromUser(
@@ -111,15 +117,25 @@ export function AccountSettingsProvider({
       if (user) {
         try {
           const remote = await fetchAccountPreferences();
-          next = preferencesToAccountSettings(remote, {
-            name: formatUserDisplayName(user),
-            email: user.email,
-          });
+          next = preferencesToAccountSettings(
+            remote,
+            {
+              name: formatUserDisplayName(user),
+              email: user.email,
+            },
+            next.theme,
+          );
         } catch {
           // Keep local cache when the preferences API is unavailable.
         }
 
         next = withProfileFromUser(next, user);
+      } else {
+        // Never surface a previous session's name/email while signed out.
+        next = {
+          ...next,
+          profile: { name: "", email: "" },
+        };
       }
 
       if (generation !== loadGenerationRef.current) {
@@ -129,7 +145,7 @@ export function AccountSettingsProvider({
       setSettings(next);
       writeAccountSettings(next, userId);
       setCurrency(next.currency);
-      applyDocumentLanguage(next.language);
+      applyDocumentPreferences(next);
       setIsHydrated(true);
     })();
     // Reload preferences when the signed-in account changes, not on profile refreshes.
@@ -146,6 +162,12 @@ export function AccountSettingsProvider({
       setSettings((prev) => {
         const next = { ...prev, ...patch };
         writeAccountSettings(next, userIdRef.current);
+        if (patch.theme) {
+          applyDocumentTheme(patch.theme);
+        }
+        if (patch.language) {
+          applyDocumentLanguage(patch.language);
+        }
         return next;
       });
     },
@@ -156,7 +178,7 @@ export function AccountSettingsProvider({
     (next: AccountSettings) => {
       persistLocal(next);
       setCurrency(next.currency);
-      applyDocumentLanguage(next.language);
+      applyDocumentPreferences(next);
     },
     [persistLocal, setCurrency],
   );
@@ -174,7 +196,7 @@ export function AccountSettingsProvider({
     async (next: AccountSettings) => {
       persistLocal(next);
       setCurrency(next.currency);
-      applyDocumentLanguage(next.language);
+      applyDocumentPreferences(next);
 
       if (!userIdRef.current) {
         return next;
@@ -183,10 +205,14 @@ export function AccountSettingsProvider({
       const saved = await saveAccountPreferences(
         accountSettingsToPreferences(next),
       );
-      const merged = preferencesToAccountSettings(saved, next.profile);
+      const merged = preferencesToAccountSettings(
+        saved,
+        next.profile,
+        next.theme,
+      );
       persistLocal(merged);
       setCurrency(merged.currency);
-      applyDocumentLanguage(merged.language);
+      applyDocumentPreferences(merged);
       return merged;
     },
     [persistLocal, setCurrency],
@@ -197,8 +223,8 @@ export function AccountSettingsProvider({
       return;
     }
 
-    applyDocumentLanguage(settings.language);
-  }, [isHydrated, settings.language]);
+    applyDocumentPreferences(settings);
+  }, [isHydrated, settings.language, settings.theme]);
 
   const value = useMemo(
     () => ({

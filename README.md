@@ -77,6 +77,7 @@ Without those variables, the Google button shows a configuration message instead
 | `npm run dev` | Frontend only |
 | `npm run dev:frontend` | Frontend |
 | `npm run dev:backend` | Backend |
+| `npm run dev:mobile` | Expo mobile app |
 | `npm run db:setup` | Backend database + seed |
 
 ## Product images
@@ -102,8 +103,24 @@ npm run images:migrate
 npm run db:seed
 ```
 
+## Mobile app (iOS + Android)
+
+Expo React Native app in `mobile/`. Uses the same API as the website.
+
+```bash
+cd mobile
+cp .env.example .env
+# Set EXPO_PUBLIC_API_URL to your LAN IP for a physical phone, e.g.
+# EXPO_PUBLIC_API_URL=http://192.168.1.60:3001/api
+npm install
+npm start
+```
+
+Or from the repo root: `npm run dev:mobile`. See [mobile/README.md](mobile/README.md).
+
 ## Layout
 
 - `backend/` — Express + Prisma (PostgreSQL)
 - `backend/uploads/products/` — product image library (by model slug)
 - `frontend/` — Next.js storefront and admin
+- `mobile/` — Expo (React Native) iOS + Android storefront

@@ -9,7 +9,6 @@ import { searchCatalog } from "@/features/search/lib/search-catalog";
 import { useProductCatalog } from "@/features/products";
 import { useTranslation } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils/cn";
-import { type as typography } from "@/shared/lib/typography";
 
 type HeaderSearchProps = {
   variant?: "desktop" | "tablet" | "mobile";
@@ -164,8 +163,8 @@ export function HeaderSearch({ variant = "desktop", className }: HeaderSearchPro
             onFocus={() => setOpen(true)}
             placeholder={t("search.placeholder")}
             className={cn(
-              "min-w-0 flex-1 bg-transparent text-foreground outline-none placeholder:text-secondary/70",
-              typography.body,
+              // 16px+ prevents iOS Safari from zooming on focus
+              "min-w-0 flex-1 select-text bg-transparent text-base leading-normal text-foreground outline-none placeholder:text-secondary/70",
             )}
             autoComplete="off"
             enterKeyHint="search"

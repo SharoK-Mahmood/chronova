@@ -3,6 +3,8 @@ import type { RegionalAddress } from "@/shared/lib/address/regional-address";
 
 export type LanguageCode = "en" | "ar" | "ku";
 
+export type ThemeCode = "light" | "dark";
+
 export type SavedAddress = RegionalAddress;
 
 export type NotificationPreferences = {
@@ -24,6 +26,7 @@ export type AccountSettings = {
   notifications: NotificationPreferences;
   language: LanguageCode;
   currency: CurrencyCode;
+  theme: ThemeCode;
 };
 
 export type SettingsSectionId =
@@ -33,4 +36,5 @@ export type SettingsSectionId =
   | "notifications"
   | "language"
   | "currency"
+  | "theme"
   | "privacy";

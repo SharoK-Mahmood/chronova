@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { SETTINGS_NAV_ITEMS } from "@/features/account/constants/settings-nav";
@@ -20,81 +21,161 @@ export function SettingsNav({
   const { t } = useTranslation();
 
   return (
-    <div className="min-w-0 w-full lg:sticky lg:top-28 lg:self-start">
-      <nav
-        aria-label="Settings sections"
-        className="hidden lg:block"
+    <>
+      <div className="hidden min-w-0 w-full lg:sticky lg:top-28 lg:block lg:self-start">
+        <nav aria-label="Settings sections">
+          <ul className="space-y-1">
+            {SETTINGS_NAV_ITEMS.map((item) => (
+              <li key={item.id}>
+                <button
+                  type="button"
+                  onClick={() => onSectionChange(item.id)}
+                  className={cn(
+                    "w-full rounded-lg px-3 py-2.5 text-left text-sm transition-colors",
+                    activeSection === item.id
+                      ? "bg-accent/10 font-medium text-accent"
+                      : "text-secondary hover:bg-background hover:text-foreground",
+                  )}
+                >
+                  {t(item.labelKey)}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+
+      <div
+        className={cn(
+          "sticky z-30 mb-2 border-b border-border bg-background/95 py-2 backdrop-blur-md",
+          "supports-[backdrop-filter]:bg-background/90",
+          /* Full-bleed within Container padding. */
+          "-mx-4 px-4 md:-mx-6 md:px-6",
+          /* Sit below sticky storefront header (mobile: logo row + search; tablet: h-16). */
+          "top-[7.5rem] md:top-16",
+          "lg:hidden",
+        )}
       >
-        <ul className="space-y-1">
-          {SETTINGS_NAV_ITEMS.map((item) => (
-            <li key={item.id}>
+        <nav
+          aria-label="Settings sections"
+          className="max-w-full overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          <div className="flex w-max gap-2">
+            {SETTINGS_NAV_ITEMS.map((item) => (
               <button
+                key={item.id}
                 type="button"
                 onClick={() => onSectionChange(item.id)}
                 className={cn(
-                  "w-full rounded-lg px-3 py-2.5 text-left text-sm transition-colors",
+                  "shrink-0 rounded-full border px-3.5 py-2 text-xs font-medium transition-colors",
                   activeSection === item.id
-                    ? "bg-accent/10 font-medium text-accent"
-                    : "text-secondary hover:bg-background hover:text-foreground",
+                    ? "border-accent bg-accent/10 text-accent"
+                    : "border-border text-secondary hover:border-accent/30 hover:text-foreground",
                 )}
               >
                 {t(item.labelKey)}
               </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      <nav
-        aria-label="Settings sections"
-        className="mb-2 max-w-full overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:hidden [&::-webkit-scrollbar]:hidden"
-      >
-        <div className="flex w-max gap-2">
-          {SETTINGS_NAV_ITEMS.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => onSectionChange(item.id)}
-              className={cn(
-                "shrink-0 rounded-full border px-3.5 py-2 text-xs font-medium transition-colors",
-                activeSection === item.id
-                  ? "border-accent bg-accent/10 text-accent"
-                  : "border-border text-secondary hover:border-accent/30 hover:text-foreground",
-              )}
-            >
-              {t(item.labelKey)}
-            </button>
-          ))}
-        </div>
-      </nav>
-    </div>
+            ))}
+          </div>
+        </nav>
+      </div>
+    </>
   );
 }
 
-export function useScrollToSettingsSection() {
+export function useScrollToSettingsSection(options?: { ready?: boolean }) {
+  const ready = options?.ready ?? true;
+  const pathname = usePathname();
   const [activeSection, setActiveSection] =
     useState<SettingsSectionId>("account");
 
-  function scrollToSection(section: SettingsSectionId) {
+  function scrollToSection(
+    section: SettingsSectionId,
+    behavior: ScrollBehavior = "smooth",
+  ) {
     setActiveSection(section);
-    const element = document.getElementById(section);
-    element?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    const tryScroll = (attempts = 0) => {
+      const element = document.getElementById(section);
+      if (element) {
+        element.scrollIntoView({ behavior, block: "start" });
+        return;
+      }
+
+      if (attempts < 30) {
+        window.setTimeout(() => tryScroll(attempts + 1), 50);
+      }
+    };
+
+    tryScroll();
     window.history.replaceState(null, "", `#${section}`);
   }
 
   useEffect(() => {
-    const hash = window.location.hash.slice(1) as SettingsSectionId;
+    if (!ready || pathname !== "/account/settings") {
+      return;
+    }
+
+    const storedSection = sessionStorage.getItem("chronova.settings-section");
+    if (storedSection) {
+      sessionStorage.removeItem("chronova.settings-section");
+    }
+
+    const hash = (window.location.hash.slice(1) ||
+      storedSection ||
+      "") as SettingsSectionId;
     const isValidSection = SETTINGS_NAV_ITEMS.some((item) => item.id === hash);
 
-    if (isValidSection) {
-      setActiveSection(hash);
-      requestAnimationFrame(() => {
-        document.getElementById(hash)?.scrollIntoView({ block: "start" });
-      });
+    if (!isValidSection) {
+      return;
     }
+
+    setActiveSection(hash);
+    if (window.location.hash.slice(1) !== hash) {
+      window.history.replaceState(null, "", `#${hash}`);
+    }
+
+    const tryScroll = (attempts = 0) => {
+      const element = document.getElementById(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+
+      if (attempts < 40) {
+        window.setTimeout(() => tryScroll(attempts + 1), 50);
+      }
+    };
+
+    // Wait a tick so settings sections are painted after the loading state.
+    window.setTimeout(() => tryScroll(), 0);
+  }, [ready, pathname]);
+
+  useEffect(() => {
+    function handleHashChange() {
+      const hash = window.location.hash.slice(1) as SettingsSectionId;
+      const isValidSection = SETTINGS_NAV_ITEMS.some(
+        (item) => item.id === hash,
+      );
+      if (!isValidSection) {
+        return;
+      }
+
+      setActiveSection(hash);
+      document
+        .getElementById(hash)
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
   useEffect(() => {
+    if (!ready) {
+      return;
+    }
+
     const sections = SETTINGS_NAV_ITEMS.map((item) =>
       document.getElementById(item.id),
     ).filter(Boolean) as HTMLElement[];
@@ -119,7 +200,7 @@ export function useScrollToSettingsSection() {
     sections.forEach((section) => observer.observe(section));
 
     return () => observer.disconnect();
-  }, []);
+  }, [ready]);
 
   return { activeSection, scrollToSection };
 }

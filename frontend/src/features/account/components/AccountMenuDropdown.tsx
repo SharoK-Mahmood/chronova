@@ -22,7 +22,7 @@ export function AccountMenuDropdown({ className }: AccountMenuDropdownProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { t } = useTranslation();
-  const { settings, isHydrated } = useAccountSettings();
+  const { isHydrated } = useAccountSettings();
   const { user, isAdmin, logout } = useAuth();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -63,8 +63,25 @@ export function AccountMenuDropdown({ className }: AccountMenuDropdownProps) {
     router.push("/login");
   }
 
-  function sectionHref(section: SettingsSectionId): string {
-    return `/account/settings#${section}`;
+  function goToSection(section: SettingsSectionId) {
+    setOpen(false);
+
+    if (pathname === "/account/settings") {
+      const nextHash = `#${section}`;
+      if (window.location.hash === nextHash) {
+        document
+          .getElementById(section)
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+
+      window.location.hash = section;
+      return;
+    }
+
+    // Next.js may drop the hash on client navigations — keep a fallback.
+    sessionStorage.setItem("chronova.settings-section", section);
+    router.push(`/account/settings#${section}`);
   }
 
   return (
@@ -96,21 +113,25 @@ export function AccountMenuDropdown({ className }: AccountMenuDropdownProps) {
         >
           {isHydrated ? (
             <div className="border-b border-border px-4 py-3">
-              <p
-                className={cn(
-                  "truncate text-sm font-medium",
-                  user || settings.profile.name ? "text-foreground" : "text-secondary",
-                )}
-              >
-                {user
-                  ? formatUserDisplayName(user)
-                  : settings.profile.name || t("account.accountSection.namePlaceholder")}
-              </p>
-              <p className="mt-0.5 truncate text-xs text-secondary">
-                {user?.email ||
-                  settings.profile.email ||
-                  t("account.accountSection.emailPlaceholder")}
-              </p>
+              {user ? (
+                <>
+                  <p className="truncate text-sm font-medium text-foreground">
+                    {formatUserDisplayName(user)}
+                  </p>
+                  <p className="mt-0.5 truncate text-xs text-secondary">
+                    {user.email}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="truncate text-sm font-medium text-secondary">
+                    {t("account.guestTitle")}
+                  </p>
+                  <p className="mt-0.5 truncate text-xs text-secondary">
+                    {t("account.guestSubtitle")}
+                  </p>
+                </>
+              )}
             </div>
           ) : null}
 
@@ -129,14 +150,14 @@ export function AccountMenuDropdown({ className }: AccountMenuDropdownProps) {
             ) : null}
             {SETTINGS_NAV_ITEMS.map((item) => (
               <li key={item.id} role="none">
-                <Link
-                  href={sectionHref(item.id)}
+                <button
+                  type="button"
                   role="menuitem"
-                  onClick={() => setOpen(false)}
-                  className="block px-4 py-2.5 text-sm text-secondary transition-colors hover:bg-background hover:text-foreground"
+                  onClick={() => goToSection(item.id)}
+                  className="block w-full px-4 py-2.5 text-left text-sm text-secondary transition-colors hover:bg-background hover:text-foreground"
                 >
                   {t(item.labelKey)}
-                </Link>
+                </button>
               </li>
             ))}
           </ul>

@@ -7,11 +7,13 @@ import { useTranslation } from "@/shared/i18n";
 type ShippingAddressSectionProps = {
   value: ShippingAddress;
   onChange: (value: ShippingAddress) => void;
+  accountEmail: string;
 };
 
 export function ShippingAddressSection({
   value,
   onChange,
+  accountEmail,
 }: ShippingAddressSectionProps) {
   const { t } = useTranslation();
 
@@ -22,6 +24,9 @@ export function ShippingAddressSection({
           {t("checkout.shipping")}
         </h2>
         <p className="mt-1 text-sm text-secondary">{t("checkout.shippingDesc")}</p>
+        <p className="mt-2 text-sm text-secondary">
+          {t("checkout.confirmationUsesAccountEmail", { email: accountEmail })}
+        </p>
       </div>
       <RegionalAddressForm
         value={value}

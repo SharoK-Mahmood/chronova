@@ -15,6 +15,7 @@ import {
   writeCartToStorage,
 } from "@/features/cart/lib/cart-storage";
 import type { StoredCartEntry } from "@/features/cart/types/cart.types";
+import { useProductCatalog } from "@/features/products";
 
 type AddToCartOptions = {
   quantity?: number;
@@ -44,6 +45,7 @@ type CartProviderProps = {
 };
 
 export function CartProvider({ children }: CartProviderProps) {
+  const { products, isLoading: isCatalogLoading } = useProductCatalog();
   const [entries, setEntries] = useState<StoredCartEntry[]>([]);
   const [isHydrated, setIsHydrated] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -58,6 +60,19 @@ export function CartProvider({ children }: CartProviderProps) {
       writeCartToStorage(entries);
     }
   }, [entries, isHydrated]);
+
+  // Drop cart lines whose products are no longer in the catalog (stale localStorage).
+  useEffect(() => {
+    if (!isHydrated || isCatalogLoading) {
+      return;
+    }
+
+    const validSlugs = new Set(products.map((product) => product.slug));
+    setEntries((current) => {
+      const next = current.filter((entry) => validSlugs.has(entry.slug));
+      return next.length === current.length ? current : next;
+    });
+  }, [isHydrated, isCatalogLoading, products]);
 
   useEffect(() => {
     if (!isDrawerOpen) {
@@ -154,10 +169,24 @@ export function CartProvider({ children }: CartProviderProps) {
     setEntries([]);
   }, []);
 
-  const itemCount = useMemo(
-    () => entries.reduce((total, entry) => total + entry.quantity, 0),
-    [entries],
+  const productSlugs = useMemo(
+    () => new Set(products.map((product) => product.slug)),
+    [products],
   );
+
+  const itemCount = useMemo(() => {
+    // Until the catalog loads, avoid counting lines we cannot display yet.
+    if (isCatalogLoading) {
+      return 0;
+    }
+
+    return entries.reduce((total, entry) => {
+      if (!productSlugs.has(entry.slug)) {
+        return total;
+      }
+      return total + entry.quantity;
+    }, 0);
+  }, [entries, isCatalogLoading, productSlugs]);
 
   const value = useMemo(
     () => ({

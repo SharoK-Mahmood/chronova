@@ -18,7 +18,8 @@ import { SettingsToggle } from "@/features/account/components/SettingsToggle";
 import { UnsavedChangesDialog } from "@/features/account/components/UnsavedChangesDialog";
 import { useAccountSettings } from "@/features/account/context/AccountSettingsProvider";
 import { useUnsavedChangesGuard } from "@/features/account/hooks/useUnsavedChangesGuard";
-import { LANGUAGE_OPTIONS } from "@/features/account/constants/settings-nav";
+import { LANGUAGE_OPTIONS, THEME_OPTIONS } from "@/features/account/constants/settings-nav";
+import { applyDocumentTheme } from "@/features/account/lib/apply-document-theme";
 import { useAuth } from "@/features/auth/context/AuthProvider";
 import { formatUserDisplayName } from "@/features/auth/lib/format-user-name";
 import { listOrders } from "@/features/checkout/services/orders.service";
@@ -28,6 +29,7 @@ import type {
   LanguageCode,
   NotificationPreferences,
   SavedAddress,
+  ThemeCode,
 } from "@/features/account/types/account-settings.types";
 import type { User } from "@/features/auth/types/auth.types";
 import {
@@ -58,6 +60,7 @@ type SettingsDraft = {
   notifications: NotificationPreferences;
   language: LanguageCode;
   currency: CurrencyCode;
+  theme: ThemeCode;
 };
 
 function formatOrderDate(iso: string, locale: string): string {
@@ -96,6 +99,7 @@ function buildDraftFromSources(
     notifications: { ...settings.notifications },
     language: settings.language,
     currency: settings.currency,
+    theme: settings.theme,
   };
 }
 
@@ -115,7 +119,6 @@ export function AccountSettingsContent() {
     refreshUser,
     logout,
   } = useAuth();
-  const { activeSection, scrollToSection } = useScrollToSettingsSection();
   const [orders, setOrders] = useState<PlacedOrder[]>([]);
   const [draft, setDraft] = useState<SettingsDraft | null>(null);
   const [baseline, setBaseline] = useState<SettingsDraft | null>(null);
@@ -126,6 +129,12 @@ export function AccountSettingsContent() {
   const seedGenerationRef = useRef(0);
   const seededUserIdRef = useRef<string | null | undefined>(undefined);
   const isDirtyRef = useRef(false);
+
+  const contentReady =
+    isHydrated && isAuthHydrated && isProfileReady && Boolean(draft);
+  const { activeSection, scrollToSection } = useScrollToSettingsSection({
+    ready: contentReady,
+  });
 
   useEffect(() => {
     void listOrders()
@@ -242,6 +251,7 @@ export function AccountSettingsContent() {
         notifications: draft.notifications,
         language: draft.language,
         currency: draft.currency,
+        theme: draft.theme,
       };
 
       await persistPreferences(nextSettings);
@@ -276,13 +286,20 @@ export function AccountSettingsContent() {
     }
   }
 
+  function handleLeaveWithoutSaving() {
+    if (baseline) {
+      applyDocumentTheme(baseline.theme);
+    }
+    confirmLeave();
+  }
+
   return (
     <>
       <UnsavedChangesDialog
         open={isLeaveDialogOpen}
         isSaving={isSaving}
         onSave={() => void handleSaveAndLeave()}
-        onLeave={confirmLeave}
+        onLeave={handleLeaveWithoutSaving}
         onStay={cancelLeave}
       />
       <section className="border-b border-border bg-primary text-background">
@@ -607,6 +624,44 @@ export function AccountSettingsContent() {
                   value={draft.currency}
                   onChange={(currency) => patchDraft({ currency })}
                 />
+              </div>
+            </SettingsSection>
+
+            <SettingsSection
+              id="theme"
+              title={t("account.themeSection.title")}
+              description={t("account.themeSection.description")}
+            >
+              <div className="grid gap-2 sm:grid-cols-2">
+                {THEME_OPTIONS.map((themeOption) => {
+                  const isSelected = draft.theme === themeOption.code;
+
+                  return (
+                    <button
+                      key={themeOption.code}
+                      type="button"
+                      onClick={() => {
+                        patchDraft({ theme: themeOption.code });
+                        applyDocumentTheme(themeOption.code);
+                      }}
+                      className={cn(
+                        "rounded-xl border px-4 py-3 text-left transition-colors",
+                        isSelected
+                          ? "border-accent bg-accent/8 ring-1 ring-accent/20"
+                          : "border-border hover:border-accent/30 hover:bg-background",
+                      )}
+                    >
+                      <span className="block text-sm font-medium">
+                        {t(themeOption.labelKey)}
+                      </span>
+                      <span className="mt-0.5 block text-xs text-secondary">
+                        {themeOption.code === "dark"
+                          ? t("account.themeSection.darkHint")
+                          : t("account.themeSection.lightHint")}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </SettingsSection>
 

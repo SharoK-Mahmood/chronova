@@ -8,12 +8,14 @@ import { estimateDelivery } from "@/features/checkout/lib/estimate-delivery";
 import { generateOrderNumber } from "@/features/checkout/lib/generate-order-number";
 import type {
   CheckoutFormData,
+  ContactInformation,
   OrderLineItem,
   PlacedOrder,
 } from "@/features/checkout/types/checkout.types";
 
 type BuildPlacedOrderInput = {
   form: CheckoutFormData;
+  contact: ContactInformation;
   lineItems: OrderLineItem[];
   subtotalUsd: number;
   shippingUsd: number;
@@ -25,6 +27,7 @@ type BuildPlacedOrderInput = {
 /** Builds a persistable order from validated checkout state (SRP). */
 export function buildPlacedOrder({
   form,
+  contact,
   lineItems,
   subtotalUsd,
   shippingUsd,
@@ -43,7 +46,7 @@ export function buildPlacedOrder({
   return {
     orderNumber: generateOrderNumber(),
     placedAt: new Date().toISOString(),
-    contact: form.contact,
+    contact,
     shippingAddress: form.shippingAddress,
     deliveryMethodId: form.deliveryMethodId,
     deliveryLabel: localizedDelivery.label,

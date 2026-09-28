@@ -67,7 +67,7 @@ export function MobileMenuDrawer({ open, onClose }: MobileMenuDrawerProps) {
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[55] md:hidden",
+        "fixed inset-0 z-[55] select-none md:hidden",
         open ? "pointer-events-auto" : "pointer-events-none",
       )}
       aria-hidden={!open}
@@ -119,10 +119,10 @@ export function MobileMenuDrawer({ open, onClose }: MobileMenuDrawerProps) {
         >
           <ul className="space-y-0.5">
             {menuLinks.map((link) => {
-              const isActive = isNavLinkActive(pathname, link.href);
-              const isHighlighted = "highlight" in link && link.highlight;
               const href =
                 link.href === "/account" ? "/account/settings" : link.href;
+              const isActive = isNavLinkActive(pathname, link.href);
+              const isHighlighted = "highlight" in link && link.highlight;
 
               return (
                 <li key={link.href}>
@@ -131,11 +131,12 @@ export function MobileMenuDrawer({ open, onClose }: MobileMenuDrawerProps) {
                     aria-current={isActive ? "page" : undefined}
                     onClick={onClose}
                     className={cn(
-                      "flex min-h-12 items-center rounded-xl px-4 text-base font-medium transition-colors",
+                      "flex min-h-12 items-center rounded-xl border-s-2 px-4 text-base transition-[color,background-color,transform,opacity] duration-150",
                       isActive
-                        ? "bg-background text-foreground"
-                        : "text-secondary hover:bg-background hover:text-foreground",
+                        ? "border-accent bg-accent/10 font-semibold text-accent"
+                        : "border-transparent font-medium text-secondary hover:bg-background hover:text-foreground",
                       isHighlighted && !isActive && "text-accent",
+                      "active:scale-[0.99] active:bg-accent/15 active:opacity-100",
                     )}
                   >
                     {t(link.labelKey)}
@@ -154,10 +155,10 @@ export function MobileMenuDrawer({ open, onClose }: MobileMenuDrawerProps) {
                 }
                 onClick={onClose}
                 className={cn(
-                  "flex min-h-12 items-center rounded-xl px-4 text-base font-medium transition-colors",
+                  "flex min-h-12 items-center rounded-xl border-s-2 px-4 text-base transition-colors",
                   pathname.startsWith("/admin")
-                    ? "bg-accent/10 text-accent"
-                    : "text-accent hover:bg-background",
+                    ? "border-accent bg-accent/10 font-semibold text-accent"
+                    : "border-transparent font-medium text-accent hover:bg-background",
                 )}
               >
                 {t("nav.admin")}

@@ -50,7 +50,7 @@ export function HomeSpotlight() {
             href={`/products/${product.slug}`}
             className="group relative order-2 lg:order-1"
           >
-            <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-border bg-white shadow-[0_24px_64px_-24px_rgba(17,17,17,0.2)]">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-border bg-card shadow-[0_24px_64px_-24px_rgba(17,17,17,0.2)] dark:shadow-[0_24px_64px_-24px_rgba(0,0,0,0.55)]">
               <ProductImage
                 src={product.imageUrl}
                 alt={`${product.brand} ${product.name}`}

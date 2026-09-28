@@ -39,6 +39,7 @@ export async function saveAccountPreferences(
 export function preferencesToAccountSettings(
   preferences: AccountPreferencesPayload,
   profile: AccountSettings["profile"],
+  theme: AccountSettings["theme"] = "light",
 ): AccountSettings {
   return {
     profile,
@@ -48,6 +49,7 @@ export function preferencesToAccountSettings(
     notifications: preferences.notifications,
     language: preferences.language,
     currency: preferences.currency,
+    theme,
   };
 }
 

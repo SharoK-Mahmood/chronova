@@ -4,6 +4,8 @@
   --background: #f8f7f4;
   --foreground: #111111;
   --primary: #111111;
+  /* Text on primary surfaces (hero bars, featured rail, primary buttons) */
+  --on-primary: #f8f7f4;
   /* Deep navy — luxury accent */
   --accent: #192841;
   --secondary: #6b6b6b;
@@ -11,10 +13,24 @@
   --border: #e5e5e5;
 }
 
+html.dark {
+  --background: #0c1219;
+  --foreground: #f3f1ec;
+  /* Keep primary bars dark so home “ink” sections stay dark */
+  --primary: #070b10;
+  --on-primary: #f3f1ec;
+  --accent: #c4a574;
+  --secondary: #9aa7b5;
+  --card: #141c26;
+  --border: #2a3542;
+  color-scheme: dark;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
   --color-accent: var(--accent);
   --color-secondary: var(--secondary);
   --color-card: var(--card);
@@ -25,6 +41,39 @@
 
 body {
   background: var(--background);
+  color: var(--foreground);
+}
+
+/*
+ * Touch feedback: iOS only shows :active (and a reliable tap flash) when
+ * interactive elements have cursor:pointer. Soft navy tap highlight — not blue.
+ */
+a,
+button,
+[role="button"],
+summary,
+label[for] {
+  cursor: pointer;
+  -webkit-tap-highlight-color: color-mix(in oklab, var(--accent) 22%, transparent);
+  touch-action: manipulation;
+}
+
+@media (hover: none) {
+  a:active,
+  button:active:not(:disabled),
+  [role="button"]:active {
+    opacity: 0.72;
+  }
+}
+
+/* Soft navy highlight instead of the default browser blue selection. */
+::selection {
+  background: color-mix(in oklab, var(--accent) 22%, transparent);
+  color: var(--foreground);
+}
+
+::-moz-selection {
+  background: color-mix(in oklab, var(--accent) 22%, transparent);
   color: var(--foreground);
 }
 

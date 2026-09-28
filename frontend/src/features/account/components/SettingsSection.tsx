@@ -22,7 +22,7 @@ export function SettingsSection({
     <section
       id={id}
       className={cn(
-        "scroll-mt-28 rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-6 lg:p-8",
+        "scroll-mt-[11.5rem] rounded-2xl border border-border bg-card p-4 shadow-sm md:scroll-mt-40 sm:p-6 lg:scroll-mt-36 lg:p-8",
         className,
       )}
     >
